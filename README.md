@@ -27,7 +27,8 @@ Please, fill the following sections about your project.
 **Answer**:
 
 The main dataset that will be used is the following: 
--Milano-Cortina 2026 Olympic Winter Games
+
+[Milano-Cortina 2026 Olympic Winter Games](https://www.kaggle.com/datasets/piterfm/milano-cortina-2026-olympic-winter-games/data?select=athletes.csv)
 
 
 The initial exploration to assess the quality of the data and how much preprocessing/data-cleaning it will require can be found under: DataExploration/PickedDataset/EXPLORATION_Milano_Cortina_2026_Olympic_Winter_Games.ipynb
