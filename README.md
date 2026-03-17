@@ -44,11 +44,15 @@ The initial exploration to assess the quality of the data and how much preproces
 
 **Answer:**
 
-How are athletes distributed across countries, sports, and gender in the Milano-Cortina 2026 Winter Olympics?
+How is participation in the Milano-Cortina 2026 Winter Olympics structured across countries, sports, and gender, and what patterns or imbalances can be observed in this distribution?
 
-The Olympic Games bring together athletes from across the globe. However, their geographic distribution is far from uniform. Certain disciplines are dominated by specific countries, some events attract more athletes than others, and gender representation also varies across disciplines.
+The Olympic Games bring together athletes from all over the world. However, participation is not evenly distributed. Certain disciplines are dominated by specific countries, some sports attract more athletes than others, and gender representation varies across disciplines.
 
-Our visualizations enable users to gain a global overview of these issues while also allowing them to explore specific disciplines in more detail, and even drill down further into individual events.
+After exploring the official Milano-Cortina 2026 Olympic Games website (https://www.olympics.com/en/milano-cortina-2026), we observed that the available data is mainly presented as static lists, which makes it difficult to explore and understand global patterns. The information is not very interactive and does not provide an intuitive overview of participation across countries, sports, and gender.
+
+The goal of this project is therefore to provide a more interactive and visual way to explore this data. Our visualization will allow users to gain a global overview of the Games while also exploring specific aspects in more detail.
+
+The target audience includes sports fans, data journalists, and anyone interested in global representation in international competitions.
 
 
 ### Exploratory Data Analysis
@@ -77,11 +81,16 @@ For pre-processing (based on exploration):
 
 **Answer:**
 
-Several visualizations have already explored Olympic datasets, most of them focusing on medal counts, country rankings, or historical performance across different Olympic Games. For example, media outlets such as The Guardian have published visualizations analyzing Olympic participation and medal distributions across countries. These projects usually highlight performance and results rather than the structure of participation itself.
+Several visualizations have already explored Olympic datasets, most of them focusing on medal counts, country rankings, or historical performance across different Olympic Games. For example, media outlets such as The Guardian have published visualizations analyzing Olympic participation and medal distributions across countries. However, these projects mainly focus on results and performance, rather than on how participation itself is structured.
 
-https://www.theguardian.com/sport/datablog/2012/jul/10/london-olympic-charts-medals-competitors
+https://www.theguardian.com/sport/datablog/2012/jul/10/london-olympic-charts-medals-competitors. Our approach is a bit different, since we focus on the structure of participation in the Milano-Cortina 2026 Winter Olympics. Instead of looking at medals or rankings, we want to explore how athletes are distributed across sports, countries, and gender. This allows us to highlight patterns and possible imbalances in participation.
+For inspiration, we also looked at visualizations from other domains. One example is the Wind Map visualization by Fernanda Viégas and Martin Wattenberg: https://earth.nullschool.net
 
-Our approach differs from these projects because we focus specifically on the structure of participation in the Milano-Cortina 2026 Winter Olympics. Instead of analyzing medals or results, we aim to explore how athletes are distributed across sports, countries, and gender. By combining multiple interactive visualizations, users will be able to explore the relationships between disciplines, nations, and gender representation.
+Even though it shows meteorological data, it’s a good example of how global patterns can be visualized in a clear and engaging way on a map. This inspired us to use a geographic visualization to show how athletes are distributed across countries, for example using color or markers.
+We also looked at examples from the D3 and Observable galleries, which include many interactive visualizations such as treemaps, hierarchical charts, and linked views: https://observablehq.com/@d3/gallery
+
+Based on this, we plan to combine different types of visualizations, such as a geographic map (for countries), a bar chart (for sports), and a stacked bar chart (for gender distribution). These visualizations will be connected, so that interacting with one (for example selecting a country or a sport) updates the others. This should make the data easier to explore and more intuitive to understand.
+
 
 
 ## Milestone 2 (17th April, 5pm)
