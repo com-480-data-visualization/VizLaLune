@@ -31,7 +31,9 @@ The main dataset that will be used is the following:
 [Milano-Cortina 2026 Olympic Winter Games](https://www.kaggle.com/datasets/piterfm/milano-cortina-2026-olympic-winter-games/data?select=athletes.csv)
 
 
-The initial exploration to assess the quality of the data and how much preprocessing/data-cleaning it will require can be found under: [DataExploration/PickedDataset/EXPLORATION_Milano_Cortina_2026_Olympic_Winter_Games.ipynb](https://github.com/com-480-data-visualization/VizLaLune/blob/master/DataExploration/PickedDataset/EXPLORATION_Milano_Cortina_2026_Olympic_Winter_Games.ipynb)
+The initial exploration to assess the quality of the data and how much preprocessing/data-cleaning it will require can be found under:
+
+[DataExploration/PickedDataset/EXPLORATION_Milano_Cortina_2026_Olympic_Winter_Games.ipynb](https://github.com/com-480-data-visualization/VizLaLune/blob/master/DataExploration/PickedDataset/EXPLORATION_Milano_Cortina_2026_Olympic_Winter_Games.ipynb)
 
 
 ### Problematic
@@ -57,10 +59,12 @@ Our visualizations enable users to gain a global overview of these issues while 
 **Answer:**
 
 For basic statistics and insights about the data:
-DataExploration/PickedDataset/EXPLORATION_Milano_Cortina_2026_Olympic_Winter_Games.ipynb
+
+[DataExploration/PickedDataset/EXPLORATION_Milano_Cortina_2026_Olympic_Winter_Games.ipynb](https://github.com/com-480-data-visualization/VizLaLune/blob/master/DataExploration/PickedDataset/EXPLORATION_Milano_Cortina_2026_Olympic_Winter_Games.ipynb)
 
 For pre-processing (based on exploration): 
-DataPreprocessing/PREPROCESSING_Milano_Cortina_2026_Olympic_Winter_Games.ipynb
+
+[DataPreprocessing/PREPROCESSING_Milano_Cortina_2026_Olympic_Winter_Games.ipynb](https://github.com/com-480-data-visualization/VizLaLune/edit/master/DataPreprocessing/PREPROCESSING_Milan_Cortina_2026_Olympic_Winter_Games.ipynb)
 
 
 ### Related work
