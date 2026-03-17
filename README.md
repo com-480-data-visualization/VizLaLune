@@ -81,9 +81,9 @@ For pre-processing (based on exploration):
 
 **Answer:**
 
-Several visualizations have already explored Olympic datasets, most of them focusing on medal counts, country rankings, or historical performance across different Olympic Games. For example, media outlets such as The Guardian have published visualizations analyzing Olympic participation and medal distributions across countries. However, these projects mainly focus on results and performance, rather than on how participation itself is structured.
+Several visualizations have already explored Olympic datasets, most of them focusing on medal counts, country rankings, or historical performance across different Olympic Games. For example, media outlets such as The Guardian have published visualizations analyzing Olympic participation and medal distributions across countries. However, these projects mainly focus on results and performance, rather than on how participation itself is structured.https://www.theguardian.com/sport/datablog/2012/jul/10/london-olympic-charts-medals-competitors. 
 
-https://www.theguardian.com/sport/datablog/2012/jul/10/london-olympic-charts-medals-competitors. Our approach is a bit different, since we focus on the structure of participation in the Milano-Cortina 2026 Winter Olympics. Instead of looking at medals or rankings, we want to explore how athletes are distributed across sports, countries, and gender. This allows us to highlight patterns and possible imbalances in participation.
+Our approach is a bit different, since we focus on the structure of participation in the Milano-Cortina 2026 Winter Olympics. Instead of looking at medals or rankings, we want to explore how athletes are distributed across sports, countries, and gender. This allows us to highlight patterns and possible imbalances in participation.
 For inspiration, we also looked at visualizations from other domains. One example is the Wind Map visualization by Fernanda Viégas and Martin Wattenberg: https://earth.nullschool.net
 
 Even though it shows meteorological data, it’s a good example of how global patterns can be visualized in a clear and engaging way on a map. This inspired us to use a geographic visualization to show how athletes are distributed across countries, for example using color or markers.
