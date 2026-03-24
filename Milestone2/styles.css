@@ -1,0 +1,10 @@
+#sidebar {
+    position: fixed;              /* Sort du flux du document */
+    left: 0;                      /* Makes sure all sidebar is properly hidden */
+    transform: translateX(-100%); /* Initialement caché */
+    transition: transform 0.3s ease-in-out;  /* Smooth slide */
+}
+
+#sidebar.active{
+    transform: translate(0); /* Show the sidebar when active */
+}
