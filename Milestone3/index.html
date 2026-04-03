@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset = 'utf-8'>
+
+        <title>COM-480: Milestone 3</title>
+
+        <link rel='stylesheet' href='styles.css'>
+
+        <!-- For leaflet interactive map styles -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""/>
+
+    </head>
+
+    <body>
+        <!-- SIDEBAR -->
+            <!-- Button -->
+        <button onclick="toggleSidebar()">
+            ☰
+        </button>
+            <!-- Sidebar -->
+        <div id='sidebar'>
+            <h2>Sidebar</h2>
+            <ul>
+                <li><a href=#section1>Section 1</a></li>
+                <li><a href=#section2>Section 2</a></li>
+                <li><a href=#section3>Section 3</a></li>
+            </ul>
+        </div>    
+
+        <!-- MAIN CONTENT -->
+        <main>
+            <h1>Main title</h1>
+            <h3>Subtitle with team name</h3>
+        </main>
+
+        <!-- SECTION 1: Introduction -->
+        <section>
+            <h2 id='section1'>Section 1 Title: Introduction</h2>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Bubbles. Key Statistics (Nb. of Athletes/Nb. of Countries/Nb. Disciplines/Nb. Events/Nb. Venues).</p>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Sorted horizontal bar chart (see 7.2 slide 24). Percentage of venue exploitation. Figures can be linked and shown side by side with the one below.</p>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Interactive map. Mouse-on venue symbols expands the symbol with the present disciplines/events which are clickable and redirect to the official event webpage.</p>
+
+            <!-- Interactive Map -->
+            <div id="map"></div>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Treemap (see 5.1 slide 31). Split into disciplines and again into events. Area proportional to medal amount (insight into most impactful sports for medal count). Animated by indicating the victors with mouse-on.</p>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Sorted horizontal bar chart (see 7.2 slide 24). Classic Medal Race (with numerous filters (discipline/event/country region/gender/team event vs. individual vs. duo etc.)).</p>
+        </section>
+
+
+
+        <!-- SECTION 2: Geographical Exploration -->
+        <section>
+            <h2 id='section2'>Section 2 Title: Geographical Exploration</h2>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Sorted horizontal bar chart (see 7.2 slide 24). Athlete count per discipline. Filter by country on world map (see below). Figures can be linked and shown side by side with the one below.</p>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Interactive map (similarity to example shown in class). Dots (1 per athlete) travel from their country of origin to the games. Filter by clicking on the country/by global region. Filter impacts the above bar chart. Mouse-on shows other key country statistitcs.</p>
+
+        </section>
+
+        <!-- SECTION 3: Gender/Team Exploration -->
+        <section>
+            <h2 id='section3'>Section 3 Title: Gender/Team Exploration</h2>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Symmetrical gender horizontal bar plot per country (see 6.1 slide 37). Filter by global region or by country.</p>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Symmetrical solo vs. team horizontal bar plot per country (see 6.1 slide 37). Filter by global region or by country. Button to synchronize filters with above plot.</p>
+
+        </section>
+
+
+        <!-- CONCLUSION -->
+        <section>
+            <h2 id='conclusion'>Conclusion</h2>
+
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Figure XXX: Moving around bubbles. Conclusion with the main takeaways for the different visualizations.</p>
+
+        </section>
+    </body>
+
+    <script src='skeleton.js'></script>
+
+    <!-- For leaflet interactive map scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+    <script src='map.js'></script>
+</html>
