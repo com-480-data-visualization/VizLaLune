@@ -1,5 +1,14 @@
-// Acknowledgment: https://leafletjs.com/
+// Acknowledgment: https://leafletjs.com/, https://d3js.org/
 // Used Google Maps to identify GPS coordinates
+// Use of Claude Haiku 4.5 for some code modulation to avoid repetition
+
+// === Access CSV data ===
+d3.csv("../DataPreprocessing/venues.csv").then(data => {
+    const eventsData = data
+        .map(row => row.events);
+    
+    console.log("Events data:", eventsData);
+});
 
 // === Map Initialization ===
 // Leaflet map linked to id="map" in index.html. setView([lat, lng], zoomLevel) sets the initial view of the map.
@@ -19,10 +28,20 @@ function setIconSize(zoomLevel) {
     return [(zoomLevel * 8),(zoomLevel * 5)];
 }
 
+function setIconSizeHover(zoomLevel) {
+    return [(zoomLevel * 10),(zoomLevel * 7)];
+}
+
 function setPopupAnchor(zoomLevel) {
     var iconSize = setIconSize(zoomLevel);
     var iconHeight = iconSize[1];
     return [0, -(iconHeight/2)]; 
+}
+
+function setPopupAnchorHover(zoomLevel) {
+    var iconSize = setIconSizeHover(zoomLevel);
+    var iconHeight = iconSize[1];
+    return [0, -(iconHeight / 2)];
 }
 
 // === Venues Data ===
@@ -43,20 +62,50 @@ const venuesData = [
     { name: "Verona Olympic Arena", coords: [45.438848940007134, 10.994207524175199], icon: "VeronaOlympicArena.png" }
 ];
 
-// === Create Markers ===
+// === Create Markers with hovering ===
 var initialIconWidth = 64
 var initialIconHeight = 40
 var initialPopupAnchor = [0, -20]
 
 const markers = venuesData.map(venue => {
+    // == Place markers ==
     const icon = L.icon({
         iconUrl: '../ExtraRessources/Venues/' + venue.icon,
         iconSize: [initialIconWidth, initialIconHeight],
         popupAnchor: initialPopupAnchor
     });
-    return L.marker(venue.coords, { icon: icon })
+    
+    // Place marker
+    const marker = L.marker(venue.coords, { icon: icon })
         .addTo(map)
         .bindPopup(venue.name);
+
+    // == Hovering ==
+    // Hovering flag
+    marker.isHovering = false;
+    
+    // Hovering event listeners
+        // Hovering on
+    marker.on('mouseover', function() {
+        marker.isHovering = true;
+        marker.setIcon(L.icon({
+            iconUrl: '../ExtraRessources/Venues/' + venue.icon,
+            iconSize: setIconSizeHover(map.getZoom()),
+            popupAnchor: setPopupAnchorHover(map.getZoom())
+        }));
+    });
+    
+        // Hovering off
+    marker.on('mouseout', function() {
+        marker.isHovering = false;
+        marker.setIcon(L.icon({
+            iconUrl: '../ExtraRessources/Venues/' + venue.icon,
+            iconSize: setIconSize(map.getZoom()),
+            popupAnchor: setPopupAnchor(map.getZoom())
+        }));
+    });
+    
+    return marker;
 });
 
 // === Zoom Event Handler ===
@@ -64,8 +113,9 @@ map.on('zoom', function() {
     markers.forEach((marker, index) => {
         marker.setIcon(L.icon({
             iconUrl: '../ExtraRessources/Venues/' + venuesData[index].icon,
-            iconSize: setIconSize(map.getZoom()),
-            popupAnchor: setPopupAnchor(map.getZoom())
+            iconSize: marker.isHovering ? setIconSizeHover(map.getZoom()) : setIconSize(map.getZoom()),
+            popupAnchor: marker.isHovering ? setPopupAnchorHover(map.getZoom()) : setPopupAnchor(map.getZoom())
         }));
     });
 });
+
