@@ -30,7 +30,10 @@ main {
     text-align: center;
 }
 
-/* Leaflet map container */
+
+/* === Leaflet map container ===*/
 #map {
     height: 800px;
 }
+
+/* === Podium page === */

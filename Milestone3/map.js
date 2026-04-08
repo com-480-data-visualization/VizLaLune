@@ -164,6 +164,13 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker11.on('dblclick', function() {
                         window.open(marker.disciplineURL[0], '_blank');
                     });
+
+                    marker.disciplineMarker11.on('click', function() {
+                        const disciplineName = marker.disciplinesList[0];
+                        const disciplineURL = marker.disciplineURL[0];
+                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
+                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                    });
                     break;
                 }
 
@@ -199,6 +206,19 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     });
                     marker.disciplineMarker22.on('dblclick', function() {
                         window.open(marker.disciplineURL[1], '_blank');
+                    });
+
+                    marker.disciplineMarker21.on('click', function() {
+                        const disciplineName = marker.disciplinesList[0];
+                        const disciplineURL = marker.disciplineURL[0];
+                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
+                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                    });
+                    marker.disciplineMarker22.on('click', function() {
+                        const disciplineName = marker.disciplinesList[1];
+                        const disciplineURL = marker.disciplineURL[1];
+                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png';
+                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
                     });
 
                     break;
@@ -251,6 +271,25 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     });
                     marker.disciplineMarker33.on('dblclick', function() {
                         window.open(marker.disciplineURL[2], '_blank');
+                    });
+
+                    marker.disciplineMarker31.on('click', function() {
+                        const disciplineName = marker.disciplinesList[0];
+                        const disciplineURL = marker.disciplineURL[0];
+                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
+                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                    });
+                    marker.disciplineMarker32.on('click', function() {
+                        const disciplineName = marker.disciplinesList[1];
+                        const disciplineURL = marker.disciplineURL[1];
+                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png';
+                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                    });
+                    marker.disciplineMarker33.on('click', function() {
+                        const disciplineName = marker.disciplinesList[2];
+                        const disciplineURL = marker.disciplineURL[2];
+                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[2] + '.png';
+                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
                     });
 
                     break;
