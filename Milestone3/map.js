@@ -57,7 +57,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
     markers = venuesData.map(venue => {
         // = Place markers =
         // Need to move it here to avoid race condition where creating markers before the data is loaded
-        // Generate icon
+        // Generate initial icon
         const icon = L.icon({
             iconUrl: '../ExtraRessources/Venues/' + venue.image,
             iconSize: [initialIconWidth, initialIconHeight],
@@ -72,7 +72,25 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
         // = Hovering =
         // Hovering flag
         marker.isHovering = false;
-        
+        marker.showDisciplines = false;
+        marker.disciplineList = venue.disciplines;
+
+        // = Discipline sub markers =
+        // Need to convert string into list for length computation
+        try {
+            marker.disciplinesList = JSON.parse(venue.disciplines);
+        } catch(e) {
+            // To handle single + empty discipline case
+            marker.disciplinesList = venue.disciplines === '' ? [] : [venue.disciplines];
+        }
+
+        // Rename discipline to match image names
+        marker.disciplinesList = marker.disciplinesList.map(discipline => {
+            const name = discipline.replace('discipline-', ''); // Extract the discipline name after the hyphen e.g. discipline-curling => curling
+            return name.charAt(0).toUpperCase() + name.slice(1);  // Cap on first letter to match image e.g curling => Curling
+            }
+        )
+
         // Hovering event listeners
             // Hovering on
         marker.on('mouseover', function() {
@@ -93,11 +111,121 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                 popupAnchor: setPopupAnchor(map.getZoom())
             }));
         });
-        
+
+        // Show/Hide disciplines on click
+        marker.on('click', function() {
+            if (marker.showDisciplines) {
+                // Showcase popup
+                marker.openPopup();
+                // Showcase discipline markers
+                switch(marker.disciplinesList.length) {
+                    case 0: break;
+
+                    case 1:  {//Show 1 discipline 
+                        const markerSize = setIconSizeHover(map.getZoom());
+                        marker.disciplineMarker11 = L.marker(
+                            venue.coords,
+                            {
+                                icon: L.icon({
+                                iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png',
+                                iconSize: [markerSize[0]/2, markerSize[1]/2],
+                                //iconAnchor: [0, 0] // leads to image having top left corner in middle of venue icon + - for x axis and up = + and down = - for y axis
+                                iconAnchor: [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+                                })
+                            }
+                        ).addTo(map);
+                        marker.disciplineMarker11.disciplineName = marker.disciplinesList[0];
+                        break;
+                    }
+
+                    case 2:  {// Show 2 disciplines
+                        const markerSize = setIconSizeHover(map.getZoom());
+                        marker.disciplineMarker21 = L.marker(
+                            venue.coords,
+                            {
+                                icon: L.icon({
+                                iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png',
+                                iconSize: [markerSize[0]/2, markerSize[1]/2],
+                                iconAnchor: [(3/4) * markerSize[0], -(3/4) * markerSize[1]]
+                                })
+                            }
+                        ).addTo(map);
+                        marker.disciplineMarker21.disciplineName = marker.disciplinesList[0];
+
+                        marker.disciplineMarker22 = L.marker(
+                            venue.coords,
+                            {
+                                icon: L.icon({
+                                iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png',
+                                iconSize: [markerSize[0]/2, markerSize[1]/2],
+                                iconAnchor: [(-1/4) * markerSize[0], -(3/4) * markerSize[1]]
+                                })
+                            }
+                        ).addTo(map);
+                        marker.disciplineMarker22.disciplineName = marker.disciplinesList[1];
+                        break;
+                    }
+
+                    case 3:  {// Show 3 disciplines
+                        const markerSize = setIconSizeHover(map.getZoom());
+                        marker.disciplineMarker31 = L.marker(
+                            venue.coords,
+                            {
+                                icon: L.icon({
+                                iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png',
+                                iconSize: [markerSize[0]/2, markerSize[1]/2],
+                                iconAnchor: [(1) * markerSize[0], -(3/4) * markerSize[1]]
+                                })
+                            }
+                        ).addTo(map);
+                        marker.disciplineMarker31.disciplineName = marker.disciplinesList[0];
+
+                        marker.disciplineMarker32 = L.marker(
+                            venue.coords,
+                            {
+                                icon: L.icon({
+                                iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png',
+                                iconSize: [markerSize[0]/2, markerSize[1]/2],
+                                iconAnchor: [(-1/2) * markerSize[0], -(3/4) * markerSize[1]]
+                                })
+                            }
+                        ).addTo(map);
+                        marker.disciplineMarker32.disciplineName = marker.disciplinesList[1];
+
+                        marker.disciplineMarker33 = L.marker(
+                            venue.coords,
+                            {
+                                icon: L.icon({
+                                iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[2] + '.png',
+                                iconSize: [markerSize[0]/2, markerSize[1]/2],
+                                iconAnchor: [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+                                })
+                            }
+                        ).addTo(map);
+                        marker.disciplineMarker33.disciplineName = marker.disciplinesList[2];
+                        break;
+                    }
+                }    
+                marker.showDisciplines = false;
+            } else {
+                // Delete popup
+                marker.closePopup();
+                // Delete discipline markers
+                markers.forEach(marker => {
+                    if (marker.disciplineMarker11) map.removeLayer(marker.disciplineMarker11);
+                    if (marker.disciplineMarker21) map.removeLayer(marker.disciplineMarker21);
+                    if (marker.disciplineMarker22) map.removeLayer(marker.disciplineMarker22);
+                    if (marker.disciplineMarker31) map.removeLayer(marker.disciplineMarker31);
+                    if (marker.disciplineMarker32) map.removeLayer(marker.disciplineMarker32);
+                    if (marker.disciplineMarker33) map.removeLayer(marker.disciplineMarker33);
+
+                });
+                marker.showDisciplines = true;
+            }
+        });
         return marker;
     });
-})
-
+});
 
 // === Event functions ===
 // Adapt icon size to zoom level
@@ -122,6 +250,53 @@ function setPopupAnchorHover(zoomLevel) {
     return [0, -(iconHeight / 2)];
 }
 
+function updateDisciplineMarkersZoom(marker) {
+    const markerSize = setIconSizeHover(map.getZoom());
+    
+    if (marker.disciplineMarker11) {
+        marker.disciplineMarker11.setIcon(L.icon({
+            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker11.disciplineName + '.png',
+            iconSize: [markerSize[0]/2, markerSize[1]/2],
+            iconAnchor: [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+        }));
+    }
+
+    if (marker.disciplineMarker21){
+        marker.disciplineMarker21.setIcon(L.icon({
+            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker21.disciplineName + '.png',
+            iconSize: [markerSize[0]/2, markerSize[1]/2],
+            iconAnchor: [(3/4) * markerSize[0], -(3/4) * markerSize[1]]
+        }));
+
+        marker.disciplineMarker22.setIcon(L.icon({
+            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker22.disciplineName + '.png',
+            iconSize: [markerSize[0]/2, markerSize[1]/2],
+            iconAnchor: [(-1/4) * markerSize[0], -(3/4) * markerSize[1]]
+        }));
+    }
+
+    if (marker.disciplineMarker31){
+        marker.disciplineMarker31.setIcon(L.icon({
+            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker31.disciplineName + '.png',
+            iconSize: [markerSize[0]/2, markerSize[1]/2],
+            iconAnchor: [(1) * markerSize[0], -(3/4) * markerSize[1]]
+        }));
+
+        marker.disciplineMarker32.setIcon(L.icon({
+            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker32.disciplineName + '.png',
+            iconSize: [markerSize[0]/2, markerSize[1]/2],
+            iconAnchor: [-(1/2) * markerSize[0], -(3/4) * markerSize[1]]
+        }));
+
+        marker.disciplineMarker33.setIcon(L.icon({
+            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker33.disciplineName + '.png',
+            iconSize: [markerSize[0]/2, markerSize[1]/2],
+            iconAnchor: [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+        }));
+    }
+}
+
+
 // === Zoom Event Handler ===
 map.on('zoom', function() {
     markers.forEach((marker, index) => {
@@ -130,6 +305,10 @@ map.on('zoom', function() {
             iconSize: marker.isHovering ? setIconSizeHover(map.getZoom()) : setIconSize(map.getZoom()),
             popupAnchor: marker.isHovering ? setPopupAnchorHover(map.getZoom()) : setPopupAnchor(map.getZoom())
         }));
+
+        // Update discipline marker sizes and positions if they are currently displayed
+        updateDisciplineMarkersZoom(marker);
     });
 });
+
 
