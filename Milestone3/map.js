@@ -384,5 +384,4 @@ map.on('zoom', function() {
     });
 });
 
-// Check schedules.csv usable if yes do bar chart of venue usage can use finals to link to other page and see podium or single click for this
 // Click on discipline and zooms in on the venue

@@ -37,3 +37,69 @@ main {
 }
 
 /* === Podium page === */
+.table-wrapper {
+    display: flex; /* Flex items for table elements */
+    justify-content: center; /* Centre table horizontally */
+}
+
+table {
+    border: 2px solid #b40ec0;    /* Border encapsulating all of table */
+    border-collapse: collapse; /* Merges common borders */
+    border-radius: 10px; /* Rounded corners for the table */
+    overflow: hidden; /* Needed to ensure rounded corners are visible due to border-collapse */
+}
+
+th {
+    border: 1px solid #c6e70e; /* Boxes the column titles */
+}
+
+td {
+    border: 1px solid #36d909; /* Boxes the data cells */
+}
+
+thead {
+    background-color: #091f36;  /* Background color for column titles */
+    color: white;               /* Text color for column titles */
+}
+
+tbody tr:hover { /* Apply style for hovering over a row in the table body */
+    background-color: #ec3e04; 
+    cursor: pointer;            /* Change cursor to indicate interactivity */
+}
+
+#sort-event {
+    cursor: pointer;  /* Change cursor to indicate interactivity */
+    user-select: none; /* Prevent text selection on click (very useful!) */
+}
+
+#sort-arrow {
+    margin-left: 6px; /* Space between the text and the arrow */
+    color: #b40ec0; /* Color of the arrow */
+}
+
+/* === Discipline grid === */
+#discipline-grid {
+    display: grid;                          /* Grid mode (avoids simple piling up) */
+    grid-template-columns: repeat(8, auto); /* 8 columns */
+    grid-template-rows: repeat(2, auto);   /* 2 rows */
+    gap: 16px;                             /* Space between each cell */
+    padding: 20px;                         /* Space around the grid */
+}
+
+.discipline-card {
+    display: flex;
+    flex-direction: column;                /* Image up, Text down */
+    align-items: center;                   /* Center horizontally */
+    cursor: pointer;                       /* Change cursor to indicate interactivity */
+}
+
+.discipline-card img {
+    width: 100%;                           /* Image takes up the full width of the cell */
+    aspect-ratio: 1 / 1;                   /* Force a square shape */
+    object-fit: cover;                     /* Crop the image to fit without distorting */
+    border-radius: 8px;                    /* Rounded corners */
+}
+
+.discipline-card text {
+    margin-top: 6px;                       /* Space between image and name */
+}

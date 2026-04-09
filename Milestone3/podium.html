@@ -19,9 +19,13 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Event Name</th>
-                            <th>Venue</th>
-                            <th>Schedule</th>
+                            <th id="sort-event">Event Name<span id="sort-arrow">⇅</span></th>
+                            <th>Event Type</th>
+                            <th>Finals Venue</th>
+                            <th>Date</th>
+                            <th>1st Place</th>
+                            <th>2nd Place</th>
+                            <th>3rd Place</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,26 +34,41 @@
                             <td>Men's Single</td>
                             <td>Milano Arena</td>
                             <td>Feb 15, 2026</td>
+                            <td>John Doe (USA)</td>
+                            <td>Max Mustermann (GER)</td>
+                            <td>Jean Dupont (FRA)</td>
                         </tr>
                         <tr>
                             <td>Women's Single</td>
                             <td>Cortina Stadium</td>
                             <td>Feb 16, 2026</td>
+                            <td>Jane Smith (CAN)</td>
+                            <td>Maria Rossi (ITA)</td>
+                            <td>Anna Müller (GER)</td>
                         </tr>
                         <tr>
                             <td>Mixed Doubles</td>
                             <td>Milano Arena</td>
                             <td>Feb 18, 2026</td>
+                            <td>Team A (USA/ITA)</td>
+                            <td>Team B (GER/FRA)</td>
+                            <td>Team C (CAN/GER)</td>
                         </tr>
                         <tr>
                             <td>Team Event</td>
                             <td>Cortina Stadium</td>
                             <td>Feb 20, 2026</td>
+                            <td>Team X (USA)</td>
+                            <td>Team Y (GER)</td>
+                            <td>Team Z (ITA)</td>
                         </tr>
                         <tr>
                             <td>Final Championship</td>
                             <td>Milano Arena</td>
                             <td>Feb 22, 2026</td>
+                            <td>John Doe (USA)</td>
+                            <td>Jane Smith (CAN)</td>
+                            <td>Max Mustermann (GER)</td>
                         </tr>
                     </tbody>
                 </table>
@@ -63,7 +82,14 @@
         <script>
             // Get URL parameters
             const urlParams = new URLSearchParams(window.location.search);
-            const disciplineName = urlParams.get('discipline');  
+            let disciplineName = urlParams.get('discipline')
+                                            .replace(/-/g, ' ') // Replace hyphens with spaces 
+                                            .replace(/\b\w/g, c => c.toUpperCase()); // Convert every starting letter to uppercase
+
+            // Special case for this discipline
+            if (disciplineName === "Cross Country Skiing") {
+                disciplineName = "Cross-Country Skiing";
+            }
             const disciplineURL = urlParams.get('url');  
             const disciplineImage = urlParams.get('image');
             
@@ -74,4 +100,10 @@
             document.getElementById('disciplineImage').src = disciplineImage;
         </script>
     </body>
+
+    <!-- To load data for events -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script src='podium.js'></script>
 </html>
+
