@@ -1,0 +1,31 @@
+main {
+    text-align: center;           /* Center the main title and subtitle <center> tag is not supported by HTML5 */
+}
+
+#sidebar {
+    position: fixed;              /* Sort du flux du document */
+    left: 0;                      /* Makes sure all sidebar is properly hidden */
+    transform: translateX(-100%); /* Initialement caché */
+    transition: transform 0.3s ease-in-out;  /* Smooth slide */
+}
+
+#sidebar.active{ /* For elements of both classes use the class1.class2 selector */
+    transform: translate(0); /* Show the sidebar when active */
+}
+
+.skeletonSketch {
+    display: block; /* Element takes all available width */
+    margin: 20px auto; /* Centers the element horizontally and adds vertical spacing */
+    width: 300px;
+    height: 300px;
+}
+
+.skeletonSketch rect { /* For elements of type rect within class1 */
+    fill: white;
+    stroke: black;
+    stroke-width: 2;
+}
+
+.skeletonSketchLabel {
+    text-align: center;
+}
