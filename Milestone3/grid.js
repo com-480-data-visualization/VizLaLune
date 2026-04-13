@@ -1,25 +1,56 @@
-fetch('/ExtraRessources/Disciplines/') // Fetch at this URL
-    .then(response => response.text()) // Transform the ReadableStream response into HTML text
-    .then(html => { // response.text() result
+// Fetches HTML directory listing from a server path, scrapes all .png image links from it, 
+// then dynamically builds a visual grid of "discipline cards" (image + label) using D3.js.
+
+fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
+    .then(response => response.text()) // Transform the body: ReadableStream response into HTML text
+    .then(html => { // html = response.text()
+
+        // Required to enable querySelectorAll which transforms HTML string into DOM tree
         const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
+        const doc = parser.parseFromString(html, 'text/html'); 
+
+        // Find all <a> tags in the directory listing,
+        // extract their href URLs and keep only .png image links
         const links = [...doc.querySelectorAll('a')]
             .map(a => a.href)
             .filter(href => href.endsWith('.png'));
 
+        // Select grid container
         const grid = d3.select('#discipline-grid');
 
+        // For each image link, create a card with the image and a label
         links.forEach(imgURL => {
-            const fileName = imgURL.split('/').pop().replace('.png', '');
+            const disciplineName = imgURL.split('/').pop().replace('.png', '');
+            const disciplineURL = `https://www.olympics.com/en/milano-cortina-2026/sports/${disciplineName.toLowerCase()}`;
+            const disciplineImgURL = `/ExtraRessources/Disciplines/${disciplineName}.png`;
 
+            // == Generate card ==
             const card = grid.append('div')
                 .attr('class', 'discipline-card');
 
             card.append('img')
-                .attr('src', `/ExtraRessources/Disciplines/${fileName}.png`)
-                .attr('alt', fileName);
+                .attr('src', disciplineImgURL)
+                .attr('alt', disciplineName);
 
-            card.append('span')
-                .text(fileName.replace(/-/g, ' '));
+            // Cross-country special case handling
+            if (disciplineName === "Cross-country-skiing"){
+                card.append('text')
+                    .text("Cross-country skiing");
+            } else {
+                card.append('text')
+                    .text(disciplineName.replace(/-/g, ' '));
+            }
+
+            // == Click event ==
+                // Redirect to discipline page
+            card.on('dblclick', () => {
+                window.open(
+                    `http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImgURL)}`, '_blank'
+                );
+            });
+                // Zoom in on venue map
+            card.on('click', () => {
+                zoomToDiscipline(disciplineName);
+            })
         });
     });

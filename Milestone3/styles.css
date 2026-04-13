@@ -80,7 +80,7 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 /* === Discipline grid === */
 #discipline-grid {
     display: grid;                          /* Grid mode (avoids simple piling up) */
-    grid-template-columns: repeat(8, auto); /* 8 columns */
+    grid-template-columns: repeat(8, 1fr); /* 8 columns */
     grid-template-rows: repeat(2, auto);   /* 2 rows */
     gap: 16px;                             /* Space between each cell */
     padding: 20px;                         /* Space around the grid */

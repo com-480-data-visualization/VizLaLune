@@ -74,7 +74,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
         // Hovering flag
         marker.isHovering = false;
         showDisciplines = true;
-        marker.disciplineList = [];
+        marker.disciplinesList = [];
         marker.disciplineURL = [];
 
         // = Discipline sub markers =
@@ -384,4 +384,16 @@ map.on('zoom', function() {
     });
 });
 
-// Click on discipline and zooms in on the venue
+// === Zoom to discipline function from grid.js ===
+function zoomToDiscipline(disciplineName) {
+    const target = markers.find(marker =>
+        marker.disciplinesList.includes(disciplineName)
+    );
+    
+    // Move to map section with 1.2s animation
+    document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    map.flyTo(target.getLatLng(), 12, { duration: 1.2 });
+
+    // Open disciplines after 1.3s to happen after animation
+    setTimeout(() => target.fire('click'), 1300);
+}
