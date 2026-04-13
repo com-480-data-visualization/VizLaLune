@@ -103,3 +103,50 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 .discipline-card text {
     margin-top: 6px;                       /* Space between image and name */
 }
+
+/* === Introduction bubbles === */
+#intro-bubbles {
+    display: flex;
+    justify-content: center;
+    gap: clamp(40px, 2.5vw, 100px); /* Space between two bubbles */
+}
+
+.bubble-card {
+    flex: 1; /* Each bubble takes equal space */
+    aspect-ratio: 1 / 1; /* Force a square shape ==> keeps it a circle */
+    border-radius: 50%; /* To make it a circle */
+    display: flex;
+    flex-direction: column; /* Put value and text on same column */
+    justify-content: center; /* Put text on centre on y-axis */
+    align-items: center; /* Put text on centre on x-axis */
+    text-align: center; /* Center text inside the bubble */
+
+    /* Animations */
+    animation: bubbling 4s ease-in-out infinite;
+}
+
+/* Animation itself */
+@keyframes bubbling {
+    0%   { transform: translateY(0) scale(1); }
+    25%  { transform: translateY(-5px) scale(1.05); }
+    50%  { transform: translateY(-10px) scale(1); }
+    75%  { transform: translateY(-5px) scale(0.95); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* Delay animations */
+.bubble-card:nth-child(1) { animation-delay: 0s; }
+.bubble-card:nth-child(2) { animation-delay: 0.4s; }
+.bubble-card:nth-child(3) { animation-delay: 0.8s; }
+.bubble-card:nth-child(4) { animation-delay: 1.2s; }
+.bubble-card:nth-child(5) { animation-delay: 1.6s; }
+
+
+.bubble-value {
+    font-size: clamp(64px, 2.5vw, 128px);
+    font-weight: bold;
+}
+
+.bubble-text {
+    font-size: clamp(32px, 2.5vw, 64px);
+}
