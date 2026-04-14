@@ -15,7 +15,32 @@ Promise.all([
     d3.csv("../DataPreprocessing/venues.csv") // For Venues
 ]).then(([athletesData, venuesData]) => {
     athletesDataGlobal = athletesData;
-    venuesDataGlobal = venuesData;
+
+    // Inspiration from map.js
+    // Need to convert string into list for discipline filtering
+    venuesDataGlobal = venuesData.map(venue => {
+    try {
+        venue.disciplines = JSON.parse(venue.disciplines);
+    } catch(e) {
+        // To handle single + empty discipline case
+        venue.disciplines = venue.disciplines === '' ? [] : [venue.disciplines];
+    }
+
+    // Rename discipline to cleanDisciplineName from grid.js
+    venue.disciplines = venue.disciplines.map(discipline => {
+        const name = discipline
+                        .replace('discipline-', '')
+                        .replace(/-/g, ' ')
+                        .replace(/\b\w/g, c => c.toUpperCase());
+
+        if (name === "Cross Country Skiing") {
+            return "Cross-Country Skiing"; // Handle special case
+        }
+        return name;
+    });
+
+    return venue;
+});
 
     // Update bubbles without any selected discipline
     updateBubbles(null);
@@ -23,7 +48,7 @@ Promise.all([
 
 // ==== UPDATE BUBBLES ====
 function updateBubbles(selectedDiscipline) {
-    // === Filter athletes on discipline ===
+    // === Filter athletes and venues on discipline ===
     const filteredAthletes = selectedDiscipline
         ? athletesDataGlobal.filter(d => {
             try {
@@ -34,6 +59,12 @@ function updateBubbles(selectedDiscipline) {
             }
         })
         : athletesDataGlobal;
+    
+    const filteredVenues = selectedDiscipline
+        ? venuesDataGlobal.filter(venue => {
+            return venue.disciplines.includes(selectedDiscipline);
+        })
+        : venuesDataGlobal;
 
     // === Compute Total Athletes ===
     totalAthletes = filteredAthletes.length;
@@ -77,7 +108,7 @@ function updateBubbles(selectedDiscipline) {
     console.log("Events:", events);
 
     // === Compute Venues ===
-    venues = venuesDataGlobal.length;
+    venues = filteredVenues.length;
     console.log("Venues:", venues);
 
 
