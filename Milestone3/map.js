@@ -391,7 +391,6 @@ function zoomToDiscipline(disciplineName) {
     );
     
     // Move to map section with 1.2s animation
-    document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
     map.flyTo(target.getLatLng(), 12, { duration: 1.2 });
 
     // Open disciplines after 1.3s to happen after animation

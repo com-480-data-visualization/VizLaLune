@@ -63,11 +63,23 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
                 if (selectedDiscipline === card) {
                     selectedDiscipline = null; // Deselect if clicking the same card
                     badge.textContent = "No discipline selected"; // Reset badge text
+                    updateBubbles(null);
                 } else {
                     card.classed('selected', true); // Add 'selected' class to clicked card
                     selectedDiscipline = card; // Update selected discipline
                     zoomToDiscipline(disciplineName);
-                    badge.textContent = disciplineName; 
+
+                    let cleanDisciplineName; // To filter properly athletes.csv in bubbles.js
+                    if (disciplineName === "Cross-country-skiing"){
+                        cleanDisciplineName = "Cross-Country Skiing";
+                    } else {
+                        cleanDisciplineName = disciplineName
+                            .replace(/-/g, ' ')
+                            .replace(/\b\w/g, c => c.toUpperCase());
+                    }
+
+                    badge.textContent = cleanDisciplineName; 
+                    updateBubbles(cleanDisciplineName);
                 }
             })
         });

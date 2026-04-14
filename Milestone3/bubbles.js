@@ -1,37 +1,51 @@
-// ==== Load CSV data onto table ====
+// ==== GLOBAL VARIABLES ====
 let totalAthletes = 0;
 let participatingCountries = 0;
 let disciplines = 0;
 let events = 0;
 let venues = 0;
 
-let athletesData = [];
-let venuesData = [];
+let athletesDataGlobal = [];
+let venuesDataGlobal = [];
 
+// ==== LOAD CSV DATA ====
 // Waits for both CSV to be loaded before continuing
 Promise.all([
     d3.csv("../DataPreprocessing/athletes.csv"), // For Total Athletes + Participating Countries + Disciplines + Events
     d3.csv("../DataPreprocessing/venues.csv") // For Venues
 ]).then(([athletesData, venuesData]) => {
-    athletesData = athletesData;
-    venuesData = venuesData;
+    athletesDataGlobal = athletesData;
+    venuesDataGlobal = venuesData;
 
     // Update bubbles without any selected discipline
     updateBubbles(null);
 });
 
+// ==== UPDATE BUBBLES ====
 function updateBubbles(selectedDiscipline) {
+    // === Filter athletes on discipline ===
+    const filteredAthletes = selectedDiscipline
+        ? athletesDataGlobal.filter(d => {
+            try {
+                const parsed = Function('return (' + d.events + ')')();
+                return parsed.some(e => e.discipline === selectedDiscipline);
+            } catch { 
+                return false; 
+            }
+        })
+        : athletesDataGlobal;
+
     // === Compute Total Athletes ===
-    totalAthletes = athletesData.length;
+    totalAthletes = filteredAthletes.length;
     console.log("Total Athletes:", totalAthletes);
 
     // === Compute Participating Countries ===
-    participatingCountries = new Set(athletesData.map(d => d.country_code)).size;
+    participatingCountries = new Set(filteredAthletes.map(d => d.country_code)).size;
     console.log("Participating Countries:", participatingCountries);
 
     // === Compute Disciplines ===
     const disciplines = new Set(
-        athletesData
+        filteredAthletes
             .flatMap(d => {
                 try {
                     // Instead of JSON.parse because of cases such as Men's which will include the ' to " and breaking the parsing
@@ -46,7 +60,7 @@ function updateBubbles(selectedDiscipline) {
 
     // === Compute Events ===
     const events = new Set(
-        athletesData
+        filteredAthletes
             .flatMap(d => {
                 try {
                     // Instead of JSON.parse because of cases such as Men's which will include the ' to " and breaking the parsing
@@ -63,7 +77,7 @@ function updateBubbles(selectedDiscipline) {
     console.log("Events:", events);
 
     // === Compute Venues ===
-    venues = venuesData.length;
+    venues = venuesDataGlobal.length;
     console.log("Venues:", venues);
 
 
@@ -80,6 +94,7 @@ function updateBubbles(selectedDiscipline) {
     // === Generate bubbles ===
     // Select bubbles container
     const bubbles = d3.select('#intro-bubbles');
+    bubbles.selectAll('*').remove(); // Wipe existing bubbles (otherwise will just add 5 more bubbles)
 
     bubbleData.forEach(d => {
         // Empty bubble
