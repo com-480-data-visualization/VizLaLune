@@ -1,6 +1,9 @@
 // Fetches HTML directory listing from a server path, scrapes all .png image links from it, 
 // then dynamically builds a visual grid of "discipline cards" (image + label) using D3.js.
 
+// To memorize the selected discipline
+let selectedDiscipline = null;
+
 fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
     .then(response => response.text()) // Transform the body: ReadableStream response into HTML text
     .then(html => { // html = response.text()
@@ -50,7 +53,22 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
             });
                 // Zoom in on venue map
             card.on('click', () => {
-                zoomToDiscipline(disciplineName);
+                const badge = document.getElementById('badge-text');
+
+                // Remove 'selected' class from previously selected discipline
+                if (selectedDiscipline){
+                    selectedDiscipline.classed('selected', false);
+                }
+
+                if (selectedDiscipline === card) {
+                    selectedDiscipline = null; // Deselect if clicking the same card
+                    badge.textContent = "No discipline selected"; // Reset badge text
+                } else {
+                    card.classed('selected', true); // Add 'selected' class to clicked card
+                    selectedDiscipline = card; // Update selected discipline
+                    zoomToDiscipline(disciplineName);
+                    badge.textContent = disciplineName; 
+                }
             })
         });
     });

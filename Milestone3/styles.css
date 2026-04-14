@@ -104,6 +104,18 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     margin-top: 6px;                       /* Space between image and name */
 }
 
+.discipline-card.selected{
+    filter: brightness(0.5);     /* Darken the card */
+}
+
+.discipline-card.selected text{
+    color: #ea0707;     /* Color the text */
+}
+
+.discipline-card:hover{
+    transform: scale(1.05);
+}
+
 /* === Introduction bubbles === */
 #intro-bubbles {
     display: flex;
@@ -149,4 +161,16 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 
 .bubble-text {
     font-size: clamp(32px, 2.5vw, 64px);
+}
+
+/* === Filters badge === */
+#selected-discipline-badge {
+    position: fixed;              /* Stays in place when scrolling */
+    background-color: #091f36;   /* Background color badge */
+    color: white;                /* Text color */
+    border: 2px solid #b40ec0; 
+    border-radius: 12px; /* Rounded corners */
+    padding: 12px 20px; /* Badge size (height x width) */
+    top: 20px; /* Badge position from top of the page */
+    right: 20px; /* Badge position from right of the page */
 }
