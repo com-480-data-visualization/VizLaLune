@@ -2,7 +2,7 @@
 // Each bubble has a text and a size
 const bubblesData = [
     { text: "Nordic Combined is the only male-only discipline", r: 80, vx: 1.5, vy: 1.0 },
-    { text: "Takeaway 2", r: 60, vx: -1.0, vy: 1.5 },
+    { text: "Some disciplines have more male-only events than female-only events", r: 60, vx: -1.0, vy: 1.5 },
     { text: "Takeaway 3", r: 90, vx: 1.2, vy: -1.2 },
     { text: "Takeaway 4", r: 70, vx: -1.8, vy: 0.8 },
     { text: "Takeaway 5", r: 75, vx: 1.0, vy: -1.5 },

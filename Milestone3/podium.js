@@ -108,14 +108,16 @@ function renderTable(scheduleData) {
     });
     rows.append("td").html(d => {
         const silvers = filteredMedallists.filter(m => m.event_name === d.event && m.medal === "SILVER");
+        if (silvers.length === 0) return "Podium equality";
         const country = silvers[0].country_code;
         const names = silvers.map(m => m.name).join("<br>");
-        return silvers.length > 0 ? `<strong>${country}</strong><br>${names}` : "Podium equality";
+        return `<strong>${country}</strong><br>${names}`;
     });
     rows.append("td").html(d => {
         const bronzes = filteredMedallists.filter(m => m.event_name === d.event && m.medal === "BRONZE");
+        if (bronzes.length === 0) return "Podium equality";
         const country = bronzes[0].country_code;
         const names = bronzes.map(m => m.name).join("<br>");
-        return bronzes.length > 0 ? `<strong>${country}</strong><br>${names}` : "Podium equality";
+        return `<strong>${country}</strong><br>${names}`;
     });
 }

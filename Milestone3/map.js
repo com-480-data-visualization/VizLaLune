@@ -176,6 +176,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         badge.textContent = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
+                        updateEventChart(cleanDisciplineName);
                     });
                     break;
                 }
@@ -223,6 +224,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         badge.textContent = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
+                        updateEventChart(cleanDisciplineName);
                     });
                     marker.disciplineMarker22.on('click', function() {
                         const disciplineName = marker.disciplinesList[1];
@@ -233,6 +235,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         badge.textContent = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
+                        updateEventChart(cleanDisciplineName);
                     });
 
                     break;
@@ -295,7 +298,8 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
                         badge.textContent = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
-                        selectDisciplineCard(cleanDisciplineName); 
+                        selectDisciplineCard(cleanDisciplineName);
+                        updateEventChart(cleanDisciplineName);
                     });
                     marker.disciplineMarker32.on('click', function() {
                         const disciplineName = marker.disciplinesList[1];
@@ -306,6 +310,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         badge.textContent = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
+                        updateEventChart(cleanDisciplineName);
                     });
                     marker.disciplineMarker33.on('click', function() {
                         const disciplineName = marker.disciplinesList[2];
@@ -316,6 +321,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         badge.textContent = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
+                        updateEventChart(cleanDisciplineName);                        
                     });
 
                     break;

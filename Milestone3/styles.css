@@ -192,14 +192,18 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 }
 
 
-/* === Gender symmetrical bar plot === */
+/* === Gender symmetrical bar plots === */
 #symmetrical-gender-discipline {
     display: flex;
     justify-content: center;
 }
 
-/* === Symmetrical gender chart tooltip === */
-.sgd-tooltip {
+#symmetrical-gender-event {
+    justify-content: center;
+    margin-top: 40px
+}
+
+.sg-tooltip {
     position: absolute;      
     background-color: #091f36;
     border: 2px solid #b40ec0;
