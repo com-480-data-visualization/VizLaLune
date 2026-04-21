@@ -61,7 +61,7 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
                     updateBubbles(null);
                     // Hide podium section when deselecting
                     document.getElementById('podium').style.display = 'none';
-                    updateEventChart("No discipline selected");
+                    renderEventChart("No discipline selected");
                 // Click on a different card
                 } else {
                     card.classed('selected', true); // Add 'selected' class to clicked card
@@ -85,7 +85,7 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
                     showPodium(cleanDisciplineName, disciplineURL, disciplineImgURL);
 
                     // Update event chart for this discipline
-                    updateEventChart(cleanDisciplineName);
+                    renderEventChart(cleanDisciplineName);
                 }
             });
         });

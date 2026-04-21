@@ -4,20 +4,37 @@
 const countsDisciplines = new Map();
 const countsEvents = new Map();
 
+let activeContinents = new Set(continents); // All selected at start
+let athletesRaw = []; // Stored for recomputing on filter change
 
-// ==== Load CSV + Compute Metrics ====
+// ==== Load CSV  ====
 d3.csv('../DataPreprocessing/athletes.csv').then(data => {
-    // === Fetch data ===
-    data.forEach(athlete => {
+    athletesRaw = data; 
+    recomputeAndRender(); // Initial render with all data
+});
+
+// ==== Recompute counts + re-render both charts ====
+function recomputeAndRender() {
+    // Clear previous counts
+    countsDisciplines.clear();
+    countsEvents.clear();
+
+    // Recount based on active continents
+    athletesRaw.forEach(athlete => {
+        // Skip athlete if their continent is not selected
+        const continent = countryToContinent[athlete.country_code];
+        if (!activeContinents.has(continent)) return;
+
         try {
             // Same parsing logic as intro_bubbles.js
             // e.g. [{discipline: 'Cross-Country Skiing', event: "Men's 10km Interval Start Free"}, {discipline: 'Cross-Country Skiing', event: "Men's 10km + 10km Skiathlon"}]
             const participations = Function('return (' + athlete.events + ')')();
 
-            // Disciplines for this athlete (avoid counting twice if multiple events in same discipline)
+            // Disciplines + events for this athlete (avoid counting twice if multiple events in same discipline)
             const disciplines = [...new Set(participations.map(p => p.discipline))];
             const events = [...new Set(participations.map(p => p.discipline + "/" + p.event))];
 
+            // Count disciplines
             disciplines.forEach(discipline => {
                 // Create entry if discipline not yet seen
                 if (!countsDisciplines.has(discipline)) {
@@ -27,6 +44,7 @@ d3.csv('../DataPreprocessing/athletes.csv').then(data => {
                 countsDisciplines.get(discipline)[athlete.gender]++;
             });
 
+            // Count events
             events.forEach(event => {
                 // Create entry if event not yet seen
                 if (!countsEvents.has(event)) {
@@ -39,25 +57,39 @@ d3.csv('../DataPreprocessing/athletes.csv').then(data => {
         } catch { return; }
     });
 
-    // === Gender distribution on disciplines ===
-    // == Convert Map to array for D3 ==
+
+
+    // Re-render discipline chart
+    renderDisciplineChart();
+    // Re-render event chart
+    const disciplineName = document.getElementById('badge-text').textContent;
+    renderEventChart(disciplineName);
+}
+
+// ==== Render discipline chart ====
+function renderDisciplineChart() {
+    // === Clear previous chart ===
+    d3.select('#symmetrical-gender-discipline').selectAll('*').remove();
+
+    // === Convert Map to array for D3 ===
     const chartData = Array.from(countsDisciplines, ([discipline, values]) => ({
         discipline,
         M: values.M,
         F: values.F
     })).sort((a, b) => (b.M + b.F) - (a.M + a.F)); // Sort by total descending
 
-    // == Create SVG ==
+    // === Generate SVG ===
+    // == Dimensions ==
     const width = 800;
     const height = 480;
     const margin = 30; // Space for x-axis labels to show properly
 
-    const sgdSvg = d3.select('#symmetrical-gender-discipline')
+    const dSvg = d3.select('#symmetrical-gender-discipline')
         .append('svg')
         .attr('width', width + margin * 2) // Extra space for axes on both sides
-        .attr('height', height + margin) // Extra space for x-axis
+        .attr('height', height + margin + 40) // Extra space for x-axis + checkboxes on top
         .append('g')
-        .attr('transform', `translate(${(width / 2) + margin}, ${0})`); // Start bars middle and top
+        .attr('transform', `translate(${(width / 2) + margin}, 40)`); // Start bars middle and top + 40px down for checkboxes
 
     // == Scales ==
     const maxVal = d3.max(chartData, d => Math.max(d.M, d.F));
@@ -71,11 +103,8 @@ d3.csv('../DataPreprocessing/athletes.csv').then(data => {
         .range([0, height])
         .padding(0.2);
 
-    console.log('xScale domain:', xScale.domain());
-    console.log('yScale domain:', yScale.domain());
-
-    // == Draw Male bars (go LEFT) ==
-    sgdSvg.selectAll('.bar-m')
+    // == Bars ==
+    dSvg.selectAll('.bar-m')
         .data(chartData)
         .enter()
         .append('rect')
@@ -86,8 +115,7 @@ d3.csv('../DataPreprocessing/athletes.csv').then(data => {
         .attr('height', yScale.bandwidth())
         .attr('fill', '#4e9af1');
 
-    // == Draw Female bars (go RIGHT) ==
-    sgdSvg.selectAll('.bar-f')
+    dSvg.selectAll('.bar-f')
         .data(chartData)
         .enter()
         .append('rect')
@@ -98,8 +126,8 @@ d3.csv('../DataPreprocessing/athletes.csv').then(data => {
         .attr('height', yScale.bandwidth())
         .attr('fill', '#f14ee9');
 
-    // == Discipline labels (center) ==
-    sgdSvg.selectAll('.label-discipline')
+    // == Labels ==
+    dSvg.selectAll('.label-discipline')
         .data(chartData)
         .enter()
         .append('text')
@@ -112,24 +140,94 @@ d3.csv('../DataPreprocessing/athletes.csv').then(data => {
         .attr('font-size', '11px')
         .text(d => d.discipline);
 
-    // == Left axis (Male — values increase going left) ==
-    sgdSvg.append('g')
-        .attr('transform', `translate(0, ${height})`)   // Place at bottom
-        .call(d3.axisBottom(xScale.copy().range([0, -width / 2]))); // Reversed range for left side
 
-    // == Right axis (Female) ==
-    sgdSvg.append('g')
-        .attr('transform', `translate(0, ${height})`)   // Place at bottom
+    // == Axes ==
+    dSvg.append('g')
+        .attr('transform', `translate(0, ${height})`)
+        .call(d3.axisBottom(xScale.copy().range([0, -width / 2])));
+
+    dSvg.append('g')
+        .attr('transform', `translate(0, ${height})`)
         .call(d3.axisBottom(xScale));
+
+    // == Legend ==
+    const legend = dSvg.append('g')
+        .attr('transform', `translate(${-width / 2}, ${height - margin})`);
+
+    legend.append('rect')
+        .attr('width', 14)
+        .attr('height', 14)
+        .attr('fill', '#4e9af1');
+
+    legend.append('text')
+        .attr('x', 20)
+        .attr('y', 11)
+        .attr('fill', 'black')
+        .attr('font-size', '12px')
+        .text('Male');
+
+    legend.append('rect')
+        .attr('x', 70)
+        .attr('width', 14)
+        .attr('height', 14)
+        .attr('fill', '#f14ee9');
+
+    legend.append('text')
+        .attr('x', 90)
+        .attr('y', 11)
+        .attr('fill', 'black')
+        .attr('font-size', '12px')
+        .text('Female');
+
+    // == Checkboxes (top right of SVG) ==
+    const checkBoxes = dSvg.append('g')
+        .attr('transform', `translate(${(width / 2) - margin}, ${0})`);
+
+    continents.forEach((continent, i) => {
+        const box = checkBoxes.append('g')
+            .attr('transform', `translate(0, ${i * 22})`) // 22px per row
+            .style('cursor', 'pointer')
+            .on('click', function() {
+                // Toggle continent in active set
+                if (activeContinents.has(continent)) {
+                    activeContinents.delete(continent);
+
+                } else {
+                    activeContinents.add(continent);
+                }
+                // Re-render everything
+                recomputeAndRender();
+            });
+
+        // Checkbox rect
+        box.append('rect')
+            .attr('width', 12).attr('height', 12)
+            .attr('rx', 2) // Slightly rounded
+            .attr('fill', activeContinents.has(continent) ? '#b40ec0' : '#333')
+            .attr('stroke', '#b40ec0').attr('stroke-width', 1);
+
+        // Checkmark when selected
+        box.append('text')
+            .attr('x', 2).attr('y', 11)
+            .attr('font-size', '10px')
+            .attr('fill', 'white')
+            .text(activeContinents.has(continent) ? '✓' : '');
+
+        // Label
+        box.append('text')
+            .attr('x', 18).attr('y', 10)
+            .attr('dominant-baseline', 'middle')
+            .attr('fill', 'black').attr('font-size', '11px')
+            .text(continent);
+    });
 
     // == Tooltip ==
     const tooltip = d3.select('body')
         .append('div')
         .attr('class', 'sg-tooltip')
         .style('display', 'none')
-    
-    // Attach hover events
-    sgdSvg.selectAll('.bar-m, .bar-f')
+
+    dSvg.selectAll('.bar-m, .bar-f')
         .on('mouseover', function(event, d) {
             tooltip
                 .style('display', 'flex')
@@ -148,20 +246,20 @@ d3.csv('../DataPreprocessing/athletes.csv').then(data => {
         .on('mouseout', function() {
             tooltip.style('display', 'none');
         });
-});
+}
 
-// ==== Gender distribution on events (for selected discipline) ====
-function updateEventChart(discipline) {
+// ==== Render event chart ====
+function renderEventChart(discipline) {
     // Clear previous chart
     d3.select('#symmetrical-gender-event').selectAll('*').remove();
-    const sgeSvg = d3.select('#symmetrical-gender-event');
+    const svg = d3.select('#symmetrical-gender-event');
 
     // Hide/Show event chart based on whether a discipline is selected
     if (discipline === "No discipline selected") {
-        sgeSvg.style('display', 'none');
+        svg.style('display', 'none');
         return; // No discipline selected
     } else {
-        sgeSvg.style('display', 'flex');
+        svg.style('display', 'flex');
     }
 
     // Filter events for this discipline + Convert Map to array for D3
@@ -273,4 +371,33 @@ function updateEventChart(discipline) {
         .on('mouseout', function() {
             eTooltip.style('display', 'none');
         });
+    
+    // == Legend ==
+    const legend = eSvg.append('g')
+        .attr('transform', `translate(${-eWidth / 2}, ${eHeight - eMargin})`);
+
+    legend.append('rect')
+        .attr('width', 14)
+        .attr('height', 14)
+        .attr('fill', '#4e9af1');
+
+    legend.append('text')
+        .attr('x', 20)
+        .attr('y', 11)
+        .attr('fill', 'black')
+        .attr('font-size', '12px')
+        .text('Male');
+
+    legend.append('rect')
+        .attr('x', 70)
+        .attr('width', 14)
+        .attr('height', 14)
+        .attr('fill', '#f14ee9');
+
+    legend.append('text')
+        .attr('x', 90)
+        .attr('y', 11)
+        .attr('fill', 'black')
+        .attr('font-size', '12px')
+        .text('Female');
 }
