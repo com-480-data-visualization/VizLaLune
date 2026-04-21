@@ -123,7 +123,6 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
         </section>
 
         <!-- SECTION 3: Gender/Team Exploration -->
-        <section>
             <h2 id='section3'>Section 3 Title: Gender/Team Exploration</h2>
 
             <svg id='figureXXX' class='skeletonSketch'>
@@ -148,6 +147,9 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
             </svg>
             <p class='skeletonSketchLabel'>Figure XXX: Moving around bubbles. Conclusion with the main takeaways for the different visualizations.</p>
 
+            <!-- Conclusion bubbles -->
+            <div id="conclusion-bubbles"></div>
+
         </section>
 
         <!-- FILTERS BADGE -->
@@ -166,8 +168,13 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
     <!-- To load data for interactive map -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
-    <script src='bubbles.js'></script>
+    <!-- Section 1 -->
+    <script src='intro_bubbles.js'></script>
     <script src='grid.js'></script>
     <script src="podium.js"></script>
     <script src='map.js'></script>
+
+    <!-- Section 3 -->
+    <script src='conclusion_bubbles.js'></script>
+
 </html>

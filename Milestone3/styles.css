@@ -178,3 +178,15 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     top: 20px; /* Badge position from top of the page */
     right: 20px; /* Badge position from right of the page */
 }
+
+/* === Conclusion bubbles === */
+#conclusion-bubbles {
+    width: 800px;
+    height: 500px;
+    margin: 0 auto;              /* Centre box on x-axis */
+    background-color: #091f36;  
+    border: 2px solid #b40ec0;  
+    border-radius: 16px;         /* Round corner */
+    overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
+    position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
+}
