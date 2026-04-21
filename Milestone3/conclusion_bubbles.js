@@ -1,7 +1,7 @@
 // === Data ===
 // Each bubble has a text and a size
 const bubblesData = [
-    { text: "Takeaway 1", r: 80, vx: 1.5, vy: 1.0 },
+    { text: "Nordic Combined is the only male-only discipline", r: 80, vx: 1.5, vy: 1.0 },
     { text: "Takeaway 2", r: 60, vx: -1.0, vy: 1.5 },
     { text: "Takeaway 3", r: 90, vx: 1.2, vy: -1.2 },
     { text: "Takeaway 4", r: 70, vx: -1.8, vy: 0.8 },

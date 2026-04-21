@@ -190,3 +190,22 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
     position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
 }
+
+
+/* === Gender symmetrical bar plot === */
+#symmetrical-gender-discipline {
+    display: flex;
+    justify-content: center;
+}
+
+/* === Symmetrical gender chart tooltip === */
+.sgd-tooltip {
+    position: absolute;      
+    background-color: #091f36;
+    border: 2px solid #b40ec0;
+    border-radius: 8px;
+    padding: 10px 14px;       /* For text within tooltip */
+    color: white;
+    font-size: 13px;
+    pointer-events: none;     /* Otherwise blinking */
+}
