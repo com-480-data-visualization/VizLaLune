@@ -2,10 +2,10 @@
 // Each bubble has a text and a size
 const bubblesData = [
     { text: "Nordic Combined is the only male-only discipline", r: 80, vx: 1.5, vy: 1.0 },
-    { text: "Some disciplines have more male-only events than female-only events", r: 60, vx: -1.0, vy: 1.5 },
-    { text: "Takeaway 3", r: 90, vx: 1.2, vy: -1.2 },
-    { text: "Takeaway 4", r: 70, vx: -1.8, vy: 0.8 },
-    { text: "Takeaway 5", r: 75, vx: 1.0, vy: -1.5 },
+    { text: "Some disciplines have more male-only events than female-only events", r: 95, vx: -1.0, vy: 1.5 },
+    { text: "Takeaway 3", r: 120, vx: 1.2, vy: -1.2 },
+    { text: "Takeaway 4", r: 110, vx: -1.8, vy: 0.8 },
+    { text: "Takeaway 5", r: 90, vx: 1.0, vy: -1.5 },
 ];
 
 // === Box dimensions ===
@@ -39,12 +39,39 @@ bubbles.append('circle')
 
 // === Append text to each group ===
 bubbles.append('text')
-    .text(d => d.text)
     .attr('text-anchor', 'middle')   // Centre text of x-axis
     .attr('dominant-baseline', 'middle') // Centre text of y-axis
     .attr('fill', 'white')
-    .attr('font-size', '14px')
-    .style('pointer-events', 'none'); // Text to not interfere with mouse events on circles
+    .style('pointer-events', 'none') // Text to not interfere with mouse events on circles
+    .each(function(d) {
+        const text = d3.select(this);
+        const words = d.text.split(' ');
+        const lineHeight = 14; // px per line
+        const maxCharsPerLine = Math.floor(d.r * 1.6 / 7); // Approximate chars that fit per line (given by Anthropic Sonnet 4.6)
+
+        // Group words into lines
+        const lines = [];
+        let currentLine = '';
+        words.forEach(word => {
+            if ((currentLine + ' ' + word).trim().length <= maxCharsPerLine) {
+                currentLine = (currentLine + ' ' + word).trim();
+            } else {
+                if (currentLine) lines.push(currentLine);
+                currentLine = word;
+            }
+        });
+        if (currentLine) lines.push(currentLine);
+
+        // Center lines vertically around 0
+        const totalHeight = (lines.length - 1) * lineHeight;
+        lines.forEach((line, i) => {
+            text.append('tspan')
+                .attr('x', 0)
+                .attr('dy', i === 0 ? -totalHeight / 2 : lineHeight) // First line offset, rest increment
+                .attr('font-size', '11px')
+                .text(line);
+        });
+    });
 
 // === Hover ===
 bubbles

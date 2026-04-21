@@ -2,17 +2,6 @@ main {
     text-align: center;           /* Center the main title and subtitle <center> tag is not supported by HTML5 */
 }
 
-#sidebar {
-    position: fixed;              /* Sort du flux du document */
-    left: 0;                      /* Makes sure all sidebar is properly hidden */
-    transform: translateX(-100%); /* Initialement caché */
-    transition: transform 0.3s ease-in-out;  /* Smooth slide */
-}
-
-#sidebar.active{ /* For elements of both classes use the class1.class2 selector */
-    transform: translate(0); /* Show the sidebar when active */
-}
-
 .skeletonSketch {
     display: block; /* Element takes all available width */
     margin: 20px auto; /* Centers the element horizontally and adds vertical spacing */
@@ -30,6 +19,33 @@ main {
     text-align: center;
 }
 
+/* === Sidebar === */
+#sidebar {
+    position: fixed;              /* Comes with scrolling */
+    left: 0;                      /* Makes sure all sidebar is properly hidden */
+    top: 0;
+    height: 100%;
+    width: 220px;
+    z-index: 100;
+    transform: translateX(-100%); /* Initially hidden */
+    transition: transform 0.3s ease-in-out;  /* Smooth slide */
+    padding-top: 30px;          /* Space for the button */
+    background-color: #091f36;
+    color: white;
+}
+
+#sidebar.active{ 
+    transform: translateX(0); /* Show the sidebar when active */
+}
+
+#sidebar-button {
+    position:fixed;
+    z-index: 200; /* Button above sidebar */
+}
+
+#sidebar ul li {
+    padding: 10px 0px;  /* Y and X padding for list items */
+}
 
 /* === Leaflet map container ===*/
 #map {
