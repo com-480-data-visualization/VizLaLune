@@ -62,8 +62,34 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
             <p class='skeletonSketchLabel'>Figure XXX: Interactive map. Mouse-on venue symbols expands the symbol with the present disciplines/events which are clickable and redirect to the official event webpage.</p>
             <!-- Introduction bubbles -->
             <div id="intro-bubbles"></div>
-            <!-- Discipline grid-->
+            <!-- Discipline grid -->
             <div id="discipline-grid"></div>
+            <!-- Podium (With all events) -->
+            <div id="podium" style="display: none;">
+                <h1 id="disciplineName"></h1>
+                <img id="disciplineImage" src="" alt="Discipline Image">
+
+                <!-- events table -->
+                <div class="table-wrapper">
+                    <table id="podium-table">
+                        <thead>
+                            <tr>
+                                <th id="sort-event">Event Name<span id="sort-arrow">⇅</span></th>
+                                <th>Event Type</th>
+                                <th>Finals Venue</th>
+                                <th>Date</th>
+                                <th>1st Place</th>
+                                <th>2nd Place</th>
+                                <th>3rd Place</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <h3 id="disciplineDetails"></h3>
+                <p id="disciplineURL"></p>
+            </div>
             <!-- Interactive Map -->
             <div id="map"></div>
 
@@ -142,5 +168,6 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
 
     <script src='bubbles.js'></script>
     <script src='grid.js'></script>
+    <script src="podium.js"></script>
     <script src='map.js'></script>
 </html>

@@ -3,19 +3,40 @@ let filteredSchedule = [];
 let filteredMedallists = [];
 let sortState = "asc"; // "asc": A to Z, "desc": Z to A
 
+// Cache the CSV data so we only load it once
+let schedulesCache = null;
+let medallistsCache = null;
 
-// ==== Load CSV data onto table ====
-// Waits for both CSV to be loaded before continuing
-Promise.all([
-    d3.csv("../DataPreprocessing/schedules.csv"),
-    d3.csv("../DataPreprocessing/medallists.csv")
-]).then(([schedulesData, medallistsData]) => {
-    // Filter the CSV data based on the discipline name
-    filteredSchedule = schedulesData.filter(row => row.discipline === disciplineName && row.event_medal === "1");
-    filteredMedallists = medallistsData.filter(row => row.discipline === disciplineName);
+// ==== Main entry point: called from grid.js and map.js ====
+// disciplineName : display name e.g. "Cross-Country Skiing"
+// disciplineURL  : link to official Olympics page
+// disciplineImage: path to the discipline image
+function showPodium(disciplineName, disciplineURL, disciplineImage) {
+    // Show the section
+    const section = document.getElementById("podium");
+    section.style.display = "block";
 
-    renderTable(filteredSchedule);
-});
+    // Scroll to it smoothly
+    section.scrollIntoView({ behavior: "smooth" });
+
+    // Fill header info
+    document.getElementById("disciplineName").textContent = disciplineName;
+    document.getElementById("disciplineImage").src = disciplineImage;
+    document.getElementById("disciplineDetails").textContent = "More details about " + disciplineName;
+    document.getElementById("disciplineURL").innerHTML =
+        `<a href="${disciplineURL}" target="_blank">View official Olympics Website for ${disciplineName}</a>`;
+
+    // Reset sort state on each new discipline load
+    sortState = "asc";
+    d3.select("#sort-arrow").text("⇅");
+
+    // Load (or reuse cached) CSV data and render the table
+    loadCSVData().then(([schedulesData, medallistsData]) => {
+        filteredSchedule = schedulesData.filter(row => row.discipline === disciplineName && row.event_medal === "1");
+        filteredMedallists = medallistsData.filter(row => row.discipline === disciplineName);
+        renderTable(filteredSchedule);
+    });
+}
 
 // ==== Sort table ====
 // On click change order of table + arrow direction
@@ -42,9 +63,25 @@ d3.select("#sort-event").on("click", function() {
     renderTable(sortedEvents);
 });
 
+// === Load both CSVs once and cache them ===
+function loadCSVData() {
+    if (schedulesCache && medallistsCache) {
+        return Promise.resolve([schedulesCache, medallistsCache]);
+    }
+    return Promise.all([
+        d3.csv("../DataPreprocessing/schedules.csv"),
+        d3.csv("../DataPreprocessing/medallists.csv")
+    ]).then(([schedulesData, medallistsData]) => {
+        schedulesCache = schedulesData;
+        medallistsCache = medallistsData;
+        return [schedulesCache, medallistsCache];
+    });
+}
+
+// === Render the table based on filtered data ===
 function renderTable(scheduleData) {
     // Select the table body
-    const tbody = d3.selectAll("table tbody");
+    const tbody = d3.select("#podium-table tbody");
 
     // Clear hard coded existing rows (leave them for debug for the moment)
     tbody.selectAll("tr").remove();

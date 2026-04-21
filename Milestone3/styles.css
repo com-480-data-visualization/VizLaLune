@@ -37,6 +37,10 @@ main {
 }
 
 /* === Podium page === */
+#podium {
+    text-align: center;      /* Centres title, image, and text */
+}
+
 .table-wrapper {
     display: flex; /* Flex items for table elements */
     justify-content: center; /* Centre table horizontally */

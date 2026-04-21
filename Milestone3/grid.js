@@ -38,20 +38,14 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
             // Cross-country special case handling
             if (disciplineName === "Cross-country-skiing"){
                 card.append('text')
-                    .text("Cross-country skiing");
+                    .text("Cross-Country Skiing");
             } else {
                 card.append('text')
-                    .text(disciplineName.replace(/-/g, ' '));
+                    .text(disciplineName.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
             }
 
             // == Click event ==
-                // Redirect to discipline page
-            card.on('dblclick', () => {
-                window.open(
-                    `http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImgURL)}`, '_blank'
-                );
-            });
-                // Zoom in on venue map
+                // Single click: zoom map + show podium below grid
             card.on('click', () => {
                 const badge = document.getElementById('badge-text');
 
@@ -64,6 +58,8 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
                     selectedDiscipline = null; // Deselect if clicking the same card
                     badge.textContent = "No discipline selected"; // Reset badge text
                     updateBubbles(null);
+                    // Hide podium section when deselecting
+                    document.getElementById('podium').style.display = 'none';
                 } else {
                     card.classed('selected', true); // Add 'selected' class to clicked card
                     selectedDiscipline = card; // Update selected discipline
@@ -78,9 +74,31 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
                             .replace(/\b\w/g, c => c.toUpperCase());
                     }
 
-                    badge.textContent = cleanDisciplineName; 
+                    badge.textContent = cleanDisciplineName;
                     updateBubbles(cleanDisciplineName);
+
+                    // Show podium inline below the grid
+                    showPodium(cleanDisciplineName, disciplineURL, disciplineImgURL);
                 }
-            })
+            });
         });
     });
+
+
+// Called from map.js when a discipline marker is clicked
+function selectDisciplineCard(disciplineName) {
+    d3.selectAll('.discipline-card').each(function() {
+        const card = d3.select(this);
+        const cardText = card.select('text').text();
+
+        if (cardText === disciplineName) {
+            // Deselect previous card
+            if (selectedDiscipline) {
+                selectedDiscipline.classed('selected', false);
+            }
+            // Select this card
+            card.classed('selected', true);
+            selectedDiscipline = card;
+        }
+    });
+}

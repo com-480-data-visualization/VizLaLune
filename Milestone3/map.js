@@ -128,6 +128,8 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
             window.open(venue.url, '_blank');
         });
 
+        const badge = document.getElementById('badge-text');
+
         // Show/Hide disciplines on click
         marker.on('click', function() {
             // Delete previous discipline markers
@@ -169,7 +171,11 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         const disciplineName = marker.disciplinesList[0];
                         const disciplineURL = marker.disciplineURL[0];
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
-                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                        const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
+                        showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
+                        badge.textContent = cleanDisciplineName;
+                        updateBubbles(cleanDisciplineName);
+                        selectDisciplineCard(cleanDisciplineName);
                     });
                     break;
                 }
@@ -212,13 +218,21 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         const disciplineName = marker.disciplinesList[0];
                         const disciplineURL = marker.disciplineURL[0];
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
-                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                        const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
+                        showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
+                        badge.textContent = cleanDisciplineName;
+                        updateBubbles(cleanDisciplineName);
+                        selectDisciplineCard(cleanDisciplineName);
                     });
                     marker.disciplineMarker22.on('click', function() {
                         const disciplineName = marker.disciplinesList[1];
                         const disciplineURL = marker.disciplineURL[1];
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png';
-                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                        const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
+                        showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
+                        badge.textContent = cleanDisciplineName;
+                        updateBubbles(cleanDisciplineName);
+                        selectDisciplineCard(cleanDisciplineName);
                     });
 
                     break;
@@ -277,19 +291,31 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         const disciplineName = marker.disciplinesList[0];
                         const disciplineURL = marker.disciplineURL[0];
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
-                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                        const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
+                        showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
+                        badge.textContent = cleanDisciplineName;
+                        updateBubbles(cleanDisciplineName);
+                        selectDisciplineCard(cleanDisciplineName); 
                     });
                     marker.disciplineMarker32.on('click', function() {
                         const disciplineName = marker.disciplinesList[1];
                         const disciplineURL = marker.disciplineURL[1];
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png';
-                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                        const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
+                        showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
+                        badge.textContent = cleanDisciplineName;
+                        updateBubbles(cleanDisciplineName);
+                        selectDisciplineCard(cleanDisciplineName);
                     });
                     marker.disciplineMarker33.on('click', function() {
                         const disciplineName = marker.disciplinesList[2];
                         const disciplineURL = marker.disciplineURL[2];
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[2] + '.png';
-                        window.open(`http://localhost:8000/Milestone3/podium.html?discipline=${disciplineName}&url=${encodeURIComponent(disciplineURL)}&image=${encodeURIComponent(disciplineImage)}`, '_blank');
+                        const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
+                        showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
+                        badge.textContent = cleanDisciplineName;
+                        updateBubbles(cleanDisciplineName);
+                        selectDisciplineCard(cleanDisciplineName);
                     });
 
                     break;
@@ -395,4 +421,11 @@ function zoomToDiscipline(disciplineName) {
 
     // Open disciplines after 1.3s to happen after animation
     setTimeout(() => target.fire('click'), 1300);
+}
+
+// === Clean discipline name for podium.js ===
+function cleanMapDisciplineName(name) {
+    if (name === "Cross-country-skiing") return "Cross-Country Skiing";
+    // General case: replace hyphens with spaces, capitalize each word
+    return name.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
