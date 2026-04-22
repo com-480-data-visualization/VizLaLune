@@ -1,7 +1,3 @@
-main {
-    text-align: center;           /* Center the main title and subtitle <center> tag is not supported by HTML5 */
-}
-
 .skeletonSketch {
     display: block; /* Element takes all available width */
     margin: 20px auto; /* Centers the element horizontally and adds vertical spacing */
@@ -19,7 +15,35 @@ main {
     text-align: center;
 }
 
+/* === Banner === */
+#banner {
+    width: 100%;
+    position: relative;    /* Needed for absolute positioning of main */
+}
+
+#banner img {
+    width: 100%;
+    height: auto;    /* Height adjusts proportionally to the image ratio */
+}
+
+main {
+    position: absolute;    /* Overlay on top of the image */
+    bottom: 30px;          /* Distance from bottom of banner */
+    width: 100%;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Shadow for readability */
+}
+
 /* === Sidebar === */
+#sidebar-button {
+    position:fixed;
+    z-index: 200; /* Button above sidebar */
+    font-size: 24px;
+    aspect-ratio: 1 / 1;
+    width: 44px;
+}
+
 #sidebar {
     position: fixed;              /* Comes with scrolling */
     left: 0;                      /* Makes sure all sidebar is properly hidden */
@@ -29,22 +53,50 @@ main {
     z-index: 100;
     transform: translateX(-100%); /* Initially hidden */
     transition: transform 0.3s ease-in-out;  /* Smooth slide */
-    padding-top: 30px;          /* Space for the button */
+    padding-top: 50px;          /* Space for the button */
     background-color: #091f36;
     color: white;
+    text-align: center;
 }
 
 #sidebar.active{ 
     transform: translateX(0); /* Show the sidebar when active */
 }
 
-#sidebar-button {
-    position:fixed;
-    z-index: 200; /* Button above sidebar */
+#sidebar h2 {
+    font-size: 40px; 
+}
+
+#sidebar ul {
+    list-style: none;    /* Remove bullet points */
+    padding: 0;          /* Remove default left indent that comes with ul */
+    flex: 1;             /* Takes up all available vertical space -> pushes GitHub logo down */
 }
 
 #sidebar ul li {
     padding: 10px 0px;  /* Y and X padding for list items */
+}
+
+#sidebar ul li a {
+    color: white;
+    text-decoration: none;     /* Remove underline */
+    font-size: 30px;
+}
+
+#sidebar ul li a:hover {
+    color: #b40ec0;            /* Highlight on hover */
+}
+
+#github-link img {
+    width: 100px;
+    height: auto;
+    filter: invert(1);    /* Makes the black GitHub logo white */
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+#github-link img:hover {
+    opacity: 1;           /* Full opacity on hover */
 }
 
 /* === Leaflet map container ===*/
