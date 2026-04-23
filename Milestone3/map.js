@@ -15,7 +15,6 @@ const projection = d3.geoNaturalEarth1()
 
 const path = d3.geoPath().projection(projection);
 
-// Correspondance ISO alpha-3 (lettres) -> ISO numeric (chiffres du TopoJSON)
 const isoAlpha3ToNumeric = {
   "AFG":"004","ALB":"008","DZA":"012","AND":"020","AGO":"024","ARG":"032",
   "ARM":"051","AUS":"036","AUT":"040","AZE":"031","BEL":"056","BEN":"204",
@@ -29,7 +28,7 @@ const isoAlpha3ToNumeric = {
   "KAZ":"398","KEN":"404","KGZ":"417","KOR":"410","KOS":"926","KSA":"682",
   "SAU":"682","LAT":"428","LBN":"422","LIE":"438","LTU":"440","LUX":"442",
   "MAD":"450","MAR":"504","MAS":"458","MDA":"498","MEX":"484","MGL":"496",
-  "MKD":"807","MLT":"470","MNE":"499","MON":"492","MCO":"492","MNE":"499",
+  "MKD":"807","MLT":"470","MNE":"499","MON":"492","MCO":"492",
   "NED":"528","NLD":"528","NGR":"566","NGA":"566","NOR":"578","NZL":"554",
   "PAK":"586","PHI":"608","POL":"616","POR":"620","PRT":"620","PUR":"630",
   "ROU":"642","RSA":"710","ZAF":"710","RUS":"643","SGP":"702","SVK":"703",
@@ -39,51 +38,7 @@ const isoAlpha3ToNumeric = {
   "VEN":"862","AIN":"000"
 };
 
-Promise.all([
-  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"),
-  d3.csv("../DataPreprocessing/athletes.csv")
-]).then(([world, athletes]) => {
-
-  // Compte les athlètes par pays
-  const athletesByCountry = d3.rollup(
-    athletes,
-    v => v.length,
-    d => d.country_code
-  );
-
-  // Ensemble des IDs numériques des pays participants
-  const participatingIds = new Set();
-  athletesByCountry.forEach((count, code) => {
-    const numId = isoAlpha3ToNumeric[code];
-    if (numId) participatingIds.add(numId);
-  });
-
-  // Échelle de couleur : plus d'athlètes = plus clair
-  const maxAthletes = d3.max([...athletesByCountry.values()]);
-  const colorScale = d3.scaleSequential()
-    .domain([0, maxAthletes])
-    .interpolator(d3.interpolateBlues);
-
-  const countries = topojson.feature(world, world.objects.countries);
-
-  // Dessine les pays
-  const countryPaths = mapSvg.append("g")
-    .selectAll("path")
-    .data(countries.features)
-    .join("path")
-    .attr("d", path)
-    .attr("fill", d => {
-      const numId = String(+d.id).padStart(3, "0");
-      // Trouve le code alpha-3 correspondant
-      const alpha3 = Object.keys(isoAlpha3ToNumeric)
-        .find(k => isoAlpha3ToNumeric[k] === numId);
-      const count = alpha3 ? (athletesByCountry.get(alpha3) || 0) : 0;
-      return count > 0 ? colorScale(count) : "#1a2e4a";
-    })
-    .attr("stroke", "#2a4a6a")
-    .attr("stroke-width", 0.5);
-
-    // Tooltip
+// Tooltip
 const tooltip = d3.select("body")
   .append("div")
   .style("position", "fixed")
@@ -96,163 +51,195 @@ const tooltip = d3.select("body")
   .style("opacity", 0)
   .style("border", "1px solid rgba(255,255,255,0.1)");
 
-// Données pays (nom depuis TopoJSON)
-const countryNames = new Map();
-countries.features.forEach(d => countryNames.set(String(+d.id).padStart(3,"0"), d.properties?.name || ""));
+Promise.all([
+  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"),
+  d3.csv("../DataPreprocessing/athletes.csv"),
+  d3.json("countries_coords.json"),
+  d3.json("regions.json")
+]).then(([world, athletes, coords, regions]) => {
 
-countryPaths
-  .on("mouseover", function(event, d) {
-    const numId = String(+d.id).padStart(3, "0");
-    const alpha3 = Object.keys(isoAlpha3ToNumeric).find(k => isoAlpha3ToNumeric[k] === numId);
-    const count = alpha3 ? (athletesByCountry.get(alpha3) || 0) : 0;
-    if (count === 0) return;
+  // Rend athletes accessible globalement pour barchart.js
+  window.athletesData = athletes;
+  updateBarChart(athletes, null);
 
-    d3.select(this).attr("stroke", "white").attr("stroke-width", 1.5);
+  // Compte les athlètes par pays
+  const athletesByCountry = d3.rollup(
+    athletes,
+    v => v.length,
+    d => d.country_code
+  );
 
-    tooltip
-      .style("opacity", 1)
-      .html(`<strong>${alpha3}</strong><br>${count} athletes`);
-  })
-  .on("mousemove", function(event) {
-    tooltip
-      .style("left", (event.clientX + 14) + "px")
-      .style("top", (event.clientY - 10) + "px");
-  })
-  .on("mouseout", function() {
-    d3.select(this).attr("stroke", "#2a4a6a").attr("stroke-width", 0.5);
-    tooltip.style("opacity", 0);
+  const maxAthletes = d3.max([...athletesByCountry.values()]);
+
+  const colorScale = d3.scaleSequential()
+    .domain([0, maxAthletes])
+    .interpolator(d3.interpolateBlues);
+
+  const countries = topojson.feature(world, world.objects.countries);
+
+  // ── CARTE ──────────────────────────────────────────────────────────────
+  const countryPaths = mapSvg.append("g")
+    .selectAll("path")
+    .data(countries.features)
+    .join("path")
+    .attr("d", path)
+    .attr("fill", d => {
+      const numId = String(+d.id).padStart(3, "0");
+      const alpha3 = Object.keys(isoAlpha3ToNumeric)
+        .find(k => isoAlpha3ToNumeric[k] === numId);
+      const count = alpha3 ? (athletesByCountry.get(alpha3) || 0) : 0;
+      return count > 0 ? colorScale(count) : "#1a2e4a";
+    })
+    .attr("stroke", "#2a4a6a")
+    .attr("stroke-width", 0.5);
+
+  // ── TOOLTIP + HOVER + CLICK ─────────────────────────────────────────────
+  countryPaths
+    .on("mouseover", function(event, d) {
+      const numId = String(+d.id).padStart(3, "0");
+      const alpha3 = Object.keys(isoAlpha3ToNumeric)
+        .find(k => isoAlpha3ToNumeric[k] === numId);
+      const count = alpha3 ? (athletesByCountry.get(alpha3) || 0) : 0;
+      if (count === 0) return;
+      d3.select(this).attr("stroke", "white").attr("stroke-width", 1.5);
+      tooltip.style("opacity", 1)
+        .html(`<strong>${alpha3}</strong><br>${count} athletes`);
+    })
+    .on("mousemove", function(event) {
+      tooltip
+        .style("left", (event.clientX + 14) + "px")
+        .style("top", (event.clientY - 10) + "px");
+    })
+    .on("mouseout", function() {
+      if (!d3.select(this).classed("selected")) {
+        d3.select(this).attr("stroke", "#2a4a6a").attr("stroke-width", 0.5);
+      }
+      tooltip.style("opacity", 0);
+    })
+    .on("click", function(event, d) {
+      const numId = String(+d.id).padStart(3, "0");
+      const alpha3 = Object.keys(isoAlpha3ToNumeric)
+        .find(k => isoAlpha3ToNumeric[k] === numId);
+      const count = alpha3 ? (athletesByCountry.get(alpha3) || 0) : 0;
+      if (count === 0) return;
+
+      const isSame = d3.select(this).classed("selected");
+      countryPaths.classed("selected", false)
+        .attr("stroke", "#2a4a6a")
+        .attr("stroke-width", 0.5);
+
+      if (!isSame) {
+        d3.select(this)
+          .classed("selected", true)
+          .attr("stroke", "white")
+          .attr("stroke-width", 2);
+        updateBarChart(athletes, alpha3);
+      } else {
+        updateBarChart(athletes, null);
+      }
+    });
+
+  // ── DOTS ────────────────────────────────────────────────────────────────
+  const milanXY = projection([9.19, 45.46]);
+
+  const dotsGroup = mapSvg.append("g").attr("class", "dots");
+
+  const radiusScale = d3.scaleSqrt()
+    .domain([0, maxAthletes])
+    .range([3, 18]);
+
+  const dots = [];
+  athletesByCountry.forEach((count, code) => {
+    const latLng = coords[code];
+    if (!latLng) return;
+    const xy = projection([latLng[1], latLng[0]]);
+    if (!xy) return;
+    dots.push({ code, count, x: xy[0], y: xy[1] });
   });
 
-  console.log("Pays participants:", participatingIds.size);
-  console.log("Athlètes chargés:", athletes.length);
-
-
-// Charge les coordonnées des pays
-d3.json("countries_coords.json").then(coords => {
-
-    // Point cible : Milan (centre des JO)
-    const milanCoords = [45.46, 9.19];
-    const milanXY = projection([milanCoords[1], milanCoords[0]]);
-  
-    // Groupe pour les dots
-    const dotsGroup = mapSvg.append("g").attr("class", "dots");
-  
-    // Échelle pour la taille des dots
-    const radiusScale = d3.scaleSqrt()
-      .domain([0, maxAthletes])
-      .range([3, 18]);
-  
-    // Crée un dot par pays participant
-    const dots = [];
-    athletesByCountry.forEach((count, code) => {
-      const latLng = coords[code];
-      if (!latLng) return;
-      const xy = projection([latLng[1], latLng[0]]);
-      if (!xy) return;
-      dots.push({ code, count, x: xy[0], y: xy[1] });
-
-   // Boutons définis dans le HTML
-d3.select("#btn-send").on("click", function() {
-    dotsGroup.selectAll("circle")
-        .transition()
-        .duration(2000)
-        .delay((d, i) => i * 20)
-        .ease(d3.easeCubicInOut)
-        .attr("cx", milanXY[0])
-        .attr("cy", milanXY[1])
-        .attr("r", 3)
-        .attr("fill", "rgba(255, 200, 50, 0.6)");
-});
-
-d3.select("#btn-reset").on("click", function() {
-    dotsGroup.selectAll("circle")
-        .transition()
-        .duration(1000)
-        .attr("cx", d => d.x)
-        .attr("cy", d => d.y)
-        .attr("r", d => radiusScale(d.count))
-        .attr("fill", "rgba(255, 200, 50, 0.7)");
-});
-
-// Filtre par région
-d3.json("regions.json").then(regions => {
-
-    // Crée un map code pays -> région
-    const countryToRegion = {};
-    Object.entries(regions).forEach(([region, codes]) => {
-        codes.forEach(code => countryToRegion[code] = region);
+  dotsGroup.selectAll("circle")
+    .data(dots)
+    .join("circle")
+    .attr("cx", d => d.x)
+    .attr("cy", d => d.y)
+    .attr("r", d => radiusScale(d.count))
+    .attr("fill", "rgba(255, 200, 50, 0.7)")
+    .attr("stroke", "white")
+    .attr("stroke-width", 0.5)
+    .style("cursor", "pointer")
+    .on("mouseover", function(event, d) {
+      d3.select(this).attr("fill", "rgba(255, 230, 100, 1)");
+      tooltip.style("opacity", 1)
+        .html(`<strong>${d.code}</strong><br>${d.count} athletes`);
+    })
+    .on("mousemove", function(event) {
+      tooltip
+        .style("left", (event.clientX + 14) + "px")
+        .style("top", (event.clientY - 10) + "px");
+    })
+    .on("mouseout", function(event, d) {
+      d3.select(this).attr("fill", "rgba(255, 200, 50, 0.7)");
+      tooltip.style("opacity", 0);
     });
 
-    let activeRegion = null;
-
-    function filterByRegion(region) {
-        activeRegion = region;
-
-        // Met à jour les boutons actifs
-        d3.selectAll(".region-btn").classed("active", false);
-        d3.select(region ? `#btn-${region.toLowerCase()}` : "#btn-all")
-            .classed("active", true);
-
-        // Affiche/cache les dots
-        dotsGroup.selectAll("circle")
-            .transition()
-            .duration(400)
-            .attr("opacity", d => {
-                if (!region) return 0.7;
-                return countryToRegion[d.code] === region ? 1 : 0.05;
-            });
-
-        // Highlight les pays sur la carte
-        countryPaths.transition()
-            .duration(400)
-            .attr("opacity", d => {
-                if (!region) return 1;
-                const numId = String(+d.id).padStart(3, "0");
-                const alpha3 = Object.keys(isoAlpha3ToNumeric)
-                    .find(k => isoAlpha3ToNumeric[k] === numId);
-                return alpha3 && countryToRegion[alpha3] === region ? 1 : 0.25;
-            });
-    }
-
-    d3.select("#btn-all").on("click", () => filterByRegion(null));
-    d3.select("#btn-europe").on("click", () => filterByRegion("Europe"));
-    d3.select("#btn-americas").on("click", () => filterByRegion("Americas"));
-    d3.select("#btn-asia").on("click", () => filterByRegion("Asia"));
-    d3.select("#btn-africa").on("click", () => filterByRegion("Africa"));
-    d3.select("#btn-oceania").on("click", () => filterByRegion("Oceania"));
-});
-    
-    });
-  
-    // Dessine les dots
+  // ── BOUTONS SEND / RESET ────────────────────────────────────────────────
+  d3.select("#btn-send").on("click", function() {
     dotsGroup.selectAll("circle")
-      .data(dots)
-      .join("circle")
+      .transition()
+      .duration(2000)
+      .delay((d, i) => i * 20)
+      .ease(d3.easeCubicInOut)
+      .attr("cx", milanXY[0])
+      .attr("cy", milanXY[1])
+      .attr("r", 3)
+      .attr("fill", "rgba(255, 200, 50, 0.6)");
+  });
+
+  d3.select("#btn-reset").on("click", function() {
+    dotsGroup.selectAll("circle")
+      .transition()
+      .duration(1000)
       .attr("cx", d => d.x)
       .attr("cy", d => d.y)
       .attr("r", d => radiusScale(d.count))
-      .attr("fill", "rgba(255, 200, 50, 0.7)")
-      .attr("stroke", "white")
-      .attr("stroke-width", 0.5)
-      .style("cursor", "pointer")
-      .on("mouseover", function(event, d) {
-        d3.select(this).attr("fill", "rgba(255, 230, 100, 1)");
-        tooltip
-          .style("opacity", 1)
-          .html(`<strong>${d.code}</strong><br>${d.count} athletes`);
-      })
-      .on("mousemove", function(event) {
-        tooltip
-          .style("left", (event.clientX + 14) + "px")
-          .style("top", (event.clientY - 10) + "px");
-      })
-      .on("mouseout", function(event, d) {
-        d3.select(this).attr("fill", "rgba(255, 200, 50, 0.7)");
-        tooltip.style("opacity", 0);
-      });
-  
-    console.log("Dots ajoutés:", dots.length);
-  
+      .attr("fill", "rgba(255, 200, 50, 0.7)");
   });
+
+  // ── FILTRE PAR RÉGION ───────────────────────────────────────────────────
+  const countryToRegion = {};
+  Object.entries(regions).forEach(([region, codes]) => {
+    codes.forEach(code => countryToRegion[code] = region);
+  });
+
+  function filterByRegion(region) {
+    d3.selectAll(".region-btn").classed("active", false);
+    d3.select(region ? `#btn-${region.toLowerCase()}` : "#btn-all")
+      .classed("active", true);
+
+    dotsGroup.selectAll("circle")
+      .transition().duration(400)
+      .attr("opacity", d => {
+        if (!region) return 0.7;
+        return countryToRegion[d.code] === region ? 1 : 0.05;
+      });
+
+    countryPaths.transition().duration(400)
+      .attr("opacity", d => {
+        if (!region) return 1;
+        const numId = String(+d.id).padStart(3, "0");
+        const alpha3 = Object.keys(isoAlpha3ToNumeric)
+          .find(k => isoAlpha3ToNumeric[k] === numId);
+        return alpha3 && countryToRegion[alpha3] === region ? 1 : 0.25;
+      });
+  }
+
+  d3.select("#btn-all").on("click", () => filterByRegion(null));
+  d3.select("#btn-europe").on("click", () => filterByRegion("Europe"));
+  d3.select("#btn-americas").on("click", () => filterByRegion("Americas"));
+  d3.select("#btn-asia").on("click", () => filterByRegion("Asia"));
+  d3.select("#btn-africa").on("click", () => filterByRegion("Africa"));
+  d3.select("#btn-oceania").on("click", () => filterByRegion("Oceania"));
+
+  console.log("Athlètes:", athletes.length, "| Dots:", dots.length);
 
 }).catch(err => console.error("Erreur:", err));
