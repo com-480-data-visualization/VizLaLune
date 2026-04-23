@@ -2,19 +2,13 @@
 <html lang='en'>
     <head>
         <meta charset = 'utf-8'>
-
-        <title>COM-480: Milestone 2</title>
-
+        <title>COM-480: Milestone 3</title>
         <link rel='stylesheet' href='styles.css'>
     </head>
 
     <body>
         <!-- SIDEBAR -->
-            <!-- Button -->
-        <button onclick="toggleSidebar()">
-            ☰
-        </button>
-            <!-- Sidebar -->
+        <button onclick="toggleSidebar()">☰</button>
         <div id='sidebar'>
             <h2>Sidebar</h2>
             <ul>
@@ -34,47 +28,55 @@
         <section>
             <h2 id='section1'>Section 1 Title: Introduction</h2>
 
-            <div class='figure1.1', class='skeletonSketch'>
+            <div class='skeletonSketch'>
                 <img src="img/figure1_1.png" alt="Figure 1.1">
-                <p class="skeletonSketchLabel"> Figure 1.1: Bubbles. Key Statistics (Nb. of Athletes/Nb. of Countries/Nb. Disciplines/Nb. Events/Nb. Venues).</p>
+                <p class="skeletonSketchLabel">Figure 1.1: Bubbles. Key Statistics.</p>
             </div>
 
-            <svg id='figure1.2' class='skeletonSketch'>
+            <svg id='figure1_2' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 1.2: Interactive map. Mouse-on venue symbols expands the symbol with the present disciplines/events which are clickable and redirect to the official event webpage.</p>
+            <p class='skeletonSketchLabel'>Figure 1.2: Interactive map for venues.</p>
 
-            <svg id='figure1.3' class='skeletonSketch'>
+            <svg id='figure1_3' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 1.3: Sorted horizontal bar chart (see 7.2 slide 24). Percentage of venue exploitation. Figures can be linked and shown side by side with the one below.</p>
+            <p class='skeletonSketchLabel'>Figure 1.3: Percentage of venue exploitation.</p>
 
-            <svg id='figure1.4' class='skeletonSketch'>
+            <svg id='figure1_4' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 1.4: Treemap (see 5.1 slide 31). Split into disciplines and again into events. Area proportional to medal amount (insight into most impactful sports for medal count). Animated by indicating the victors with mouse-on.</p>
+            <p class='skeletonSketchLabel'>Figure 1.4: Treemap splitting into disciplines then into events.</p>
 
-            <svg id='figure1.5' class='skeletonSketch'>
+            <svg id='figure1_5' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 1.5: Sorted horizontal bar chart (see 7.2 slide 24). Classic Medal Race (with numerous filters (discipline/event/country region/gender/team event vs. individual vs. duo etc.)).</p>
+            <p class='skeletonSketchLabel'>Figure 1.5: Medal Race.</p>
         </section>
-
-
 
         <!-- SECTION 2: Geographical Exploration -->
         <section>
             <h2 id='section2'>Section 2 Title: Geographical Exploration</h2>
 
-            <svg id='figure2.1' class='skeletonSketch'>
+            <svg id='figure2_1' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 2.1: Sorted horizontal bar chart (see 7.2 slide 24). Athlete count per discipline. Filter by country on world map (see below). Figures can be linked and shown side by side with the one below.</p>
+            <p class='skeletonSketchLabel'>Figure 2.1: Athlete count per discipline.</p>
 
-            <svg id='figure2.2' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure 2.2: Interactive map (similarity to example shown in class). Dots (1 per athlete) travel from their country of origin to the games. Filter by clicking on the country/by global region. Filter impacts the above bar chart. Mouse-on shows other key country statistitcs.</p>
+            <div id="map-container">
+                <svg id="figure2_2"></svg>
+                <div id="map-buttons">
+                    <button id="btn-all" class="region-btn active">🌍 All</button>
+                    <button id="btn-europe" class="region-btn">🇪🇺 Europe</button>
+                    <button id="btn-americas" class="region-btn">🌎 Americas</button>
+                    <button id="btn-asia" class="region-btn">🌏 Asia</button>
+                    <button id="btn-africa" class="region-btn">🌍 Africa</button>
+                    <button id="btn-oceania" class="region-btn">🌊 Oceania</button>
+                    <button id="btn-send">✈ Send to Milano!</button>
+                    <button id="btn-reset">↺ Reset</button>
+                </div>
+            </div>
+            <p class='skeletonSketchLabel'>Figure 2.2: Interactive map — dots travel from country of origin to the games.</p>
 
         </section>
 
@@ -82,30 +84,32 @@
         <section>
             <h2 id='section3'>Section 3 Title: Gender/Team Exploration</h2>
 
-            <svg id='figure3.1' class='skeletonSketch'>
+            <svg id='figure3_1' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 3.1: Symmetrical gender horizontal bar plot per country (see 6.1 slide 37). Filter by global region or by country.</p>
+            <p class='skeletonSketchLabel'>Figure 3.1: Symmetrical gender horizontal bar plot per country.</p>
 
-            <svg id='figure3.2' class='skeletonSketch'>
+            <svg id='figure3_2' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 3.2: Symmetrical solo vs. team horizontal bar plot per country (see 6.1 slide 37). Filter by global region or by country. Button to synchronize filters with above plot.</p>
+            <p class='skeletonSketchLabel'>Figure 3.2: Symmetrical solo vs. team horizontal bar plot per country.</p>
 
         </section>
-
 
         <!-- CONCLUSION -->
         <section>
             <h2 id='conclusion'>Conclusion</h2>
 
-            <svg id='figure4.1' class='skeletonSketch'>
+            <svg id='figure4_1' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 4.1: Moving around bubbles. Conclusion with the main takeaways for the different visualizations.</p>
+            <p class='skeletonSketchLabel'>Figure 4.1: Moving bubbles with main takeaways.</p>
 
         </section>
     </body>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
     <script src='skeleton.js'></script>
+    <script src='map.js'></script>
 </html>
