@@ -49,7 +49,7 @@ main {
     left: 0;                      /* Makes sure all sidebar is properly hidden */
     top: 0;
     height: 100%;
-    width: 220px;
+    width: 400px;
     z-index: 100;
     transform: translateX(-100%); /* Initially hidden */
     transition: transform 0.3s ease-in-out;  /* Smooth slide */
@@ -236,26 +236,26 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 }
 
 /* === Filters badge === */
-#selected-discipline-badge {
-    position: fixed;              /* Stays in place when scrolling */
-    background-color: #091f36;   /* Background color badge */
-    color: white;                /* Text color */
-    border: 2px solid #b40ec0; 
-    border-radius: 12px; /* Rounded corners */
-    padding: 12px 20px; /* Badge size (height x width) */
-    top: 20px; /* Badge position from top of the page */
-    right: 20px; /* Badge position from right of the page */
+#filters-badge {
+    position: fixed;
+    background-color: #091f36;
+    color: white;
+    border: 2px solid #b40ec0;
+    border-radius: 12px;
+    padding: 24px 40px;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-#selected-country-badge {
-    position: fixed;              /* Stays in place when scrolling */
-    background-color: #091f36;   /* Background color badge */
-    color: white;                /* Text color */
-    border: 2px solid #b40ec0; 
-    border-radius: 12px; /* Rounded corners */
-    padding: 12px 20px; /* Badge size (height x width) */
-    top: 70px; /* Badge position from top of the page */
-    right: 20px; /* Badge position from right of the page */
+#filters-badge hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #b40ec0;
+    margin: 8px 0;
 }
 
 /* === Conclusion bubbles === */

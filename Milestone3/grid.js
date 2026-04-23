@@ -47,7 +47,7 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
             // == Click event ==
                 // Single click: zoom map + show podium below grid
             card.on('click', () => {
-                const badge = document.getElementById('badge-text');
+                const badge = document.getElementById('badge-discipline');
 
                 // Remove 'selected' class from previously selected discipline
                 if (selectedDiscipline){

@@ -128,7 +128,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
             window.open(venue.url, '_blank');
         });
 
-        const badge = document.getElementById('badge-text');
+        const badge = document.getElementById('badge-discipline');
 
         // Show/Hide disciplines on click
         marker.on('click', function() {
