@@ -22,22 +22,57 @@
 /* === Banner === */
 #banner {
     width: 100%;
+    height: 100vh; 
     position: relative;    /* Needed for absolute positioning of main */
 }
 
 #banner img {
     width: 100%;
-    height: auto;    /* Height adjusts proportionally to the image ratio */
+    height: 100%;
+    object-fit: cover;     /* Ensures the image covers the entire banner area without distortion */
+}
+
+#scroll-down{
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    animation: bounce 2s infinite;
+}
+
+#scroll-down span {
+    display: block;
+    font-size: 40px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+#scroll-down .arrow {
+    font-size: 50px;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(10px); }
 }
 
 main {
     position: absolute;    /* Overlay on top of the image */
-    bottom: 80px;          /* Distance from bottom of banner */
+    top: 30%;          /* Distance from bottom of banner */
     width: 100%;
     text-align: center;
     color: white;
     text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Shadow for readability */
     font-size: 64px;
+}
+
+main h1{
+    padding-bottom: 50px;
 }
 
 /* === Sidebar === */
@@ -111,23 +146,107 @@ main {
     opacity: 1;           /* Full opacity on hover */
 }
 
+/* === Filters badge === */
+#filters-badge {
+    display: none; /* Initially hidden */
+    position: fixed;
+    background-color: #091f36;
+    color: white;
+    border: 2px solid #1295af;
+    border-radius: 12px;
+    padding: 24px 40px;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    flex-direction: column;
+    align-items: center;
+    z-index: 100;
+}
+
+#filters-badge hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #1295af;
+    margin: 8px 0;
+}
+
 /* === Section titles === */
-#section1 h2 {
+#section-title {
     font-size: 80px;
     color: #134172;
     text-align: center;
     letter-spacing: 4px;
     text-transform: uppercase;
-    padding: 60px 0 40px;
+    padding: 60px;
 }
 
-#section1 h2::after {
+#section-title::after {
     content: '';
     display: block;
     width: 600px;
     height: 3px;
     background: #134172;
     margin: 10px auto 0;
+}
+
+/* === Text styles === */
+p {
+    max-width: 50%;
+    margin: 0 auto 60px;
+    text-align: justify;
+    font-size: 25px;
+    line-height: 1.8;
+    color: #333;
+    padding: 50px 0px 50px;
+    text-align-last: center;
+}
+
+/* === Introduction bubbles === */
+#intro-bubbles {
+    display: flex;
+    justify-content: center;
+    gap: clamp(40px, 2.5vw, 100px); /* Space between two bubbles */
+    margin: 0 20px; /* So bubbles are now glued to the screen sides */
+}
+
+.bubble-card {
+    flex: 1; /* Each bubble takes equal space */
+    aspect-ratio: 1 / 1; /* Force a square shape ==> keeps it a circle */
+    border-radius: 50%; /* To make it a circle */
+    display: flex;
+    flex-direction: column; /* Put value and text on same column */
+    justify-content: center; /* Put text on centre on y-axis */
+    align-items: center; /* Put text on centre on x-axis */
+    text-align: center; /* Center text inside the bubble */
+
+    /* Animations */
+    animation: bubbling 4s ease-in-out infinite;
+}
+
+/* Animation itself */
+@keyframes bubbling {
+    0%   { transform: translateY(0) scale(1); }
+    25%  { transform: translateY(-5px) scale(0.95); }
+    50%  { transform: translateY(-10px) scale(0.90); }
+    75%  { transform: translateY(-5px) scale(0.95); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* Delay animations */
+.bubble-card:nth-child(1) { animation-delay: 0s; }
+.bubble-card:nth-child(2) { animation-delay: 0.4s; }
+.bubble-card:nth-child(3) { animation-delay: 0.8s; }
+.bubble-card:nth-child(4) { animation-delay: 1.2s; }
+.bubble-card:nth-child(5) { animation-delay: 1.6s; }
+
+
+.bubble-value {
+    font-size: clamp(64px, 2.5vw, 128px);
+    font-weight: bold;
+}
+
+.bubble-text {
+    font-size: clamp(32px, 2.5vw, 64px);
 }
 
 /* === Leaflet map container ===*/
@@ -219,75 +338,6 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     transform: scale(1.05);
 }
 
-/* === Introduction bubbles === */
-#intro-bubbles {
-    display: flex;
-    justify-content: center;
-    gap: clamp(40px, 2.5vw, 100px); /* Space between two bubbles */
-}
-
-.bubble-card {
-    flex: 1; /* Each bubble takes equal space */
-    aspect-ratio: 1 / 1; /* Force a square shape ==> keeps it a circle */
-    border-radius: 50%; /* To make it a circle */
-    display: flex;
-    flex-direction: column; /* Put value and text on same column */
-    justify-content: center; /* Put text on centre on y-axis */
-    align-items: center; /* Put text on centre on x-axis */
-    text-align: center; /* Center text inside the bubble */
-
-    /* Animations */
-    animation: bubbling 4s ease-in-out infinite;
-}
-
-/* Animation itself */
-@keyframes bubbling {
-    0%   { transform: translateY(0) scale(1); }
-    25%  { transform: translateY(-5px) scale(1.05); }
-    50%  { transform: translateY(-10px) scale(1); }
-    75%  { transform: translateY(-5px) scale(0.95); }
-    100% { transform: translateY(0) scale(1); }
-}
-
-/* Delay animations */
-.bubble-card:nth-child(1) { animation-delay: 0s; }
-.bubble-card:nth-child(2) { animation-delay: 0.4s; }
-.bubble-card:nth-child(3) { animation-delay: 0.8s; }
-.bubble-card:nth-child(4) { animation-delay: 1.2s; }
-.bubble-card:nth-child(5) { animation-delay: 1.6s; }
-
-
-.bubble-value {
-    font-size: clamp(64px, 2.5vw, 128px);
-    font-weight: bold;
-}
-
-.bubble-text {
-    font-size: clamp(32px, 2.5vw, 64px);
-}
-
-/* === Filters badge === */
-#filters-badge {
-    position: fixed;
-    background-color: #091f36;
-    color: white;
-    border: 2px solid #1295af;
-    border-radius: 12px;
-    padding: 24px 40px;
-    top: 20px;
-    right: 20px;
-    font-size: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#filters-badge hr {
-    width: 100%;
-    border: none;
-    border-top: 1px solid #1295af;
-    margin: 8px 0;
-}
 
 /* === Conclusion bubbles === */
 #conclusion-bubbles {

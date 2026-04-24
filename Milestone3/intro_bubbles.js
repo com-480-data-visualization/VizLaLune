@@ -115,8 +115,8 @@ function updateBubbles(selectedDiscipline) {
     // All rest of code put here to ensure it get CSV data
     // === Bubble data ===
     const bubbleData = [
-        { value: totalAthletes, text: 'Total Athletes',        color: { fill: '#EEEDFE', stroke: '#AFA9EC', text: '#3C3489'} },
-        { value: participatingCountries, text: 'Participating Countries',    color: { fill: '#E1F5EE', stroke: '#5DCAA5', text: '#085041'} },
+        { value: totalAthletes, text: 'Athletes',        color: { fill: '#EEEDFE', stroke: '#AFA9EC', text: '#3C3489'} },
+        { value: participatingCountries, text: 'Countries',    color: { fill: '#E1F5EE', stroke: '#5DCAA5', text: '#085041'} },
         { value: disciplines,   text: 'Disciplines', color: { fill: '#FAEEDA', stroke: '#EF9F27', text: '#633806'} },
         { value: events,  text: 'Events',      color: { fill: '#E6F1FB', stroke: '#85B7EB', text: '#0C447C'} },
         { value: venues,   text: 'Venues',      color: { fill: '#FAECE7', stroke: '#F0997B', text: '#712B13'} },

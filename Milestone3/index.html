@@ -38,22 +38,46 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
             </a>
         </div>
 
-        <!-- MAIN CONTENT -->
-        <!-- Look panoramic photo (little height and large width)-->
+        <!-- FILTERS BADGE -->
+        <div id="filters-badge">
+            <span id="badge-discipline">No discipline selected</span>
+            <hr>
+            <span id="badge-country">No country selected</span>
+        </div>
+
+        <!-- BANNER -->
         <div id="banner">
             <img src="../ExtraRessources/Extra/Banner3.avif" alt="Milano-Cortina 2026"/>
             <main>
                 <h1>Milano-Cortina 2026 Winter Olympics: Behind the Scenes</h1>
                 <h3>VizLaLune</h3>
             </main>
+            <div id="scroll-down" onclick="document.getElementById('section1').scrollIntoView({behavior: 'smooth'})">
+                <span>Explore</span>
+                <div class="arrow">↓</div>
+            </div>
         </div>
 
-        <!-- SECTION 1: Introduction -->
+        <!-- SECTION 1: Global Overview -->
         <section id='section1'>
-            <h2>Global Overview</h2>
-
+            <h2 id='section-title'>Global Overview</h2>
+            
+            <!-- INTRO BUBBLES-->
+            <p>
+                The XXV Olympic Winter Games, officially known as <strong>Milano-Cortina 2026</strong> saw <strong>~2,900 athletes</strong> from 
+                <strong>93 countries</strong> competed across <strong>17 days from February 6 to 22 2026</strong> in front of millions of spectactors. For the first time ever, two Olympic 
+                cauldrons were simultaneously ignited, in both Milan and Cortina d'Ampezzo.
+            </p>
             <div id="intro-bubbles"></div>
-            <!-- Discipline grid -->
+
+            <!-- DISCIPLINE GRID -->
+            <p> 
+                At Milano-Cortina, <strong>116 events in 16 disciplines</strong> were hosted, a record for any Winter Games, and 7 more events than Beijing 2022.
+                <strong>8 brand-new events</strong> made their Olympic debut, headlined by <strong>Ski Mountaineering</strong>, the first new Winter Olympic sport in 24 years. 
+                NHL players returned to the ice for the first time since Sochi 2014, making ice hockey one of the most anticipated events of the Games.
+                <br>Select a discipline below to explore its events and results!
+            </p>
+
             <div id="discipline-grid"></div>
             <!-- Podium (With all events) -->
             <div id="podium" style="display: none;">
@@ -81,25 +105,20 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                 <h3 id="disciplineDetails"></h3>
                 <p id="disciplineURL"></p>
             </div>
+
             <!-- Interactive Map -->
+            <p> 
+                Milano-Cortina 2026 took place across the breathtaking landscapes 
+                of northern Italy. Spread over <strong>15 venues and 22,000 km²</strong>, it was the most geographically expansive Winter Games in history.
+            </p>
             <div id="map"></div>
-
-            <svg id='figureXXX' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure XXX: Treemap (see 5.1 slide 31). Split into disciplines and again into events. Area proportional to medal amount (insight into most impactful sports for medal count). Animated by indicating the victors with mouse-on.</p>
-
-            <svg id='figureXXX' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure XXX: Sorted horizontal bar chart (see 7.2 slide 24). Classic Medal Race (with numerous filters (discipline/event/country region/gender/team event vs. individual vs. duo etc.)).</p>
         </section>
 
 
 
         <!-- SECTION 2: Geographical Exploration -->
         <section id='section2'>
-            <h2>Geographic Structure</h2>
+            <h2 id='section-title'>Geographic Structure</h2>
 
             <svg id='figureXXX' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
@@ -115,9 +134,14 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
 
         <!-- SECTION 3: Gender/Team Exploration -->
         <section id='section3'>
-            <h2>Gender & Team Representation</h2>
+            <h2 id='section-title'>Gender & Team Representation</h2>
 
             <!-- Gender distribution on disciplines -->
+            <p>
+                Milano-Cortina was also the
+                <strong>most gender-balanced Winter Olympics in history</strong>, with a record
+                <strong>50 women's events</strong> and 12 of 16 disciplines fully gender-equal.
+            </p>
             <div id="symmetrical-gender-discipline"></div>
             <!-- Gender distribution on events (for specific discipline) -->
             <div id="symmetrical-gender-event" style="display: none;"></div>
@@ -137,7 +161,7 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
 
         <!-- CONCLUSION -->
         <section id='section4'>
-            <h2 id='conclusion'>Conclusion</h2>
+            <h2 id='section-title'>Conclusion</h2>
 
             <svg id='figureXXX' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
@@ -148,13 +172,6 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
             <div id="conclusion-bubbles"></div>
 
         </section>
-
-        <!-- FILTERS BADGE -->
-        <div id="filters-badge">
-            <span id="badge-discipline">No discipline selected</span>
-            <hr>
-            <span id="badge-country">No country selected</span>
-        </div>
     </body>
 
     <script src='skeleton.js'></script>
@@ -184,13 +201,3 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
 
 </html>
 
-
-<!-- 1. Get clean Filters Badge
-2. Get clean Banner (Done)
-3. Space spacebar items further + Other term than "Select your section" (Done)
-4. Start first section with background color + text + title
-5. Clean intro bubbles to fit on screen
-6. More beautiful grid + grid highlight
-7. Make map cleaner by enabling sidebar to be over it + more beautiful tiles.
-8. Make same for Gender representation symmetrical + Link visualizations with text
-9. Clean conclusion + text -->

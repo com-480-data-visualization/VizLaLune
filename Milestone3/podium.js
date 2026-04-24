@@ -16,9 +16,6 @@ function showPodium(disciplineName, disciplineURL, disciplineImage) {
     const section = document.getElementById("podium");
     section.style.display = "block";
 
-    // Scroll to it smoothly
-    section.scrollIntoView({ behavior: "smooth" });
-
     // Fill header info
     document.getElementById("disciplineName").textContent = disciplineName;
     document.getElementById("disciplineImage").src = disciplineImage;
