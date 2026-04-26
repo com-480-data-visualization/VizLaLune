@@ -1,3 +1,4 @@
+/* === SKELETON === */
 .skeletonSketch {
     display: block; /* Element takes all available width */
     margin: 20px auto; /* Centers the element horizontally and adds vertical spacing */
@@ -19,63 +20,7 @@
     margin: 0; /* To have banner image take up the whole width + height without small borders */
 }
 
-/* === Banner === */
-#banner {
-    width: 100%;
-    height: 100vh; 
-    position: relative;    /* Needed for absolute positioning of main */
-}
-
-#banner img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;     /* Ensures the image covers the entire banner area without distortion */
-}
-
-#scroll-down{
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: white;
-    cursor: pointer;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
-    animation: bounce 2s infinite;
-}
-
-#scroll-down span {
-    display: block;
-    font-size: 40px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-}
-
-#scroll-down .arrow {
-    font-size: 50px;
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50%       { transform: translateX(-50%) translateY(10px); }
-}
-
-#banner-title {
-    position: absolute;    /* Overlay on top of the image */
-    top: 30%;          /* Distance from bottom of banner */
-    width: 100%;
-    text-align: center;
-    color: white;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Shadow for readability */
-    font-size: 64px;
-}
-
-#banner-title h1{
-    padding-bottom: 50px;
-}
-
-/* === Sidebar === */
+    /* == SIDEBAR == */
 #sidebar-button {
     position:fixed;
     z-index: 600; /* Button above sidebar */
@@ -146,7 +91,7 @@
     opacity: 1;           /* Full opacity on hover */
 }
 
-/* === Filters badge === */
+    /* == FILTERS BADGE == */
 #filters-badge {
     display: none; /* Initially hidden */
     position: fixed;
@@ -170,7 +115,64 @@
     margin: 8px 0;
 }
 
-/* === Section titles === */
+
+    /* == BANNER == */
+#banner {
+    width: 100%;
+    height: 100vh; 
+    position: relative;    /* Needed for absolute positioning of main */
+}
+
+#banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;     /* Ensures the image covers the entire banner area without distortion */
+}
+
+#scroll-down{
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    animation: bounce 2s infinite;
+}
+
+#scroll-down span {
+    display: block;
+    font-size: 40px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+#scroll-down .arrow {
+    font-size: 50px;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(10px); }
+}
+
+#banner-title {
+    position: absolute;    /* Overlay on top of the image */
+    top: 30%;          /* Distance from bottom of banner */
+    width: 100%;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Shadow for readability */
+    font-size: 64px;
+}
+
+#banner-title h1{
+    padding-bottom: 50px;
+}
+
+    /* == SECTION TITLES == */
 #section-title {
     font-size: 80px;
     color: #134172;
@@ -189,7 +191,7 @@
     margin: 10px auto 0;
 }
 
-/* === Text styles === */
+    /* == TEXT STYLES == */
 p {
     max-width: 50%;
     margin: 0 auto 60px;
@@ -200,7 +202,9 @@ p {
     text-align-last: center;
 }
 
-/* === Introduction bubbles === */
+/* ================================================================================================================= */
+/* === SECTION 1: GLOBAL OVERVIEW === */
+    /* === INTRO BUBBLES === */
 #intro-bubbles {
     display: flex;
     justify-content: center;
@@ -248,7 +252,7 @@ p {
     font-size: clamp(32px, 2.5vw, 64px);
 }
 
-/* === Discipline grid === */
+    /* == DISCIPLINE GRID == */
 #discipline-grid {
     display: grid;                          /* Grid mode (avoids simple piling up) */
     grid-template-columns: repeat(8, 1fr); /* 8 columns */
@@ -289,7 +293,7 @@ p {
     transform: scale(1.05);
 }
 
-/* === Podium page === */
+    /* == PODIUM (Selected discipline) == */
 #podium {
     text-align: center;      /* Centres title, image, and text */
 }
@@ -388,27 +392,16 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     font-size: 20px;
 }
 
-/* === Leaflet map container ===*/
+    /* == VENUE MAP ==*/
 #venue-map {
     height: 800px;
     width: 80%;        
     margin: 0 auto;    /* Centre */
 }
 
-/* === Conclusion bubbles === */
-#conclusion-bubbles {
-    width: 800px;
-    height: 500px;
-    margin: 0 auto;              /* Centre box on x-axis */
-    background-color: #091f36;  
-    border: 2px solid #b40ec0;  
-    border-radius: 16px;         /* Round corner */
-    overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
-    position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
-}
-
-
-/* === Gender symmetrical bar plots === */
+/* ================================================================================================================= */
+/* === SECTION 2: GENDER REPRESENTATION == */
+    /* === SYMMETRICAL PLOTS === */
 #symmetrical-gender-discipline {
     display: flex;
     justify-content: center;
@@ -428,4 +421,17 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     color: white;
     font-size: 13px;
     pointer-events: none;     /* Otherwise blinking */
+}
+
+/* ================================================================================================================= */
+/* === CONCLUSION === */
+#conclusion-bubbles {
+    width: 800px;
+    height: 500px;
+    margin: 0 auto;              /* Centre box on x-axis */
+    background-color: #091f36;  
+    border: 2px solid #b40ec0;  
+    border-radius: 16px;         /* Round corner */
+    overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
+    position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
 }
