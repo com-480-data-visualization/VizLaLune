@@ -4,6 +4,7 @@ Command to run a local server to serve the files, allowing d3 to load the CSV fi
 http://localhost:8000/Milestone3/index.html (to view the page in a browser)
 If old version used in Source then Ctrl + Shift + R and disable cache in Network
 -->
+
 <!DOCTYPE html>
 <html lang='en'>
     <head>
@@ -13,7 +14,7 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
 
         <link rel='stylesheet' href='styles.css'>
 
-        <!-- For leaflet interactive map styles -->
+        <!-- FOR LEAFLET STYLES (VENUE MAP) -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
             integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
             crossorigin=""/>
@@ -22,15 +23,14 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
 
     <body>
         <!-- SIDEBAR -->
-            <!-- Button -->
+            <!-- BUTTON -->
         <button id="sidebar-button"onclick="toggleSidebar()">☰</button>
-            <!-- Sidebar -->
+            <!-- SIDEBAR -->
         <div id='sidebar'>
             <h2>Navigate</h2>
             <ul>
                 <li><a href=#section1>Global Overview</a></li>
-                <li><a href=#section2>Geographic Structure</a></li>
-                <li><a href=#section3>Gender & Team Representation</a></li>
+                <li><a href=#section2>Gender Representation</a></li>
                 <li><a href=#conclusion>Conclusion</a></li>
             </ul>
             <a id="github-link" href="https://github.com/com-480-data-visualization/VizLaLune" target="_blank">
@@ -58,7 +58,7 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
             </div>
         </div>
 
-        <!-- SECTION 1: Global Overview -->
+        <!-- SECTION 1: GLOBAL OVERVIEW -->
         <section id='section1'>
             <h2 id='section-title'>Global Overview</h2>
             
@@ -116,52 +116,47 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                 double-click a venue/discipline to learn more about the it. 
             </p>
             <div id="venue-map"></div>
+
+            <!-- TREEMAP -->
+            <p style="padding-top: 80px; padding-bottom: 50px">
+                One usually focus on the medal count to evaluate the performance of countries at the Olympics, but let's not forget that behind each medal there is an athlete. Hence one will spend more time on this and focus on it to better determine their specialities/origins and more than anything else their gender.
+                Talk about the fact that each edition the Winter Olympics change their events. And let's explore how the athlete distribution among the disciplines and events
+                to better grasp the structure of the games. Before that talk about one or two facts about these games especially focusing on events.
+            </p>
+            <svg id='figureXXX' class='skeletonSketch'>
+                <rect x='0' y='0' width='300' height='300'/>
+            </svg>
+            <p class='skeletonSketchLabel'>Manon Treemap</p>
         </section>
 
 
 
-        <!-- SECTION 2: Geographical Exploration -->
+        <!-- SECTION 2: GENDER REPRESENTATION -->
         <section id='section2'>
-            <h2 id='section-title'>Geographic Structure</h2>
+            <h2 id='section-title'>Gender Representation</h2>
 
+            <!-- ORIGINS -->
+            <p style="padding-top: 80px; padding-bottom: 50px">
+                Now that we have a better understanding of the structure of the games events, let's explore where the athletes come from.
+                Let's dwelve on how each country brings each gender to the games. Are some countries bringing more men or women in their delegations. Or is this evenly matched?
+            </p>
             <svg id='figureXXX' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure XXX: Sorted horizontal bar chart (see 7.2 slide 24). Athlete count per discipline. Filter by country on world map (see below). Figures can be linked and shown side by side with the one below.</p>
+            <p class='skeletonSketchLabel'>Leontine WorldMap</p>
 
-            <svg id='figureXXX' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure XXX: Interactive map (similarity to example shown in class). Dots (1 per athlete) travel from their country of origin to the games. Filter by clicking on the country/by global region. Filter impacts the above bar chart. Mouse-on shows other key country statistitcs.</p>
-
-        </section>
-
-        <!-- SECTION 3: Gender/Team Exploration -->
-        <section id='section3'>
-            <h2 id='section-title'>Gender & Team Representation</h2>
-
-            <!-- Gender distribution on disciplines -->
+            <!-- SYMMETRICAL PLOTS -->
+                <!-- DISCIPLINES -->
             <p>
                 Milano-Cortina was also the
                 <strong>most gender-balanced Winter Olympics in history</strong>, with a record
                 <strong>50 women's events</strong> and 12 of 16 disciplines fully gender-equal.
+                Select a discipline to explore its events repartition between genders.
             </p>
             <div id="symmetrical-gender-discipline"></div>
-            <!-- Gender distribution on events (for specific discipline) -->
+                <!-- EVENTS -->
             <div id="symmetrical-gender-event" style="display: none;"></div>
-
-            <svg id='figureXXX' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure XXX: Symmetrical gender horizontal bar plot per country (see 6.1 slide 37). Filter by global region or by country.</p>
-
-            <svg id='figureXXX' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure XXX: Symmetrical solo vs. team horizontal bar plot per country (see 6.1 slide 37). Filter by global region or by country. Button to synchronize filters with above plot.</p>
-
         </section>
-
 
         <!-- CONCLUSION -->
         <section id='conclusion'>
@@ -172,35 +167,36 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
             </svg>
             <p class='skeletonSketchLabel'>Figure XXX: Moving around bubbles. Conclusion with the main takeaways for the different visualizations.</p>
 
-            <!-- Conclusion bubbles -->
+            <!-- CONCLUSION BUBBLES -->
             <div id="conclusion-bubbles"></div>
 
         </section>
     </body>
 
+    <!-- FOR PAGE SKELETON (SIDEBAR + FILTERS BADGE)-->
     <script src='skeleton.js'></script>
 
-    <!-- For leaflet interactive map scripts -->
+    <!-- FOR LEAFLET INTERACTIVE MAP SCRIPTS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
 
-    <!-- To load data for interactive map -->
+    <!-- TO LOAD DATA -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
-    <!-- For continent mapping -->
+    <!-- FOR CONTINENT MAPPING -->
     <script src='continents.js'></script>
 
-    <!-- Section 1 -->
+    <!-- SECTION 1 SCRIPTS -->
     <script src='intro_bubbles.js'></script>
     <script src='grid.js'></script>
     <script src="podium.js"></script>
     <script src='map.js'></script>
 
-    <!-- Section 3 -->
+    <!-- SECTION 2 SCRIPTS -->
     <script src='symmetrical_gender.js'></script>
 
-    <!-- Conclusion -->
+    <!-- CONCLUSION SCRIPTS -->
     <script src='conclusion_bubbles.js'></script>
 
 </html>

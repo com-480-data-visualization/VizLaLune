@@ -52,9 +52,9 @@ var venuesData = [];
 
 var markers = [];
 
-var initialIconWidth = 64
-var initialIconHeight = 40
-var initialPopupAnchor = [0, -20]
+var initialIconWidth = 96
+var initialIconHeight = 60
+var initialPopupAnchor = [0, -initialIconHeight/2]
 
 d3.csv("../DataPreprocessing/venues.csv").then(data => {
     // == Complete CSV data ==
@@ -169,8 +169,8 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         {
                             icon: roundedDisciplineIcon(
                                 marker.disciplinesList[0],
-                                [markerSize[0]/2, markerSize[1]/2],
-                                [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+                                [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+                                [(3/8) * markerSize[0], -(3/4) * markerSize[1]]
                             )
                         }
                     ).addTo(map);
@@ -202,8 +202,8 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         {
                             icon: roundedDisciplineIcon(
                                 marker.disciplinesList[0],
-                                [markerSize[0]/2, markerSize[1]/2],
-                                [(3/4) * markerSize[0], -(3/4) * markerSize[1]]
+                                [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+                                [(7/8) * markerSize[0], -(3/4) * markerSize[1]]
                             )
                         }
                     ).addTo(map);
@@ -214,8 +214,8 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         {
                             icon: roundedDisciplineIcon(
                                 marker.disciplinesList[1],
-                                [markerSize[0]/2, markerSize[1]/2],
-                                [(-1/4) * markerSize[0], -(3/4) * markerSize[1]]
+                                [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+                                [(-1/8) * markerSize[0], -(3/4) * markerSize[1]]
                             )
                         }
                     ).addTo(map);
@@ -262,8 +262,8 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         {
                             icon: roundedDisciplineIcon(
                                 marker.disciplinesList[0],
-                                [markerSize[0]/2, markerSize[1]/2],
-                                [(1) * markerSize[0], -(3/4) * markerSize[1]]
+                                [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+                                [(10/8) * markerSize[0], -(3/4) * markerSize[1]]
                             )
                         }
                     ).addTo(map);
@@ -274,8 +274,8 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         {
                             icon: roundedDisciplineIcon(
                                 marker.disciplinesList[1],
-                                [markerSize[0]/2, markerSize[1]/2],
-                                [(-1/2) * markerSize[0], -(3/4) * markerSize[1]]
+                                [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+                                [(3/8) * markerSize[0], -(3/4) * markerSize[1]]
                             )
                         }
                     ).addTo(map);
@@ -286,8 +286,8 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         {
                             icon: roundedDisciplineIcon(
                                 marker.disciplinesList[2],
-                                [markerSize[0]/2, markerSize[1]/2],
-                                [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+                                [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+                                [(-4/8) * markerSize[0], -(3/4) * markerSize[1]]
                             )
                         }
                     ).addTo(map);
@@ -350,11 +350,11 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
 // Adapt icon size to zoom level
 // [0;19] with 0 being whole world
 function setIconSize(zoomLevel) {
-    return [(zoomLevel * 8),(zoomLevel * 5)];
+    return [(zoomLevel * 12),(zoomLevel * 7.5)];
 }
 
 function setIconSizeHover(zoomLevel) {
-    return [(zoomLevel * 10),(zoomLevel * 7)];
+    return [(zoomLevel * 14),(zoomLevel * 8.75)];
 }
 
 function setPopupAnchor(zoomLevel) {
@@ -375,39 +375,39 @@ function updateDisciplineMarkersZoom(marker) {
     if (marker.disciplineMarker11) {
         marker.disciplineMarker11.setIcon(roundedDisciplineIcon(
             marker.disciplineMarker11.disciplineName,
-            [markerSize[0]/2, markerSize[1]/2],
-            [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+            [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+            [(3/8) * markerSize[0], -(3/4) * markerSize[1]]
         ));
     }
 
     if (marker.disciplineMarker21){
         marker.disciplineMarker21.setIcon(roundedDisciplineIcon(
             marker.disciplineMarker21.disciplineName,
-            [markerSize[0]/2, markerSize[1]/2],
-            [(3/4) * markerSize[0], -(3/4) * markerSize[1]]
+            [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+            [(7/8) * markerSize[0], -(3/4) * markerSize[1]]
         ));
         marker.disciplineMarker22.setIcon(roundedDisciplineIcon(
             marker.disciplineMarker22.disciplineName,
-            [markerSize[0]/2, markerSize[1]/2],
-            [(-1/4) * markerSize[0], -(3/4) * markerSize[1]]
+            [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+            [(-1/8) * markerSize[0], -(3/4) * markerSize[1]]
         ));
     }
 
     if (marker.disciplineMarker31){
         marker.disciplineMarker31.setIcon(roundedDisciplineIcon(
             marker.disciplineMarker31.disciplineName,
-            [markerSize[0]/2, markerSize[1]/2],
-            [(1) * markerSize[0], -(3/4) * markerSize[1]]
+            [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+            [(10/8) * markerSize[0], -(3/4) * markerSize[1]]
         ));
         marker.disciplineMarker32.setIcon(roundedDisciplineIcon(
             marker.disciplineMarker32.disciplineName,
-            [markerSize[0]/2, markerSize[1]/2],
-            [(-1/2) * markerSize[0], -(3/4) * markerSize[1]]
+            [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+            [(3/8) * markerSize[0], -(3/4) * markerSize[1]]
         ));
         marker.disciplineMarker33.setIcon(roundedDisciplineIcon(
             marker.disciplineMarker33.disciplineName,
-            [markerSize[0]/2, markerSize[1]/2],
-            [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+            [markerSize[0]*(3/4), markerSize[1]*(3/4)],
+            [(-4/8) * markerSize[0], -(3/4) * markerSize[1]]
         ));
     }
 }
