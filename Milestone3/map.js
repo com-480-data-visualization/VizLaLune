@@ -2,14 +2,29 @@
 // Used Google Maps to identify GPS coordinates
 // Use of Claude Haiku 4.5 for some code modulation to avoid repetition
 
+// === Rounded Discipline Icon ===
+// Required as cannot be done in CSS directly
+function roundedDisciplineIcon(disciplineName, size, anchor) {
+    return L.divIcon({
+        className: '',
+        html: `<img src="../ExtraRessources/Disciplines/${disciplineName}.png" 
+                style="width:${size[0]}px; height:${size[1]}px; 
+                    border-radius: 4px;">`,
+        iconSize: size,
+        iconAnchor: anchor
+    });
+}
+
 // === Map Initialization ===
-// Leaflet map linked to id="map" in index.html. setView([lat, lng], zoomLevel) sets the initial view of the map.
-var map = L.map('map').setView([45.850799, 10.664303], 8);
+// Leaflet map linked to id="venue-map" in index.html. setView([lat, lng], zoomLevel) sets the initial view of the map.
+var map = L.map('venue-map').setView([45.850799, 10.664303], 8);
 
 // Add tiles to map
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+// Other pick for tiles: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+// attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>'
+L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
     maxZoom: 20,
-    attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>'
+    attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
 // === Venues Manual Data ===
@@ -152,12 +167,11 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker11 = L.marker(
                         venue.coords,
                         {
-                            icon: L.icon({
-                            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png',
-                            iconSize: [markerSize[0]/2, markerSize[1]/2],
-                            //iconAnchor: [0, 0] // leads to image having top left corner in middle of venue icon + - for x axis and up = + and down = - for y axis
-                            iconAnchor: [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
-                            })
+                            icon: roundedDisciplineIcon(
+                                marker.disciplinesList[0],
+                                [markerSize[0]/2, markerSize[1]/2],
+                                [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+                            )
                         }
                     ).addTo(map);
                     marker.disciplineMarker11.disciplineName = marker.disciplinesList[0];
@@ -186,11 +200,11 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker21 = L.marker(
                         venue.coords,
                         {
-                            icon: L.icon({
-                            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png',
-                            iconSize: [markerSize[0]/2, markerSize[1]/2],
-                            iconAnchor: [(3/4) * markerSize[0], -(3/4) * markerSize[1]]
-                            })
+                            icon: roundedDisciplineIcon(
+                                marker.disciplinesList[0],
+                                [markerSize[0]/2, markerSize[1]/2],
+                                [(3/4) * markerSize[0], -(3/4) * markerSize[1]]
+                            )
                         }
                     ).addTo(map);
                     marker.disciplineMarker21.disciplineName = marker.disciplinesList[0];
@@ -198,11 +212,11 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker22 = L.marker(
                         venue.coords,
                         {
-                            icon: L.icon({
-                            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png',
-                            iconSize: [markerSize[0]/2, markerSize[1]/2],
-                            iconAnchor: [(-1/4) * markerSize[0], -(3/4) * markerSize[1]]
-                            })
+                            icon: roundedDisciplineIcon(
+                                marker.disciplinesList[1],
+                                [markerSize[0]/2, markerSize[1]/2],
+                                [(-1/4) * markerSize[0], -(3/4) * markerSize[1]]
+                            )
                         }
                     ).addTo(map);
                     marker.disciplineMarker22.disciplineName = marker.disciplinesList[1];
@@ -246,11 +260,11 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker31 = L.marker(
                         venue.coords,
                         {
-                            icon: L.icon({
-                            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png',
-                            iconSize: [markerSize[0]/2, markerSize[1]/2],
-                            iconAnchor: [(1) * markerSize[0], -(3/4) * markerSize[1]]
-                            })
+                            icon: roundedDisciplineIcon(
+                                marker.disciplinesList[0],
+                                [markerSize[0]/2, markerSize[1]/2],
+                                [(1) * markerSize[0], -(3/4) * markerSize[1]]
+                            )
                         }
                     ).addTo(map);
                     marker.disciplineMarker31.disciplineName = marker.disciplinesList[0];
@@ -258,11 +272,11 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker32 = L.marker(
                         venue.coords,
                         {
-                            icon: L.icon({
-                            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png',
-                            iconSize: [markerSize[0]/2, markerSize[1]/2],
-                            iconAnchor: [(-1/2) * markerSize[0], -(3/4) * markerSize[1]]
-                            })
+                            icon: roundedDisciplineIcon(
+                                marker.disciplinesList[1],
+                                [markerSize[0]/2, markerSize[1]/2],
+                                [(-1/2) * markerSize[0], -(3/4) * markerSize[1]]
+                            )
                         }
                     ).addTo(map);
                     marker.disciplineMarker32.disciplineName = marker.disciplinesList[1];
@@ -270,11 +284,11 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker33 = L.marker(
                         venue.coords,
                         {
-                            icon: L.icon({
-                            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplinesList[2] + '.png',
-                            iconSize: [markerSize[0]/2, markerSize[1]/2],
-                            iconAnchor: [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
-                            })
+                            icon: roundedDisciplineIcon(
+                                marker.disciplinesList[2],
+                                [markerSize[0]/2, markerSize[1]/2],
+                                [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+                            )
                         }
                     ).addTo(map);
                     marker.disciplineMarker33.disciplineName = marker.disciplinesList[2];
@@ -359,45 +373,42 @@ function updateDisciplineMarkersZoom(marker) {
     const markerSize = setIconSizeHover(map.getZoom());
     
     if (marker.disciplineMarker11) {
-        marker.disciplineMarker11.setIcon(L.icon({
-            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker11.disciplineName + '.png',
-            iconSize: [markerSize[0]/2, markerSize[1]/2],
-            iconAnchor: [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
-        }));
+        marker.disciplineMarker11.setIcon(roundedDisciplineIcon(
+            marker.disciplineMarker11.disciplineName,
+            [markerSize[0]/2, markerSize[1]/2],
+            [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+        ));
     }
 
     if (marker.disciplineMarker21){
-        marker.disciplineMarker21.setIcon(L.icon({
-            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker21.disciplineName + '.png',
-            iconSize: [markerSize[0]/2, markerSize[1]/2],
-            iconAnchor: [(3/4) * markerSize[0], -(3/4) * markerSize[1]]
-        }));
-
-        marker.disciplineMarker22.setIcon(L.icon({
-            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker22.disciplineName + '.png',
-            iconSize: [markerSize[0]/2, markerSize[1]/2],
-            iconAnchor: [(-1/4) * markerSize[0], -(3/4) * markerSize[1]]
-        }));
+        marker.disciplineMarker21.setIcon(roundedDisciplineIcon(
+            marker.disciplineMarker21.disciplineName,
+            [markerSize[0]/2, markerSize[1]/2],
+            [(3/4) * markerSize[0], -(3/4) * markerSize[1]]
+        ));
+        marker.disciplineMarker22.setIcon(roundedDisciplineIcon(
+            marker.disciplineMarker22.disciplineName,
+            [markerSize[0]/2, markerSize[1]/2],
+            [(-1/4) * markerSize[0], -(3/4) * markerSize[1]]
+        ));
     }
 
     if (marker.disciplineMarker31){
-        marker.disciplineMarker31.setIcon(L.icon({
-            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker31.disciplineName + '.png',
-            iconSize: [markerSize[0]/2, markerSize[1]/2],
-            iconAnchor: [(1) * markerSize[0], -(3/4) * markerSize[1]]
-        }));
-
-        marker.disciplineMarker32.setIcon(L.icon({
-            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker32.disciplineName + '.png',
-            iconSize: [markerSize[0]/2, markerSize[1]/2],
-            iconAnchor: [-(1/2) * markerSize[0], -(3/4) * markerSize[1]]
-        }));
-
-        marker.disciplineMarker33.setIcon(L.icon({
-            iconUrl: '../ExtraRessources/Disciplines/' + marker.disciplineMarker33.disciplineName + '.png',
-            iconSize: [markerSize[0]/2, markerSize[1]/2],
-            iconAnchor: [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
-        }));
+        marker.disciplineMarker31.setIcon(roundedDisciplineIcon(
+            marker.disciplineMarker31.disciplineName,
+            [markerSize[0]/2, markerSize[1]/2],
+            [(1) * markerSize[0], -(3/4) * markerSize[1]]
+        ));
+        marker.disciplineMarker32.setIcon(roundedDisciplineIcon(
+            marker.disciplineMarker32.disciplineName,
+            [markerSize[0]/2, markerSize[1]/2],
+            [(-1/2) * markerSize[0], -(3/4) * markerSize[1]]
+        ));
+        marker.disciplineMarker33.setIcon(roundedDisciplineIcon(
+            marker.disciplineMarker33.disciplineName,
+            [markerSize[0]/2, markerSize[1]/2],
+            [(1/4) * markerSize[0], -(3/4) * markerSize[1]]
+        ));
     }
 }
 

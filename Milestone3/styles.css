@@ -61,7 +61,7 @@
     50%       { transform: translateX(-50%) translateY(10px); }
 }
 
-main {
+#banner-title {
     position: absolute;    /* Overlay on top of the image */
     top: 30%;          /* Distance from bottom of banner */
     width: 100%;
@@ -71,14 +71,14 @@ main {
     font-size: 64px;
 }
 
-main h1{
+#banner-title h1{
     padding-bottom: 50px;
 }
 
 /* === Sidebar === */
 #sidebar-button {
     position:fixed;
-    z-index: 200; /* Button above sidebar */
+    z-index: 600; /* Button above sidebar */
     font-size: 24px;
     aspect-ratio: 1 / 1;
     width: 44px;
@@ -92,7 +92,7 @@ main h1{
     top: 0;
     height: 100%;
     width: 400px;
-    z-index: 100;
+    z-index: 500; /* To place it above the venue map */
     transform: translateX(-100%); /* Initially hidden */
     transition: transform 0.3s ease-in-out;  /* Smooth slide */
     padding-top: 80px;          /* Space for the button */
@@ -160,7 +160,7 @@ main h1{
     font-size: 30px;
     flex-direction: column;
     align-items: center;
-    z-index: 100;
+    z-index: 500; /* To place it above the venue map */
 }
 
 #filters-badge hr {
@@ -197,7 +197,6 @@ p {
     font-size: 25px;
     line-height: 1.8;
     color: #333;
-    padding: 50px 0px 50px;
     text-align-last: center;
 }
 
@@ -249,63 +248,13 @@ p {
     font-size: clamp(32px, 2.5vw, 64px);
 }
 
-/* === Leaflet map container ===*/
-#map {
-    height: 800px;
-}
-
-/* === Podium page === */
-#podium {
-    text-align: center;      /* Centres title, image, and text */
-}
-
-.table-wrapper {
-    display: flex; /* Flex items for table elements */
-    justify-content: center; /* Centre table horizontally */
-}
-
-table {
-    border: 2px solid #b40ec0;    /* Border encapsulating all of table */
-    border-collapse: collapse; /* Merges common borders */
-    border-radius: 10px; /* Rounded corners for the table */
-    overflow: hidden; /* Needed to ensure rounded corners are visible due to border-collapse */
-}
-
-th {
-    border: 1px solid #c6e70e; /* Boxes the column titles */
-}
-
-td {
-    border: 1px solid #36d909; /* Boxes the data cells */
-}
-
-thead {
-    background-color: #091f36;  /* Background color for column titles */
-    color: white;               /* Text color for column titles */
-}
-
-tbody tr:hover { /* Apply style for hovering over a row in the table body */
-    background-color: #ec3e04; 
-    cursor: pointer;            /* Change cursor to indicate interactivity */
-}
-
-#sort-event {
-    cursor: pointer;  /* Change cursor to indicate interactivity */
-    user-select: none; /* Prevent text selection on click (very useful!) */
-}
-
-#sort-arrow {
-    margin-left: 6px; /* Space between the text and the arrow */
-    color: #b40ec0; /* Color of the arrow */
-}
-
 /* === Discipline grid === */
 #discipline-grid {
     display: grid;                          /* Grid mode (avoids simple piling up) */
     grid-template-columns: repeat(8, 1fr); /* 8 columns */
     grid-template-rows: repeat(2, auto);   /* 2 rows */
     gap: 16px;                             /* Space between each cell */
-    padding: 20px;                         /* Space around the grid */
+    padding: 20px 40px 80px 40px;                /* top right bottom left */
 }
 
 .discipline-card {
@@ -323,21 +272,128 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 }
 
 .discipline-card text {
-    margin-top: 6px;                       /* Space between image and name */
+    margin-top: 12px;                       /* Space between image and name */
+    font-size: 25px;
+    text-align: center;
 }
 
 .discipline-card.selected{
-    filter: brightness(0.5);     /* Darken the card */
+    filter: brightness(2);    
 }
 
 .discipline-card.selected text{
-    color: #ea0707;     /* Color the text */
+    font-weight: bold;
 }
 
 .discipline-card:hover{
     transform: scale(1.05);
 }
 
+/* === Podium page === */
+#podium {
+    text-align: center;      /* Centres title, image, and text */
+}
+
+#disciplineName{
+    font-size: 40px;
+    color: #134172;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+#disciplineImage {
+    width: 20%;
+    aspect-ratio: 1.5 / 1;                   /* Force a square shape */
+    object-fit: cover;                     /* Crop the image to fit without distorting */
+    border-radius: 10px;                    /* Rounded corners */
+    margin-bottom: 30px;
+}
+
+.table-wrapper {
+    display: flex; /* Flex items for table elements */
+    justify-content: center; /* Centre table horizontally */
+}
+
+table {
+    border: 2px solid #091f36;    /* Border encapsulating all of table */
+    border-collapse: separate;   
+    border-spacing: 0;           /* Merges common borders */
+    border-radius: 10px; /* Rounded corners for the table */
+    overflow: hidden; /* Needed to ensure rounded corners are visible due to border-collapse */
+    width: 70%;
+    font-size: 20px;
+}
+
+th {
+    border: 1px solid #1295af; /* Boxes the column titles */
+}
+
+td {
+    border: 1px solid #1295af; /* Boxes the data cells */
+}
+
+thead {
+    background-color: #091f36;  /* Background color for column titles */
+    color: white;               /* Text color for column titles */
+}
+
+tbody tr:hover { /* Apply style for hovering over a row in the table body */
+    background-color: #134273; 
+    cursor: pointer;            /* Change cursor to indicate interactivity */
+    color: white;
+}
+
+#event-name {
+    cursor: pointer;  /* Change cursor to indicate interactivity */
+    user-select: none; /* Prevent text selection on click (very useful!) */
+}
+
+#event-type {
+    cursor: pointer;  /* Change cursor to indicate interactivity */
+    user-select: none; /* Prevent text selection on click (very useful!) */
+}
+
+#event-venue {
+    cursor: pointer;  /* Change cursor to indicate interactivity */
+    user-select: none; /* Prevent text selection on click (very useful!) */
+}
+
+#event-date {
+    cursor: pointer;  /* Change cursor to indicate interactivity */
+    user-select: none; /* Prevent text selection on click (very useful!) */
+}
+
+#sort-event-name-arrow {
+    margin-left: 6px; /* Space between the text and the arrow */
+    color: #1295af; /* Color of the arrow */
+}
+
+#sort-event-type-arrow {
+    margin-left: 6px; /* Space between the text and the arrow */
+    color: #1295af; /* Color of the arrow */
+}
+
+#sort-event-venue-arrow {
+    margin-left: 6px; /* Space between the text and the arrow */
+    color: #1295af; /* Color of the arrow */
+}
+
+#sort-event-date-arrow {
+    margin-left: 6px; /* Space between the text and the arrow */
+    color: #1295af; /* Color of the arrow */
+}
+
+#disciplineDetails {
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+/* === Leaflet map container ===*/
+#venue-map {
+    height: 800px;
+    width: 80%;        
+    margin: 0 auto;    /* Centre */
+}
 
 /* === Conclusion bubbles === */
 #conclusion-bubbles {
