@@ -47,7 +47,7 @@ const bcTitle = bcSvg.append("text")
     .style("font-weight", "bold");
 
 // Helper : extrait la discipline depuis le champ events (string JSON)
-function getDiscipline(d) {
+window.getDiscipline = function getDiscipline(d) {
     try {
         const eventsStr = d.events.replace(/'/g, '"').replace(/\\"/g, '"');
         const events = JSON.parse(eventsStr);
@@ -145,3 +145,4 @@ function updateBarChart(athletesData, countryCode) {
                 .remove()
         );
 }
+

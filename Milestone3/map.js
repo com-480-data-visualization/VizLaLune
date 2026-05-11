@@ -50,6 +50,17 @@ const tooltip = d3.select("body")
   .style("pointer-events", "none")
   .style("opacity", 0)
   .style("border", "1px solid rgba(255,255,255,0.1)");
+  
+
+  function parseDiscipline(d) {
+    try {
+        // Extrait la discipline avec une regex plutôt que JSON.parse
+        const match = d.events.match(/'discipline':\s*'([^']+)'/);
+        return match ? match[1] : "Unknown";
+    } catch {
+        return "Unknown";
+    }
+}
 
 Promise.all([
   d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"),
@@ -99,12 +110,38 @@ Promise.all([
       const numId = String(+d.id).padStart(3, "0");
       const alpha3 = Object.keys(isoAlpha3ToNumeric)
         .find(k => isoAlpha3ToNumeric[k] === numId);
-      const count = alpha3 ? (athletesByCountry.get(alpha3) || 0) : 0;
-      if (count === 0) return;
-      d3.select(this).attr("stroke", "white").attr("stroke-width", 1.5);
-      tooltip.style("opacity", 1)
-        .html(`<strong>${alpha3}</strong><br>${count} athletes`);
-    })
+        const count = alpha3 ? (athletesByCountry.get(alpha3) || 0) : 0;
+        if (count === 0) return;
+        d3.select(this).attr("stroke", "white").attr("stroke-width", 1.5);
+
+    // Calcule les stats du pays
+    const countryAthletes = athletes.filter(a => a.country_code === alpha3);
+    
+    // Top discipline
+    const disciplineCount = d3.rollup(
+        countryAthletes,
+        v => v.length,
+        a => parseDiscipline(a)
+    );
+    const topDiscipline = [...disciplineCount.entries()]
+        .sort((a, b) => b[1] - a[1])[0];
+
+    // % H/F
+    const men = countryAthletes.filter(a => a.gender === "M").length;
+    const women = countryAthletes.filter(a => a.gender === "F").length;
+    const pctMen = Math.round(men / count * 100);
+    const pctWomen = Math.round(women / count * 100);
+
+    tooltip
+        .style("opacity", 1)
+        .html(`
+            <div style="font-weight:bold; font-size:14px; margin-bottom:6px; color:#4a9eff">${alpha3}</div>
+            <div>🏅 <strong>${count}</strong> athletes</div>
+            <div>🏆 Top sport: <strong>${topDiscipline ? topDiscipline[0] : "—"}</strong></div>
+            <div>👨 Men: <strong>${men}</strong> (${pctMen}%)</div>
+            <div>👩 Women: <strong>${women}</strong> (${pctWomen}%)</div>
+        `);
+})
     .on("mousemove", function(event) {
       tooltip
         .style("left", (event.clientX + 14) + "px")
@@ -139,71 +176,62 @@ Promise.all([
       }
     });
 
-  // ── DOTS ────────────────────────────────────────────────────────────────
-  const milanXY = projection([9.19, 45.46]);
+  // ── DOTS (1 par athlète) ────────────────────────────────────────────────
+const milanXY = projection([9.19, 45.46]);
 
-  const dotsGroup = mapSvg.append("g").attr("class", "dots");
+const dotsGroup = mapSvg.append("g").attr("class", "dots");
 
-  const radiusScale = d3.scaleSqrt()
-    .domain([0, maxAthletes])
-    .range([3, 18]);
-
-  const dots = [];
-  athletesByCountry.forEach((count, code) => {
+// Crée un point par athlète
+const allDots = [];
+athletesByCountry.forEach((count, code) => {
     const latLng = coords[code];
     if (!latLng) return;
     const xy = projection([latLng[1], latLng[0]]);
     if (!xy) return;
-    dots.push({ code, count, x: xy[0], y: xy[1] });
-  });
 
-  dotsGroup.selectAll("circle")
-    .data(dots)
+    for (let i = 0; i < count; i++) {
+        allDots.push({
+            code,
+            count,
+            x: xy[0] + (Math.random() - 0.5) * 25,
+            y: xy[1] + (Math.random() - 0.5) * 25,
+            originX: xy[0] + (Math.random() - 0.5) * 25,
+            originY: xy[1] + (Math.random() - 0.5) * 25,
+        });
+    }
+});
+
+dotsGroup.selectAll("circle")
+    .data(allDots)
     .join("circle")
     .attr("cx", d => d.x)
     .attr("cy", d => d.y)
-    .attr("r", d => radiusScale(d.count))
+    .attr("r", 2)
     .attr("fill", "rgba(255, 200, 50, 0.7)")
-    .attr("stroke", "white")
-    .attr("stroke-width", 0.5)
-    .style("cursor", "pointer")
-    .on("mouseover", function(event, d) {
-      d3.select(this).attr("fill", "rgba(255, 230, 100, 1)");
-      tooltip.style("opacity", 1)
-        .html(`<strong>${d.code}</strong><br>${d.count} athletes`);
-    })
-    .on("mousemove", function(event) {
-      tooltip
-        .style("left", (event.clientX + 14) + "px")
-        .style("top", (event.clientY - 10) + "px");
-    })
-    .on("mouseout", function(event, d) {
-      d3.select(this).attr("fill", "rgba(255, 200, 50, 0.7)");
-      tooltip.style("opacity", 0);
-    });
+    .attr("stroke", "none");
 
-  // ── BOUTONS SEND / RESET ────────────────────────────────────────────────
-  d3.select("#btn-send").on("click", function() {
+// ── BOUTONS SEND / RESET ────────────────────────────────────────────────
+d3.select("#btn-send").on("click", function() {
     dotsGroup.selectAll("circle")
-      .transition()
-      .duration(2000)
-      .delay((d, i) => i * 20)
-      .ease(d3.easeCubicInOut)
-      .attr("cx", milanXY[0])
-      .attr("cy", milanXY[1])
-      .attr("r", 3)
-      .attr("fill", "rgba(255, 200, 50, 0.6)");
-  });
+        .transition()
+        .duration(2000)
+        .delay(() => Math.random() * 1500)
+        .ease(d3.easeCubicInOut)
+        .attr("cx", milanXY[0])
+        .attr("cy", milanXY[1])
+        .attr("r", 1.5)
+        .attr("fill", "rgba(255, 200, 50, 0.4)");
+});
 
-  d3.select("#btn-reset").on("click", function() {
+d3.select("#btn-reset").on("click", function() {
     dotsGroup.selectAll("circle")
-      .transition()
-      .duration(1000)
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y)
-      .attr("r", d => radiusScale(d.count))
-      .attr("fill", "rgba(255, 200, 50, 0.7)");
-  });
+        .transition()
+        .duration(1000)
+        .attr("cx", d => d.originX)
+        .attr("cy", d => d.originY)
+        .attr("r", 2)
+        .attr("fill", "rgba(255, 200, 50, 0.7)");
+});
 
   // ── FILTRE PAR RÉGION ───────────────────────────────────────────────────
   const countryToRegion = {};
