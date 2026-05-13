@@ -22,7 +22,7 @@ observer.observe(document.getElementById('banner'));
 // Reset filters
 function resetFilters() {
     // Reset filter badge content
-    document.getElementById('badge-discipline').textContent = 'No discipline selected';
+    document.getElementById('badge-discipline-input').value = '';
     document.getElementById('badge-country').textContent = 'No country selected';
 
     // Reset introduction bubbles
