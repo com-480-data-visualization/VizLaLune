@@ -1,14 +1,15 @@
 // === Data ===
 // Each bubble has a text and a size
 const bubblesData = [
-    { text: "Nordic Combined is the only male-only discipline.", r: 115, vx: 1.5, vy: 1.0 },
-    { text: "Most geographically expansive Games in history.", r: 95, vx: -1.0, vy: 1.5 },
-    { text: "COUNTRY X DOMINATES X THROUGH LEONTINE FIGURE. TALK ABOUT GENDER IF POSSIBLE TOO", r: 120, vx: 1.2, vy: -1.2 },
-    { text: "Most gender equal Games! 47% of female participants.", r: 110, vx: -1.8, vy: 0.8 },
-    { text: "Africa male vs Neutral (look into exactly who? Female.", r: 90, vx: 1.0, vy: -1.5 },
-    { text: "EVENT SYMMETRIC TAKEAWAY", r: 90, vx: 1.0, vy: -1.5 },
-    { text: "DISCIPLINE TAKEAWAY", r: 90, vx: 1.0, vy: -1.5 },
-    { text: "MANON TREEMAP TAKEAWAY", r: 90, vx: 1.0, vy: -1.5 },
+    { text: "Freestyle skiing, snowboard and speed skating together represent (60% of athletes) but offer less than 35% of all potential medals", r: 160, vx: -1.75, vy: 1.75 },
+    { text: "Most geographically expansive Games in history.", r: 95, vx: -1.75, vy: 1.75 },
+    { text: "Nordic Combined is the only male-only discipline.", r: 115, vx: 1.5, vy: 1.5 },
+    { text: "Most gender equal Games! 47% of female participants.", r: 120, vx: -1.25, vy: 1.25 },
+    { text: "Africa, Oceania, and Neutral athletes combined represent less than 4% of all competitors.", r: 140, vx: 1.0, vy: -1.0 },
+    { text: "European competitors make up more than 65% of all competitors.", r: 120, vx: 1.5, vy: -1.5 },
+    { text: "Bobsleigh's gender gap stems from its greater number of male team events compared to women's individual events.", r: 150, vx: -1.0, vy: -1.0 },
+    { text: "COUNTRY X DOMINATES X THROUGH LEONTINE FIGURE. TALK ABOUT GENDER IF POSSIBLE TOO", r: 120, vx: 1.25, vy: -1.25 },
+    { text: "MANON TREEMAP TAKEAWAY", r: 90, vx: 1.75, vy: -1.75 },
 ];
 
 // === Box dimensions ===

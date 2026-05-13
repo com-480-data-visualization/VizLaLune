@@ -81,7 +81,7 @@ function updateBubbles(selectedDiscipline) {
                 try {
                     // Instead of JSON.parse because of cases such as Men's which will include the ' to " and breaking the parsing
                     const parsed = Function('return (' + d.events + ')')();
-                    return parsed.map(e => e.discipline);
+                    return parsed.map(e => e.discipline).filter(disc => !selectedDiscipline || disc === selectedDiscipline); // Filter necessary if an athlete competes in multiple disciplines!
                 } catch {
                     return []; // skip rows that fail to parse
                 }
@@ -98,7 +98,7 @@ function updateBubbles(selectedDiscipline) {
                     const parsed = Function('return (' + d.events + ')')();
                     // Need to filter out the empty events (as seen in the data exploration! See /DataExploration/PickedDataset)
                     return parsed
-                                .filter(e => e.event)
+                                .filter(e => e.event && (!selectedDiscipline || e.discipline === selectedDiscipline)) // Also need to take into account the case where an athlete does an event from another discipline as the one picked
                                 .map(e => e.discipline + ' - ' + e.event);
                 } catch {
                     return []; // skip rows that fail to parse

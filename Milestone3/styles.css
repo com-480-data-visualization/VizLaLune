@@ -123,6 +123,18 @@ body {
     margin: 8px 0;
 }
 
+#reset-filters {
+    margin-top: 15px;
+    background-color: transparent;
+    color: white;
+    border: 1px solid #1295af;
+    border-radius: 50%; /* Circle */
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
 
     /* == BANNER == */
 #banner {

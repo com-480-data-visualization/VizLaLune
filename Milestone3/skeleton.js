@@ -18,3 +18,10 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 }); 
 
 observer.observe(document.getElementById('banner'));
+
+// Reset filters
+function resetFilters() {
+    // Reset filter badge content
+    document.getElementById('badge-discipline').textContent = 'No discipline selected';
+    document.getElementById('badge-country').textContent = 'No country selected';
+}
