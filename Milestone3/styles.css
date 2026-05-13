@@ -20,6 +20,10 @@
     margin: 0; /* To have banner image take up the whole width + height without small borders */
 }
 
+body {
+    background-color: #f2f1ed;
+}
+
     /* == SIDEBAR == */
 #sidebar-button {
     position:fixed;
@@ -29,6 +33,10 @@
     width: 44px;
     top: 20px;
     left: 20px;
+    background-color: #091f36;
+    border: 2px solid #1295af;
+    border-radius: 12px;
+    color: white;
 }
 
 #sidebar {
@@ -105,7 +113,7 @@
     font-size: 30px;
     flex-direction: column;
     align-items: center;
-    z-index: 500; /* To place it above the venue map */
+    z-index: 10000; /* To place it above the venue map + extra to ensure above anything else */
 }
 
 #filters-badge hr {
@@ -200,6 +208,21 @@ p {
     line-height: 1.8;
     color: #333;
     text-align-last: center;
+}
+
+    /* == CREDITS == */
+#credits {
+    background-color: #d9d9d9;
+    text-align: center; /* Center text **/
+    padding: 30px 20px; /* top&bottom + right&left */
+    margin-top: 60px; /* Space between credits and previous section */
+}
+
+#credits p {
+    font-size: 16px; /* Written in small */
+    color: #555; 
+    margin: 0; /* Overwrite default margins */
+    max-width: 100%; /* Overwrite default max-width */
 }
 
 /* ================================================================================================================= */
@@ -343,7 +366,6 @@ thead {
 
 tbody tr:hover { /* Apply style for hovering over a row in the table body */
     background-color: #134273; 
-    cursor: pointer;            /* Change cursor to indicate interactivity */
     color: white;
 }
 

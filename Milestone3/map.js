@@ -138,10 +138,10 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
             }));
         });
 
-        // Access link by double click
-        marker.on('dblclick', function() {
-            window.open(venue.url, '_blank');
-        });
+        // Access link by double click (Official Website deleted such pages)
+        // marker.on('dblclick', function() {
+        //     window.open(venue.url, '_blank');
+        // });
 
         const badge = document.getElementById('badge-discipline');
 
@@ -178,7 +178,9 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
 
                     // Redirect to link
                     marker.disciplineMarker11.on('dblclick', function() {
-                        window.open(marker.disciplineURL[0], '_blank');
+                        const disciplineName = marker.disciplinesList[0];
+                        window.open(`https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`, '_blank');
+                        console.log(`https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`);
                     });
 
                     marker.disciplineMarker11.on('click', function() {
@@ -223,10 +225,12 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
 
                     // Redirect to link
                     marker.disciplineMarker21.on('dblclick', function() {
-                        window.open(marker.disciplineURL[0], '_blank');
+                        const disciplineName = marker.disciplinesList[0];
+                        window.open(`https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`, '_blank');
                     });
                     marker.disciplineMarker22.on('dblclick', function() {
-                        window.open(marker.disciplineURL[1], '_blank');
+                        const disciplineName = marker.disciplinesList[1];
+                        window.open(`https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`, '_blank');
                     });
 
                     marker.disciplineMarker21.on('click', function() {
@@ -295,13 +299,16 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
 
                     // Redirect to link
                     marker.disciplineMarker31.on('dblclick', function() {
-                        window.open(marker.disciplineURL[0], '_blank');
+                        const disciplineName = marker.disciplinesList[0];
+                        window.open(`https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`, '_blank');
                     });
                     marker.disciplineMarker32.on('dblclick', function() {
-                        window.open(marker.disciplineURL[1], '_blank');
+                        const disciplineName = marker.disciplinesList[1];
+                        window.open(`https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`, '_blank');
                     });
                     marker.disciplineMarker33.on('dblclick', function() {
-                        window.open(marker.disciplineURL[2], '_blank');
+                        const disciplineName = marker.disciplinesList[2];
+                        window.open(`https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`, '_blank');
                     });
 
                     marker.disciplineMarker31.on('click', function() {

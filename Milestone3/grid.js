@@ -24,7 +24,7 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
         // For each image link, create a card with the image and a label
         links.forEach(imgURL => {
             const disciplineName = imgURL.split('/').pop().replace('.png', '');
-            const disciplineURL = `https://www.olympics.com/en/milano-cortina-2026/sports/${disciplineName.toLowerCase()}`;
+            const disciplineURL = `https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`; // Link maybe changed (done once already)
             const disciplineImgURL = `/ExtraRessources/Disciplines/${disciplineName}.png`;
 
             // == Generate card ==

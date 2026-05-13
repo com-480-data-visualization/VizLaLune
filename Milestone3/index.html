@@ -25,6 +25,7 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
         <!-- SIDEBAR -->
             <!-- BUTTON -->
         <button id="sidebar-button"onclick="toggleSidebar()">☰</button>
+        
             <!-- SIDEBAR -->
         <div id='sidebar'>
             <h2>Navigate</h2>
@@ -65,7 +66,7 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
             <!-- INTRO BUBBLES-->
             <p style="padding-top: 50px; padding-bottom: 50px">
                 The XXV Olympic Winter Games, officially known as <strong>Milano-Cortina 2026</strong> saw more than<strong> 2,900 athletes</strong> from 
-                <strong>93 countries</strong> competed across <strong>17 days from February 6 to 22 2026</strong> in front of millions of spectactors. For the first time ever, two Olympic 
+                <strong>93 countries</strong> compete across <strong>17 days from February 6 to 22 2026</strong> in front of millions of spectactors. For the first time ever, two Olympic 
                 cauldrons were simultaneously ignited, in both Milan and Cortina d'Ampezzo.
             </p>
             <div id="intro-bubbles"></div>
@@ -75,7 +76,7 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                 At Milano-Cortina, <strong>116 events in 16 disciplines</strong> were hosted, a record for any Winter Games, and 7 more events than Beijing 2022.
                 <strong>8 brand-new events</strong> made their Olympic debut, headlined by <strong>Ski Mountaineering</strong>, the first new Winter Olympic sport in 24 years. 
                 NHL players returned to the ice for the first time since Sochi 2014, making ice hockey one of the most anticipated events of the Games.
-                <br><strong>Choose a discipline below to dive into its events and results</strong>. Your selection will update the visualizations throughout the page!
+                <br><strong>Choose a discipline below to dive into its events and results</strong>. Your selection will update visualizations throughout the page!
             </p>
 
             <div id="discipline-grid"></div>
@@ -101,7 +102,6 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                         <tbody></tbody>
                     </table>
                 </div>
-
                 <h3 id="disciplineDetails"></h3>
             </div>
 
@@ -113,12 +113,13 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                 <strong>Explore the map below! </strong> <br>
                 Single-click a venue to discover 
                 which disciplines were hosted there and single-click a discipline to update the global filter, or 
-                double-click a venue/discipline to learn more about the it. 
+                double-click to learn more about the it. 
             </p>
             <div id="venue-map"></div>
 
             <!-- TREEMAP -->
             <p style="padding-top: 80px; padding-bottom: 50px">
+                CHANGE TEXT BECAUSE NEED TO INCLUDE MEDAL COUNT BY MANON!
                 One usually focus on the medal count to evaluate the performance of countries at the Olympics, but let's not forget that behind each medal there is an athlete. Hence one will spend more time on this and focus on it to better determine their specialities/origins and more than anything else their gender.
                 Talk about the fact that each edition the Winter Olympics change their events. And let's explore how the athlete distribution among the disciplines and events
                 to better grasp the structure of the games. Before that talk about one or two facts about these games especially focusing on events.
@@ -137,7 +138,7 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
 
             <!-- ORIGINS -->
             <p style="padding-top: 80px; padding-bottom: 50px">
-                Now that we have a better understanding of the structure of the games events, let's explore where the athletes come from.
+                Now that we have a better understanding of the structure of the games, let's explore where the athletes come from.
                 Let's dwelve on how each country brings each gender to the games. Are some countries bringing more men or women in their delegations. Or is this evenly matched?
             </p>
             <svg id='figureXXX' class='skeletonSketch'>
@@ -154,6 +155,7 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                 Select a discipline to explore its events repartition between genders.
             </p>
             <div id="symmetrical-gender-discipline"></div>
+
                 <!-- EVENTS -->
             <div id="symmetrical-gender-event" style="display: none;"></div>
         </section>
@@ -162,15 +164,25 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
         <section id='conclusion'>
             <h2 id='section-title'>Conclusion</h2>
 
-            <svg id='figureXXX' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure XXX: Moving around bubbles. Conclusion with the main takeaways for the different visualizations.</p>
-
             <!-- CONCLUSION BUBBLES -->
             <div id="conclusion-bubbles"></div>
-
         </section>
+
+        <!-- CREDITS -->
+        <footer id="credits">
+            <p>
+                Data source: 
+                <a href="https://www.kaggle.com/datasets/piterfm/milano-cortina-2026-olympic-winter-games/" target="_blank">Kaggle Milano-Cortina 2026 Olympic Winter Games</a> by <a href="https://www.kaggle.com/piterfm" target="_blank">Petro Ivaniuk</a>. <br>
+                Team members:
+                <a href="https://github.com/ThomasLenges" target="_blank">Thomas Lenges</a>, 
+                <a href="https://github.com/titinelef" target="_blank">Léontine Lefranc</a>, 
+                and <a href="https://github.com/mcesbrondarnaud" target="_blank">Manon Cesbron Darnaud</a>. <br>
+                Code can be found
+                <a href="https://github.com/com-480-data-visualization/VizLaLune" target="_blank">here</a>. <br>
+                This project is licensed under 
+                <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>. <br>
+            </p>
+        </footer>
     </body>
 
     <!-- FOR PAGE SKELETON (SIDEBAR + FILTERS BADGE)-->
@@ -198,6 +210,5 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
 
     <!-- CONCLUSION SCRIPTS -->
     <script src='conclusion_bubbles.js'></script>
-
 </html>
 
