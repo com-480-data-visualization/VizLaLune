@@ -1,16 +1,19 @@
 // === Data ===
 // Each bubble has a text and a size
 const bubblesData = [
-    { text: "Nordic Combined is the only male-only discipline", r: 80, vx: 1.5, vy: 1.0 },
-    { text: "Some disciplines have more male-only events than female-only events", r: 95, vx: -1.0, vy: 1.5 },
-    { text: "Takeaway 3", r: 120, vx: 1.2, vy: -1.2 },
-    { text: "Takeaway 4", r: 110, vx: -1.8, vy: 0.8 },
-    { text: "Takeaway 5", r: 90, vx: 1.0, vy: -1.5 },
+    { text: "Nordic Combined is the only male-only discipline.", r: 115, vx: 1.5, vy: 1.0 },
+    { text: "Most geographically expansive Games in history.", r: 95, vx: -1.0, vy: 1.5 },
+    { text: "COUNTRY X DOMINATES X THROUGH LEONTINE FIGURE. TALK ABOUT GENDER IF POSSIBLE TOO", r: 120, vx: 1.2, vy: -1.2 },
+    { text: "Most gender equal Games! 47% of female participants.", r: 110, vx: -1.8, vy: 0.8 },
+    { text: "Africa male vs Neutral (look into exactly who? Female.", r: 90, vx: 1.0, vy: -1.5 },
+    { text: "EVENT SYMMETRIC TAKEAWAY", r: 90, vx: 1.0, vy: -1.5 },
+    { text: "DISCIPLINE TAKEAWAY", r: 90, vx: 1.0, vy: -1.5 },
+    { text: "MANON TREEMAP TAKEAWAY", r: 90, vx: 1.0, vy: -1.5 },
 ];
 
 // === Box dimensions ===
-const boxWidth = 800;
-const boxHeight = 500;
+const boxWidth = 1400;
+const boxHeight = 700;
 
 // === Create SVG inside the box ===
 const svg = d3.select('#conclusion-bubbles')
@@ -34,7 +37,9 @@ const bubbles = svg.selectAll('g')
 // === Append circle to each group ===
 bubbles.append('circle')
     .attr('r', d => d.r)
-    .attr('fill', '#b40ec0')
+    .attr('fill', '#1295af')
+    .attr('stroke', '#066071')
+    .attr('stroke-width', 2)
     .attr('opacity', 0.8);
 
 // === Append text to each group ===
@@ -46,7 +51,7 @@ bubbles.append('text')
     .each(function(d) {
         const text = d3.select(this);
         const words = d.text.split(' ');
-        const lineHeight = 14; // px per line
+        const lineHeight = 18; // px per line
         const maxCharsPerLine = Math.floor(d.r * 1.6 / 7); // Approximate chars that fit per line (given by Anthropic Sonnet 4.6)
 
         // Group words into lines
@@ -68,7 +73,7 @@ bubbles.append('text')
             text.append('tspan')
                 .attr('x', 0)
                 .attr('dy', i === 0 ? -totalHeight / 2 : lineHeight) // First line offset, rest increment
-                .attr('font-size', '11px')
+                .attr('font-size', '18px')
                 .text(line);
         });
     });

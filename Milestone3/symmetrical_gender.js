@@ -236,7 +236,7 @@ function renderDisciplineChart() {
 
     // == Checkboxes (top right of SVG) ==
     const checkBoxes = dSvg.append('g')
-        .attr('transform', `translate(${(width / 2) - 120}, ${-30})`);
+        .attr('transform', `translate(${(width / 2) - 120}, ${height/2 - 2*margin})`);
 
     continents.forEach((continent, i) => {
         const box = checkBoxes.append('g')

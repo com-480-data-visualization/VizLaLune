@@ -448,8 +448,8 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 /* ================================================================================================================= */
 /* === CONCLUSION === */
 #conclusion-bubbles {
-    width: 800px;
-    height: 500px;
+    width: 1400px;
+    height: 700px;
     margin: 0 auto;              /* Centre box on x-axis */
     background-color: #091f36;  
     border: 2px solid #1295af;  
