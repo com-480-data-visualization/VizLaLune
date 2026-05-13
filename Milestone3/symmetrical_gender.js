@@ -62,7 +62,7 @@ function recomputeAndRender() {
     // Re-render discipline chart
     renderDisciplineChart();
     // Re-render event chart
-    const disciplineName = document.getElementById('badge-discipline').textContent;
+    const disciplineName = document.getElementById('badge-discipline-input').value || 'No discipline selected';
     renderEventChart(disciplineName);
 }
 

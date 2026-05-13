@@ -34,3 +34,58 @@ function resetFilters() {
     // Reset map view
     resetMapView();
 }
+
+// Discipline filter selection
+function filterDisciplineSuggestions(value) {
+    const suggestions = document.getElementById('discipline-suggestions');
+    const badge = document.getElementById('badge-discipline-input');
+
+    // Get all discipline names from grid cards
+    const allDisciplines = [...document.querySelectorAll('.discipline-card text')]
+        .map(t => t.textContent);
+
+    // Filter by startsWith (case insensitive)
+    const filtered = value.trim() === ''
+        ? allDisciplines
+        : allDisciplines.filter(d => d.toLowerCase().startsWith(value.toLowerCase()));
+
+    if (filtered.length === 0) {
+        suggestions.style.display = 'none';
+        return;
+    }
+
+    // Render suggestions
+    suggestions.innerHTML = ''; // Clear previous suggestions
+    suggestions.style.display = 'block'; // Make suggestions now visible
+
+    filtered.forEach(discipline => {
+        const item = document.createElement('div');
+        item.className = 'discipline-suggestion-item';
+        item.textContent = discipline;
+        item.onclick = () => {
+            badge.value = discipline;
+            suggestions.style.display = 'none';
+            // Trigger discipline selection
+            updateBubbles(discipline);
+            selectDisciplineCard(discipline);
+            
+            // Convert "Alpine Skiing" to "Alpine-skiing" to match disciplinesList format
+            // For zoomToDiscipline and showPodium functions
+            const formattedName = discipline.replace(/ /g, '-')
+                .toLowerCase()
+                .replace(/^\w/, c => c.toUpperCase()); // First letter only to cap
+
+            zoomToDiscipline(formattedName);
+            showPodium(discipline, `https://www.olympics.com/en/sports/${formattedName.toLowerCase()}`, `/ExtraRessources/Disciplines/${formattedName}.png`);
+            renderEventChart(discipline);
+        };
+        suggestions.appendChild(item);
+    });
+}
+
+// Close suggestions when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('#badge-discipline-wrapper')) {
+        document.getElementById('discipline-suggestions').style.display = 'none';
+    }
+});

@@ -47,7 +47,7 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
             // == Click event ==
                 // Single click: zoom map + show podium below grid
             card.on('click', () => {
-                const badge = document.getElementById('badge-discipline');
+                const badge = document.getElementById('badge-discipline-input')
 
                 // Remove 'selected' class from previously selected discipline
                 if (selectedDiscipline){
@@ -57,7 +57,7 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
                 // Click back on selected card
                 if (selectedDiscipline === card) {
                     selectedDiscipline = null; // Deselect if clicking the same card
-                    badge.textContent = "No discipline selected"; // Reset badge text
+                    badge.value = ''; // Reset badge text
                     updateBubbles(null);
                     // Hide podium section when deselecting
                     document.getElementById('podium').style.display = 'none';
@@ -78,7 +78,7 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
                             .replace(/\b\w/g, c => c.toUpperCase());
                     }
 
-                    badge.textContent = cleanDisciplineName;
+                    badge.value = cleanDisciplineName;
                     updateBubbles(cleanDisciplineName);
 
                     // Show podium inline below the grid

@@ -143,7 +143,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
         //     window.open(venue.url, '_blank');
         // });
 
-        const badge = document.getElementById('badge-discipline');
+        const badge = document.getElementById('badge-discipline-input')
 
         // Show/Hide disciplines on click
         marker.on('click', function() {
@@ -189,7 +189,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
-                        badge.textContent = cleanDisciplineName;
+                        badge.value = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
                         renderEventChart(cleanDisciplineName);
@@ -239,7 +239,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
-                        badge.textContent = cleanDisciplineName;
+                        badge.value = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
                         renderEventChart(cleanDisciplineName);
@@ -250,7 +250,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
-                        badge.textContent = cleanDisciplineName;
+                        badge.value = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
                         renderEventChart(cleanDisciplineName);
@@ -317,7 +317,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
-                        badge.textContent = cleanDisciplineName;
+                        badge.value = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
                         renderEventChart(cleanDisciplineName);
@@ -328,7 +328,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
-                        badge.textContent = cleanDisciplineName;
+                        badge.value = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
                         renderEventChart(cleanDisciplineName);
@@ -339,7 +339,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                         const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[2] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
-                        badge.textContent = cleanDisciplineName;
+                        badge.value = cleanDisciplineName;
                         updateBubbles(cleanDisciplineName);
                         selectDisciplineCard(cleanDisciplineName);
                         renderEventChart(cleanDisciplineName);                        
@@ -436,6 +436,7 @@ map.on('zoom', function() {
 
 // === Zoom to discipline function from grid.js ===
 function zoomToDiscipline(disciplineName) {
+    
     const target = markers.find(marker =>
         marker.disciplinesList.includes(disciplineName)
     );
