@@ -79,12 +79,17 @@ function renderDisciplineChart() {
         F: values.F
     })).sort((a, b) => (b.M + b.F) - (a.M + a.F)); // Sort by total descending
 
-    // Compute Overall
+    // Compute Overall (bug detected and fixed: 3 athletes participated to more than 1 discipline!)
     if(showOverall) {
-        const overallM = d3.sum(chartData, d => d.M);
-        const overallF = d3.sum(chartData, d => d.F);
+        // Filter by continent first
+        const filteredAthletes = athletesRaw.filter(a => {
+            const continent = countryToContinent[a.country_code];
+            return activeContinents.has(continent);
+        });
 
-        // Add overall at beginning of array
+        const overallM = filteredAthletes.filter(a => a.gender === 'M').length;
+        const overallF = filteredAthletes.filter(a => a.gender === 'F').length;
+
         chartData.unshift({ discipline: 'Overall', M: overallM, F: overallF });
     }
 
@@ -330,10 +335,22 @@ function renderEventChart(discipline) {
 
     // Compute Overall
     if(showOverall) {
-        const overallM = d3.sum(eventData, d => d.M);
-        const overallF = d3.sum(eventData, d => d.F);
+        // Filter by continent AND discipline (not by event)
+        const filteredAthletes = athletesRaw.filter(a => {
+            // Filter by continent
+            const continent = countryToContinent[a.country_code];
+            if (!activeContinents.has(continent)) return false;
 
-        // Add overall at beginning of array
+            // Filter by discipline
+            try {
+                const parsed = Function('return (' + a.events + ')')();
+                return parsed.some(e => e.discipline === discipline);
+            } catch { return false; }
+        });
+
+        const overallM = filteredAthletes.filter(a => a.gender === 'M').length;
+        const overallF = filteredAthletes.filter(a => a.gender === 'F').length;
+
         eventData.unshift({ key: discipline + '/Overall', event: 'Overall', M: overallM, F: overallF });
     }
 

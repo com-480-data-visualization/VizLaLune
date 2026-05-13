@@ -1,7 +1,6 @@
 // === Data ===
 // Each bubble has a text and a size
 const bubblesData = [
-    { text: "Freestyle skiing, snowboard and speed skating together represent (60% of athletes) but offer less than 35% of all potential medals", r: 160, vx: -1.75, vy: 1.75 },
     { text: "Most geographically expansive Games in history.", r: 95, vx: -1.75, vy: 1.75 },
     { text: "Nordic Combined is the only male-only discipline.", r: 115, vx: 1.5, vy: 1.5 },
     { text: "Most gender equal Games! 47% of female participants.", r: 120, vx: -1.25, vy: 1.25 },
