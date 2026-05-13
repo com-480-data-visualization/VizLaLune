@@ -67,6 +67,7 @@ function recomputeAndRender() {
 }
 
 // ==== Render discipline chart ====
+let showOverall = true;
 function renderDisciplineChart() {
     // === Clear previous chart ===
     d3.select('#symmetrical-gender-discipline').selectAll('*').remove();
@@ -78,16 +79,25 @@ function renderDisciplineChart() {
         F: values.F
     })).sort((a, b) => (b.M + b.F) - (a.M + a.F)); // Sort by total descending
 
+    // Compute Overall
+    if(showOverall) {
+        const overallM = d3.sum(chartData, d => d.M);
+        const overallF = d3.sum(chartData, d => d.F);
+
+        // Add overall at beginning of array
+        chartData.unshift({ discipline: 'Overall', M: overallM, F: overallF });
+    }
+
     // === Generate SVG ===
     // == Dimensions ==
-    const width = 800;
-    const height = 480;
-    const margin = 30; // Space for x-axis labels to show properly
+    const width = 1400;
+    const height = 600;
+    const margin = 40; // Space for x-axis labels to show properly
 
     const dSvg = d3.select('#symmetrical-gender-discipline')
         .append('svg')
         .attr('width', width + margin * 2) // Extra space for axes on both sides
-        .attr('height', height + margin + 40) // Extra space for x-axis + checkboxes on top
+        .attr('height', height + margin + 80) // Extra space for x-axis + checkboxes on top
         .append('g')
         .attr('transform', `translate(${(width / 2) + margin}, 40)`); // Start bars middle and top + 40px down for checkboxes
 
@@ -113,7 +123,7 @@ function renderDisciplineChart() {
         .attr('y', d => yScale(d.discipline))
         .attr('width', d => xScale(d.M))
         .attr('height', yScale.bandwidth())
-        .attr('fill', '#4e9af1');
+        .attr('fill', '#5b91ce');
 
     dSvg.selectAll('.bar-f')
         .data(chartData)
@@ -124,7 +134,7 @@ function renderDisciplineChart() {
         .attr('y', d => yScale(d.discipline))
         .attr('width', d => xScale(d.F))
         .attr('height', yScale.bandwidth())
-        .attr('fill', '#f14ee9');
+        .attr('fill', '#c45bbf');
 
     // == Labels ==
     dSvg.selectAll('.label-discipline')
@@ -137,55 +147,100 @@ function renderDisciplineChart() {
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .attr('fill', 'black')
-        .attr('font-size', '11px')
-        .text(d => d.discipline);
+        .attr('font-size', '18px')
+        .text(d => {
+            const total = d.M + d.F;
+            const pctM = Math.round(d.M / total * 100);
+            const pctF = Math.round(d.F / total * 100);
+            return `${pctM}%    ${d.discipline}    ${pctF}%`;
+        });
 
 
     // == Axes ==
     dSvg.append('g')
         .attr('transform', `translate(0, ${height})`)
-        .call(d3.axisBottom(xScale.copy().range([0, -width / 2])));
+        .call(d3.axisBottom(xScale.copy().range([0, -width / 2])))
+        .style('font-size', '16px');
 
     dSvg.append('g')
         .attr('transform', `translate(0, ${height})`)
-        .call(d3.axisBottom(xScale));
+        .call(d3.axisBottom(xScale))
+        .style('font-size', '16px');
+
+    dSvg.append('text')
+        .attr('x', 0)
+        .attr('y', height + margin + 20)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '25px')
+        .text('Number of Athletes per Discipline');
+        
 
     // == Legend ==
     const legend = dSvg.append('g')
-        .attr('transform', `translate(${-width / 2}, ${height - margin})`);
+        .attr('transform', `translate(${-width / 2}, ${-30})`);
 
     legend.append('rect')
-        .attr('width', 14)
-        .attr('height', 14)
-        .attr('fill', '#4e9af1');
+        .attr('width', 20)
+        .attr('height', 20)
+        .attr('fill', '#5b91ce');
 
     legend.append('text')
-        .attr('x', 20)
-        .attr('y', 11)
+        .attr('x', 25)
+        .attr('y', 16)
         .attr('fill', 'black')
-        .attr('font-size', '12px')
+        .attr('font-size', '18px')
         .text('Male');
 
     legend.append('rect')
         .attr('x', 70)
-        .attr('width', 14)
-        .attr('height', 14)
-        .attr('fill', '#f14ee9');
+        .attr('width', 20)
+        .attr('height', 20)
+        .attr('fill', '#c45bbf');
 
     legend.append('text')
-        .attr('x', 90)
-        .attr('y', 11)
+        .attr('x', 95)
+        .attr('y', 16)
         .attr('fill', 'black')
-        .attr('font-size', '12px')
+        .attr('font-size', '18px')
         .text('Female');
+
+    // == Overall button ==
+    const overallToggle = dSvg.append('g')
+        .attr('transform', `translate(${(-width / 2) + 170}, -30)`)
+        .style('cursor', 'pointer')
+        .on('click', function() {
+            showOverall = !showOverall;
+            recomputeAndRender();
+        });
+
+    // Checkbox rect
+    overallToggle.append('rect')
+        .attr('width', 20).attr('height', 20)
+        .attr('rx', 2)
+        .attr('fill', showOverall ? '#98a4a8' : '#ffffff')
+        .attr('stroke', '#6775de').attr('stroke-width', 1);
+
+    // Checkmark
+    overallToggle.append('text')
+        .attr('x', 3).attr('y', 18)
+        .attr('font-size', '22px')
+        .attr('fill', 'white')
+        .text(showOverall ? '✓' : '');
+
+    // Label
+    overallToggle.append('text')
+        .attr('x', 25).attr('y', 13)
+        .attr('dominant-baseline', 'middle')
+        .attr('fill', 'black').attr('font-size', '18px')
+        .text('Overall');
 
     // == Checkboxes (top right of SVG) ==
     const checkBoxes = dSvg.append('g')
-        .attr('transform', `translate(${(width / 2) - margin}, ${0})`);
+        .attr('transform', `translate(${(width / 2) - 120}, ${-30})`);
 
     continents.forEach((continent, i) => {
         const box = checkBoxes.append('g')
-            .attr('transform', `translate(0, ${i * 22})`) // 22px per row
+            .attr('transform', `translate(0, ${i * 32})`) // 32px per row
             .style('cursor', 'pointer')
             .on('click', function() {
                 // Toggle continent in active set
@@ -201,23 +256,23 @@ function renderDisciplineChart() {
 
         // Checkbox rect
         box.append('rect')
-            .attr('width', 12).attr('height', 12)
+            .attr('width', 20).attr('height', 20)
             .attr('rx', 2) // Slightly rounded
-            .attr('fill', activeContinents.has(continent) ? '#b40ec0' : '#333')
-            .attr('stroke', '#b40ec0').attr('stroke-width', 1);
+            .attr('fill', activeContinents.has(continent) ? '#98a4a8' : '#ffffff')
+            .attr('stroke', '#6775de').attr('stroke-width', 1);
 
         // Checkmark when selected
         box.append('text')
-            .attr('x', 2).attr('y', 11)
-            .attr('font-size', '10px')
+            .attr('x', 3).attr('y', 18)
+            .attr('font-size', '22px')
             .attr('fill', 'white')
             .text(activeContinents.has(continent) ? '✓' : '');
 
         // Label
         box.append('text')
-            .attr('x', 18).attr('y', 10)
+            .attr('x', 25).attr('y', 13)
             .attr('dominant-baseline', 'middle')
-            .attr('fill', 'black').attr('font-size', '11px')
+            .attr('fill', 'black').attr('font-size', '18px')
             .text(continent);
     });
 
@@ -230,12 +285,13 @@ function renderDisciplineChart() {
     dSvg.selectAll('.bar-m, .bar-f')
         .on('mouseover', function(event, d) {
             tooltip
-                .style('display', 'flex')
+                .style('display', 'block')
+                .style('text-align', 'center')
                 .html(`
                     <strong>${d.discipline}</strong><br>
                     Total: ${d.M + d.F}<br>
-                    💙 Male: ${d.M}<br>
-                    🩷 Female: ${d.F}
+                    Male: ${d.M}<br>
+                    Female: ${d.F}
                 `);
         })
         .on('mousemove', function(event) {
@@ -272,17 +328,26 @@ function renderEventChart(discipline) {
     .filter(d => d.key.startsWith(discipline + '/') && d.event.trim() !== '') // Do not want empty events (IMPORTANT!)
     .sort((a, b) => (b.M + b.F) - (a.M + a.F));
 
+    // Compute Overall
+    if(showOverall) {
+        const overallM = d3.sum(eventData, d => d.M);
+        const overallF = d3.sum(eventData, d => d.F);
+
+        // Add overall at beginning of array
+        eventData.unshift({ key: discipline + '/Overall', event: 'Overall', M: overallM, F: overallF });
+    }
+
     console.log('Event data for discipline', discipline, ':', eventData);
 
     // == Create SVG (same structure as discipline chart) ==
-    const eWidth = 800;
-    const eHeight = eventData.length * 30;
-    const eMargin = 30;
+    const eWidth = 1400;
+    const eHeight = eventData.length * 40;
+    const eMargin = 40;
 
     const eSvg = d3.select('#symmetrical-gender-event')
         .append('svg')
         .attr('width', eWidth + eMargin * 2)
-        .attr('height', eHeight + eMargin)
+        .attr('height', eHeight + eMargin + 80)
         .append('g')
         .attr('transform', `translate(${(eWidth / 2) + eMargin}, ${0})`);
 
@@ -308,7 +373,7 @@ function renderEventChart(discipline) {
         .attr('y', d => eYScale(d.event))
         .attr('width', d => eXScale(d.M))
         .attr('height', eYScale.bandwidth())
-        .attr('fill', '#4e9af1');
+        .attr('fill', '#5b91ce');
 
     // == Female bars ==
     eSvg.selectAll('.e-bar-f')
@@ -320,7 +385,7 @@ function renderEventChart(discipline) {
         .attr('y', d => eYScale(d.event))
         .attr('width', d => eXScale(d.F))
         .attr('height', eYScale.bandwidth())
-        .attr('fill', '#f14ee9');
+        .attr('fill', '#c45bbf');
 
     // == Event labels ==
     eSvg.selectAll('.e-label')
@@ -333,8 +398,13 @@ function renderEventChart(discipline) {
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .attr('fill', 'black')
-        .attr('font-size', '11px')
-        .text(d => d.event);
+        .attr('font-size', '18px')
+        .text(d => {
+            const total = d.M + d.F;
+            const pctM = Math.round(d.M / total * 100);
+            const pctF = Math.round(d.F / total * 100);
+            return `${pctM}%    ${d.event}    ${pctF}%`;
+        });
 
     // == Axes ==
     eSvg.append('g')
@@ -344,6 +414,13 @@ function renderEventChart(discipline) {
     eSvg.append('g')
         .attr('transform', `translate(0, ${eHeight})`)
         .call(d3.axisBottom(eXScale));
+
+    eSvg.append('text')
+        .attr('x', 0)
+        .attr('y', eHeight + eMargin + 20)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '25px')
+        .text('Number of Athletes per Event');
 
     // == Tooltip ==
     const eTooltip = d3.select('body')
@@ -355,12 +432,13 @@ function renderEventChart(discipline) {
     eSvg.selectAll('.e-bar-m, .e-bar-f')
         .on('mouseover', function(event, d) {
             eTooltip
-                .style('display', 'flex')
+                .style('display', 'block')
+                .style('text-align', 'center')
                 .html(`
                     <strong>${d.event}</strong><br>
                     Total: ${d.M + d.F}<br>
-                    💙 Male: ${d.M}<br>
-                    🩷 Female: ${d.F}
+                    Male: ${d.M}<br>
+                    Female: ${d.F}
                 `);
         })
         .on('mousemove', function(event) {
@@ -371,33 +449,4 @@ function renderEventChart(discipline) {
         .on('mouseout', function() {
             eTooltip.style('display', 'none');
         });
-    
-    // == Legend ==
-    const legend = eSvg.append('g')
-        .attr('transform', `translate(${-eWidth / 2}, ${eHeight - eMargin})`);
-
-    legend.append('rect')
-        .attr('width', 14)
-        .attr('height', 14)
-        .attr('fill', '#4e9af1');
-
-    legend.append('text')
-        .attr('x', 20)
-        .attr('y', 11)
-        .attr('fill', 'black')
-        .attr('font-size', '12px')
-        .text('Male');
-
-    legend.append('rect')
-        .attr('x', 70)
-        .attr('width', 14)
-        .attr('height', 14)
-        .attr('fill', '#f14ee9');
-
-    legend.append('text')
-        .attr('x', 90)
-        .attr('y', 11)
-        .attr('fill', 'black')
-        .attr('font-size', '12px')
-        .text('Female');
 }

@@ -437,11 +437,11 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 .sg-tooltip {
     position: absolute;      
     background-color: #091f36;
-    border: 2px solid #b40ec0;
+    border: 2px solid #1295af;
     border-radius: 8px;
     padding: 10px 14px;       /* For text within tooltip */
     color: white;
-    font-size: 13px;
+    font-size: 18px;
     pointer-events: none;     /* Otherwise blinking */
 }
 
@@ -452,7 +452,7 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     height: 500px;
     margin: 0 auto;              /* Centre box on x-axis */
     background-color: #091f36;  
-    border: 2px solid #b40ec0;  
+    border: 2px solid #1295af;  
     border-radius: 16px;         /* Round corner */
     overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
     position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
