@@ -94,6 +94,19 @@ fetch('/ExtraRessources/Disciplines/') // Fetch at this URL from server
 
 // Called from map.js when a discipline marker is clicked
 function selectDisciplineCard(disciplineName) {
+    // If disciplineName is empty ==> reset the grid selection
+    if (!disciplineName){
+        if (selectedDiscipline){
+            selectedDiscipline.classed('selected', false);
+            selectedDiscipline = null;
+        }
+        // Hide podium section when deselecting
+        document.getElementById('podium').style.display = 'none';
+        renderEventChart("No discipline selected");
+        return;
+    }
+
+    // If disciplineName is provided
     d3.selectAll('.discipline-card').each(function() {
         const card = d3.select(this);
         const cardText = card.select('text').text();

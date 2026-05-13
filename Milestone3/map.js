@@ -453,3 +453,8 @@ function cleanMapDisciplineName(name) {
     // General case: replace hyphens with spaces, capitalize each word
     return name.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
+
+// === Reset map view when clearing filters ===
+function resetMapView() {
+    map.flyTo([45.850799, 10.664303], 8);
+}
