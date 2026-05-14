@@ -47,28 +47,63 @@ Promise.all([
 });
 
 // ==== UPDATE BUBBLES ====
-function updateBubbles(selectedDiscipline) {
-    // === Filter athletes and venues on discipline ===
-    const filteredAthletes = selectedDiscipline
-        ? athletesDataGlobal.filter(d => {
+function updateBubbles(selectedDiscipline = null, selectedCountry = null) {
+    // === Filter athletes on discipline ===
+    let filteredAthletes = athletesDataGlobal;
+
+    if (selectedDiscipline){
+        filteredAthletes = filteredAthletes.filter(d => {
             try {
                 const parsed = Function('return (' + d.events + ')')();
                 return parsed.some(e => e.discipline === selectedDiscipline);
-            } catch { 
-                return false; 
+            } catch {
+                return false;
             }
-        })
-        : athletesDataGlobal;
-    
-    const filteredVenues = selectedDiscipline
-        ? venuesDataGlobal.filter(venue => {
-            return venue.disciplines.includes(selectedDiscipline);
-        })
-        : venuesDataGlobal;
+        });
+    }
+
+    // === Filter athletes on country ===
+    const countryNameToCode = Object.fromEntries(
+        Object.entries(countryCodeToName).map(([code, name]) => [name, code])
+    );
+
+    if (selectedCountry) {
+        const selectedCode = countryNameToCode[selectedCountry];
+        filteredAthletes = filteredAthletes.filter(d => d.country_code === selectedCode);
+    }
 
     // === Compute Total Athletes ===
     totalAthletes = filteredAthletes.length;
     console.log("Total Athletes:", totalAthletes);
+
+    // === Filter venues on discipline ===
+    let filteredVenues = venuesDataGlobal;
+
+    if (selectedDiscipline) {
+        filteredVenues = filteredVenues.filter(venue => {
+            return venue.disciplines.includes(selectedDiscipline);
+        });
+    }
+
+    if (selectedCountry) {
+        // Check in filteredAthletes the athletes disciplines and filter venues if the venue hosts that discipline
+        const disciplinesOfSelectedCountry = new Set(
+            filteredAthletes.flatMap(d => {
+                try {
+                    const parsed = Function('return (' + d.events + ')')();
+                    return parsed.map(e => e.discipline);
+                } catch {
+                    return [];
+                }
+            })
+        );
+
+        console.log("Disciplines of selected country:", disciplinesOfSelectedCountry);
+
+        filteredVenues = filteredVenues.filter(venue => {
+            return venue.disciplines.some(d => disciplinesOfSelectedCountry.has(d));
+        });
+    }
 
     // === Compute Participating Countries ===
     participatingCountries = new Set(filteredAthletes.map(d => d.country_code)).size;

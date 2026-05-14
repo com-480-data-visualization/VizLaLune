@@ -40,6 +40,8 @@ function filterDisciplineSuggestions(value) {
     const suggestions = document.getElementById('discipline-suggestions');
     const badge = document.getElementById('badge-discipline-input');
 
+    const countryBadge = document.getElementById('badge-country-input');
+
     // Get all discipline names from grid cards
     const allDisciplines = [...document.querySelectorAll('.discipline-card text')]
         .map(t => t.textContent);
@@ -66,7 +68,7 @@ function filterDisciplineSuggestions(value) {
             badge.value = discipline;
             suggestions.style.display = 'none';
             // Trigger discipline selection
-            updateBubbles(discipline);
+            updateBubbles(discipline, countryBadge.value);
             selectDisciplineCard(discipline);
             
             // Convert "Alpine Skiing" to "Alpine-skiing" to match disciplinesList format
@@ -87,6 +89,8 @@ function filterDisciplineSuggestions(value) {
 function filterCountrySuggestions(value) {
     const suggestions = document.getElementById('country-suggestions');
     const badge = document.getElementById('badge-country-input');
+
+    const disciplineBadge = document.getElementById('badge-discipline-input');
 
     // Get all country names from athletes data
     const allCountriesCodes = [...new Set(athletesDataGlobal.map(a => a.country_code))];
@@ -114,7 +118,7 @@ function filterCountrySuggestions(value) {
             badge.value = country;
             suggestions.style.display = 'none';
             // Trigger country selection
-            // updateBubbles(country);
+            updateBubbles(disciplineBadge.value, country);
             // renderCountryChart(country);
             // renderEventChart(country);
         };
