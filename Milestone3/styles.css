@@ -546,56 +546,25 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     pointer-events: none;     /* Otherwise blinking */
 }
 
-/* ================================================================================================================= */
-/* === CONCLUSION === */
-#conclusion-bubbles {
-    width: 1400px;
-    height: 700px;
-    margin: 0 auto;              /* Centre box on x-axis */
-    background-color: #091f36;  
-    border: 2px solid #1295af;  
-    border-radius: 16px;         /* Round corner */
-    overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
-    position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
-}
-
+/* === WORLD MAP === */
 #map-container {
     width: 100%;
     margin: 20px auto;
-  }
-  
-  #figure2_2 {
-    width: 900px;
+}
+
+#figure2_2 {
+    width: 960px;
     height: 500px;
     display: block;
-  }
+    margin: 0 auto;
+}
 
-  
 #map-buttons {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
     margin: 10px auto;
     justify-content: center;
-}
-
-#btn-send {
-    padding: 10px 20px;
-    background: #1a4a8a;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-#btn-reset {
-    padding: 6px 14px;
-    background: #2a4a6a;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 13px;
-    cursor: pointer;
 }
 
 .region-btn {
@@ -620,3 +589,43 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     border-color: #4a8adf;
 }
 
+#btn-send {
+    padding: 8px 18px;
+    background: #1a4a8a;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#btn-reset {
+    padding: 8px 14px;
+    background: #2a4a6a;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* === BAR CHART === */
+#barchart-container {
+    width: 100%;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+}
+
+/* ================================================================================================================= */
+/* === CONCLUSION === */
+#conclusion-bubbles {
+    width: 1400px;
+    height: 700px;
+    margin: 0 auto;              /* Centre box on x-axis */
+    background-color: #091f36;  
+    border: 2px solid #1295af;  
+    border-radius: 16px;         /* Round corner */
+    overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
+    position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
+}

@@ -141,6 +141,8 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
             <p class='skeletonSketchLabel'>Manon Treemap</p>
         </section>
 
+
+
         <!-- SECTION 2: GENDER REPRESENTATION -->
         <section id='section2'>
             <h2 id='section-title'>Gender Representation</h2>
@@ -152,9 +154,22 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                 It took <strong>12 years for a second discipline to open to women</strong> with Alpine Skiing in 1936 (see <a href="https://www.britannica.com/event/Chamonix-1924-Olympic-Winter-Games" target="_blank"> Britannica</a>). <br>
                 Let's first dwell on how each country brings each gender to the games. <strong>Are some countries bringing more men or women in their delegations? Or is this evenly matched?</strong>
             </p>
-            <svg id='figureXXX' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
+            <div id="barchart-container">
+                <svg id="figure2_1"></svg>
+            </div>
+            <div id="map-container">
+                <svg id="figure2_2"></svg>
+                <div id="map-buttons">
+                    <button id="btn-all" class="region-btn active">🌍 All</button>
+                    <button id="btn-europe" class="region-btn">🇪🇺 Europe</button>
+                    <button id="btn-americas" class="region-btn">🌎 Americas</button>
+                    <button id="btn-asia" class="region-btn">🌏 Asia</button>
+                    <button id="btn-africa" class="region-btn">🌍 Africa</button>
+                    <button id="btn-oceania" class="region-btn">🌊 Oceania</button>
+                    <button id="btn-send">✈ Send to Milano!</button>
+                    <button id="btn-reset">↺ Reset</button>
+                </div>
+            </div>
             <p class='skeletonSketchLabel'>Leontine WorldMap</p>
 
             <!-- SYMMETRICAL PLOTS -->
@@ -208,7 +223,32 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
     </body>
 
     <!-- FOR PAGE SKELETON (SIDEBAR + FILTERS BADGE)-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
     <script src='skeleton.js'></script>
+
+    <!-- FOR LEAFLET INTERACTIVE MAP SCRIPTS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+    <!-- TO LOAD DATA -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- FOR CONTINENT & COUNTRIES MAPPING -->
+    <script src='continents_and_countries.js'></script>
+
+    <!-- SECTION 1 SCRIPTS -->
+    <script src='intro_bubbles.js'></script>
+    <script src='grid.js'></script>
+    <script src="podium.js"></script>
+    <script src='map.js'></script>
+
+    <!-- SECTION 2 SCRIPTS -->
+    <script src='symmetrical_gender.js'></script>
+
+    <!-- CONCLUSION SCRIPTS -->
+    <script src='conclusion_bubbles.js'></script>
 </html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script src='barchart.js'></script>
+<script src='worldmap.js'></script>
