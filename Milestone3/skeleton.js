@@ -23,7 +23,7 @@ observer.observe(document.getElementById('banner'));
 function resetFilters() {
     // Reset filter badge content
     document.getElementById('badge-discipline-input').value = '';
-    document.getElementById('badge-country').textContent = 'No country selected';
+    document.getElementById('badge-country-input').value = '';
 
     // Reset introduction bubbles
     updateBubbles();
@@ -83,9 +83,54 @@ function filterDisciplineSuggestions(value) {
     });
 }
 
+// Country filter selection
+function filterCountrySuggestions(value) {
+    const suggestions = document.getElementById('country-suggestions');
+    const badge = document.getElementById('badge-country-input');
+
+    // Get all country names from athletes data
+    const allCountriesCodes = [...new Set(athletesDataGlobal.map(a => a.country_code))];
+    const allCountries = allCountriesCodes.map(code => countryCodeToName[code]).sort();
+
+    // Filter by startsWith (case insensitive)
+    const filtered = value.trim() === ''
+        ? allCountries
+        : allCountries.filter(c => c.toLowerCase().startsWith(value.toLowerCase()));
+
+    if (filtered.length === 0) {
+        suggestions.style.display = 'none';
+        return;
+    }
+
+    // Render suggestions
+    suggestions.innerHTML = ''; // Clear previous suggestions
+    suggestions.style.display = 'block'; // Make suggestions now visible
+
+    filtered.forEach(country => {
+        const item = document.createElement('div');
+        item.className = 'country-suggestion-item';
+        item.textContent = country;
+        item.onclick = () => {
+            badge.value = country;
+            suggestions.style.display = 'none';
+            // Trigger country selection
+            // updateBubbles(country);
+            // renderCountryChart(country);
+            // renderEventChart(country);
+        };
+        suggestions.appendChild(item);
+    });
+}
+
 // Close suggestions when clicking outside
 document.addEventListener('click', (e) => {
     if (!e.target.closest('#badge-discipline-wrapper')) {
         document.getElementById('discipline-suggestions').style.display = 'none';
+    }
+});
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('#badge-country-wrapper')) {
+        document.getElementById('country-suggestions').style.display = 'none';
     }
 });

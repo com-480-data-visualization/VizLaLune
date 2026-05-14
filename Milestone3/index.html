@@ -48,7 +48,12 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                 <div id="discipline-suggestions"></div>
             </div>
             <hr>
-            <span id="badge-country">No country selected</span>
+            <div id="badge-country-wrapper">
+                <input id="badge-country-input" type="text" placeholder="Filter country..." 
+                    oninput="filterCountrySuggestions(this.value)"
+                    onfocus="filterCountrySuggestions(this.value)"/> <!-- To display suggestions even before starting typing -->
+                <div id="country-suggestions"></div>
+            </div>
             <button id="reset-filters" onclick=resetFilters()>↺</button>
         </div>
 
@@ -215,8 +220,8 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
     <!-- TO LOAD DATA -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
-    <!-- FOR CONTINENT MAPPING -->
-    <script src='continents.js'></script>
+    <!-- FOR CONTINENT & COUNTRIES MAPPING -->
+    <script src='continents_and_countries.js'></script>
 
     <!-- SECTION 1 SCRIPTS -->
     <script src='intro_bubbles.js'></script>

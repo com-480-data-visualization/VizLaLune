@@ -180,6 +180,51 @@ body {
 }
 
 
+#badge-country-wrapper {
+    position: relative;
+}
+
+#badge-country-input {
+    font-family: inherit;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    outline: none;
+    width: 100%;
+}
+
+#badge-country-input::placeholder {
+    color: #aaa; /* For empty filter effect */
+}
+
+#country-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #091f36;
+    border: 1px solid #1295af;
+    border-radius: 8px;
+    z-index: 10001;
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.country-suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 18px;
+    color: white;
+}
+
+.country-suggestion-item:hover {
+    background-color: #1295af33;
+}
+
+
     /* == BANNER == */
 #banner {
     width: 100%;
