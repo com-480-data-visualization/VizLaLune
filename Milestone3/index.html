@@ -154,23 +154,29 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                 It took <strong>12 years for a second discipline to open to women</strong> with Alpine Skiing in 1936 (see <a href="https://www.britannica.com/event/Chamonix-1924-Olympic-Winter-Games" target="_blank"> Britannica</a>). <br>
                 Let's first dwell on how each country brings each gender to the games. <strong>Are some countries bringing more men or women in their delegations? Or is this evenly matched?</strong>
             </p>
-            <div id="barchart-container">
-                <svg id="figure2_1"></svg>
-            </div>
-            <div id="map-container">
-                <svg id="figure2_2"></svg>
-                <div id="map-buttons">
-                    <button id="btn-all" class="region-btn active">🌍 All</button>
-                    <button id="btn-europe" class="region-btn">🇪🇺 Europe</button>
-                    <button id="btn-americas" class="region-btn">🌎 Americas</button>
-                    <button id="btn-asia" class="region-btn">🌏 Asia</button>
-                    <button id="btn-africa" class="region-btn">🌍 Africa</button>
-                    <button id="btn-oceania" class="region-btn">🌊 Oceania</button>
-                    <button id="btn-send">✈ Send to Milano!</button>
-                    <button id="btn-reset">↺ Reset</button>
+            <div id="geo-section" style="display: flex; align-items: flex-start; gap: 40px; justify-content: center; margin: 20px 0;">
+                
+                <div id="map-container">
+                    <div id="map-buttons-top">
+                        <button id="btn-all" class="region-btn active">🌍 All</button>
+                        <button id="btn-europe" class="region-btn">🇪🇺 Europe</button>
+                        <button id="btn-americas" class="region-btn">🌎 Americas</button>
+                        <button id="btn-asia" class="region-btn">🌏 Asia</button>
+                        <button id="btn-africa" class="region-btn">🌍 Africa</button>
+                        <button id="btn-oceania" class="region-btn">🌊 Oceania</button>
+                    </div>
+                    <svg id="figure2_2"></svg>
+                    <div id="map-buttons">
+                        <button id="btn-send">✈ Send to Milano!</button>
+                        <button id="btn-reset">↺ Reset</button>
+                        <button id="btn-gender" class="region-btn">👫 Show gender</button>
+                        <button id="btn-reset-zoom" class="region-btn">🔍 Reset zoom</button>
+                    </div>
+                </div>
+                <div id="barchart-container">
+                    <svg id="figure2_1"></svg>
                 </div>
             </div>
-            <p class='skeletonSketchLabel'>Leontine WorldMap</p>
 
             <!-- SYMMETRICAL PLOTS -->
                 <!-- DISCIPLINES -->

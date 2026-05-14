@@ -547,16 +547,30 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 }
 
 /* === WORLD MAP === */
+#geo-section {
+    overflow: visible;
+    padding: 20px 40px;
+    box-sizing: border-box;
+}
+
 #map-container {
-    width: 100%;
-    margin: 20px auto;
+    flex-shrink: 0;
+    overflow: visible;
 }
 
 #figure2_2 {
-    width: 960px;
-    height: 500px;
+    width: 750px;
+    height: 420px;
     display: block;
-    margin: 0 auto;
+}
+
+
+#map-buttons-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+    justify-content: center;
 }
 
 #map-buttons {
@@ -611,8 +625,7 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 
 /* === BAR CHART === */
 #barchart-container {
-    width: 100%;
-    margin: 20px auto;
+    flex-shrink: 0;
     display: flex;
     justify-content: center;
 }
@@ -629,3 +642,4 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
     position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
 }
+

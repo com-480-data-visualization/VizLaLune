@@ -1,7 +1,7 @@
-// ─── MAP.JS — Figure 2.2 ───────────────────────────────────────────────────
+// ─── WORLDMAP.JS — Figure 2.2 ─────────────────────────────────────────────
 
-const mapWidth = 960;
-const mapHeight = 500;
+const mapWidth = 750;
+const mapHeight = 420;
 
 const mapSvg = d3.select("#figure2_2")
   .attr("width", mapWidth)
@@ -9,8 +9,14 @@ const mapSvg = d3.select("#figure2_2")
   .style("background", "#0a1628")
   .style("display", "block");
 
+// Groupe zoomable (carte + dots + Milan)
+const zoomG = mapSvg.append("g").attr("class", "zoom-group");
+
+// Groupe fixe (légende uniquement)
+const fixedG = mapSvg.append("g").attr("class", "fixed-group");
+
 const projection = d3.geoNaturalEarth1()
-  .scale(153)
+  .scale(750 / 6.3)
   .translate([mapWidth / 2, mapHeight / 2]);
 
 const path = d3.geoPath().projection(projection);
@@ -69,7 +75,6 @@ const countryNames = {
   "AIN":"AIN"
 };
 
-// Tooltip
 const tooltip = d3.select("body")
   .append("div")
   .style("position", "fixed")
@@ -114,7 +119,7 @@ Promise.all([
   const countries = topojson.feature(world, world.objects.countries);
 
   // ── CARTE ──────────────────────────────────────────────────────────────
-  const countryPaths = mapSvg.append("g")
+  const countryPaths = zoomG.append("g")
     .selectAll("path")
     .data(countries.features)
     .join("path")
@@ -129,7 +134,7 @@ Promise.all([
     .attr("stroke", "#2a4a6a")
     .attr("stroke-width", 0.5);
 
-  // ── TOOLTIP + HOVER + CLICK ─────────────────────────────────────────────
+  // ── TOOLTIP + HOVER + CLICK ────────────────────────────────────────────
   countryPaths
     .on("mouseover", function(event, d) {
       const numId = String(+d.id).padStart(3, "0");
@@ -192,8 +197,57 @@ Promise.all([
       }
     });
 
-  // ── LÉGENDE ─────────────────────────────────────────────────────────────
-  const legend = mapSvg.append("g")
+  // ── DOTS (dans zoomG) ──────────────────────────────────────────────────
+  const milanXY = projection([9.19, 45.46]);
+  const dotsGroup = zoomG.append("g").attr("class", "dots");
+
+  const allDots = [];
+  athletesByCountry.forEach((count, code) => {
+    const latLng = coords[code];
+    if (!latLng) return;
+    const xy = projection([latLng[1], latLng[0]]);
+    if (!xy) return;
+
+    const countryAthletes = athletes.filter(a => a.country_code === code);
+    countryAthletes.forEach(athlete => {
+      const angle = Math.random() * 2 * Math.PI;
+      const radius = Math.random() * Math.min(8, Math.sqrt(count) * 0.8);
+      const ox = xy[0] + Math.cos(angle) * radius;
+      const oy = xy[1] + Math.sin(angle) * radius;
+      allDots.push({ code, count, gender: athlete.gender, x: ox, y: oy, originX: ox, originY: oy });
+    });
+  });
+
+  dotsGroup.selectAll("circle")
+    .data(allDots)
+    .join("circle")
+    .attr("cx", d => d.x)
+    .attr("cy", d => d.y)
+    .attr("r", 2)
+    .attr("fill", "rgba(255, 200, 50, 0.7)")
+    .attr("stroke", "none");
+
+  // ── MARQUEUR MILAN (dans zoomG) ────────────────────────────────────────
+  const milanG = zoomG.append("g")
+    .attr("transform", `translate(${milanXY[0]}, ${milanXY[1]})`);
+
+  milanG.append("circle")
+    .attr("r", 8)
+    .attr("fill", "rgba(255, 80, 80, 0.3)")
+    .attr("stroke", "#ff5050")
+    .attr("stroke-width", 1.5);
+
+  milanG.append("text")
+    .attr("text-anchor", "middle").attr("dy", "4px")
+    .style("font-size", "10px").text("⭐");
+
+  milanG.append("text")
+    .attr("text-anchor", "middle").attr("dy", "-12px")
+    .style("fill", "white").style("font-size", "10px")
+    .style("font-weight", "bold").text("Milano");
+
+  // ── LÉGENDE (dans fixedG) ──────────────────────────────────────────────
+  const legend = fixedG.append("g")
     .attr("transform", `translate(20, ${mapHeight - 100})`);
 
   legend.append("text")
@@ -207,9 +261,9 @@ Promise.all([
 
   linearGradient.selectAll("stop")
     .data([
-      { offset: "0%", color: colorScale(maxAthletes) },
+      { offset: "0%", color: colorScale(0) },
       { offset: "50%", color: colorScale(maxAthletes / 2) },
-      { offset: "100%", color: colorScale(0) }
+      { offset: "100%", color: colorScale(maxAthletes) }
     ])
     .join("stop")
     .attr("offset", d => d.offset)
@@ -236,56 +290,25 @@ Promise.all([
     .style("fill", "#a0b4c8").style("font-size", "10px")
     .text("1 dot = 1 athlete");
 
-  // ── DOTS (1 par athlète) ────────────────────────────────────────────────
-  const milanXY = projection([9.19, 45.46]);
+  // ── ZOOM ───────────────────────────────────────────────────────────────
+  const zoom = d3.zoom()
+    .scaleExtent([1, 8])
+    .on("zoom", function(event) {
+      zoomG.attr("transform", event.transform);
+      countryPaths.attr("stroke-width", 0.5 / event.transform.k);
+      dotsGroup.selectAll("circle").attr("r", 2 / event.transform.k);
+      milanG.select("circle").attr("r", 8 / event.transform.k);
+      milanG.selectAll("text").style("font-size", `${10 / event.transform.k}px`);
+    });
 
-  const dotsGroup = mapSvg.append("g").attr("class", "dots");
+  mapSvg.call(zoom);
 
-  const allDots = [];
-  athletesByCountry.forEach((count, code) => {
-    const latLng = coords[code];
-    if (!latLng) return;
-    const xy = projection([latLng[1], latLng[0]]);
-    if (!xy) return;
-
-    for (let i = 0; i < count; i++) {
-      const angle = Math.random() * 2 * Math.PI;
-      const radius = Math.random() * 20;
-      const ox = xy[0] + Math.cos(angle) * radius;
-      const oy = xy[1] + Math.sin(angle) * radius;
-      allDots.push({ code, count, x: ox, y: oy, originX: ox, originY: oy });
-    }
+  d3.select("#btn-reset-zoom").on("click", function() {
+    mapSvg.transition().duration(750)
+      .call(zoom.transform, d3.zoomIdentity);
   });
 
-  dotsGroup.selectAll("circle")
-    .data(allDots)
-    .join("circle")
-    .attr("cx", d => d.x)
-    .attr("cy", d => d.y)
-    .attr("r", 2)
-    .attr("fill", "rgba(255, 200, 50, 0.7)")
-    .attr("stroke", "none");
-
-  // ── MARQUEUR MILAN ──────────────────────────────────────────────────────
-  const milanG = mapSvg.append("g")
-    .attr("transform", `translate(${milanXY[0]}, ${milanXY[1]})`);
-
-  milanG.append("circle")
-    .attr("r", 8)
-    .attr("fill", "rgba(255, 80, 80, 0.3)")
-    .attr("stroke", "#ff5050")
-    .attr("stroke-width", 1.5);
-
-  milanG.append("text")
-    .attr("text-anchor", "middle").attr("dy", "4px")
-    .style("font-size", "10px").text("⭐");
-
-  milanG.append("text")
-    .attr("text-anchor", "middle").attr("dy", "-12px")
-    .style("fill", "white").style("font-size", "10px")
-    .style("font-weight", "bold").text("Milano");
-
-  // ── BOUTONS SEND / RESET ────────────────────────────────────────────────
+  // ── BOUTONS SEND / RESET ───────────────────────────────────────────────
   d3.select("#btn-send").on("click", function() {
     dotsGroup.selectAll("circle")
       .transition().duration(2000)
@@ -300,9 +323,31 @@ Promise.all([
       .transition().duration(1000)
       .attr("cx", d => d.originX).attr("cy", d => d.originY)
       .attr("r", 2).attr("fill", "rgba(255, 200, 50, 0.7)");
+    genderMode = false;
+    d3.select("#btn-gender").classed("active", false).text("👫 Show gender");
+    mapSvg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
   });
 
-  // ── FILTRE PAR RÉGION ───────────────────────────────────────────────────
+  // ── BOUTON GENRE ───────────────────────────────────────────────────────
+  let genderMode = false;
+
+  d3.select("#btn-gender").on("click", function() {
+    genderMode = !genderMode;
+    d3.select(this)
+      .classed("active", genderMode)
+      .text(genderMode ? "🎨 Hide gender" : "👫 Show gender");
+
+    dotsGroup.selectAll("circle")
+      .transition().duration(600)
+      .attr("fill", d => {
+        if (!genderMode) return "rgba(255, 200, 50, 0.7)";
+        if (d.gender === "M") return "rgba(74, 158, 255, 0.8)";
+        if (d.gender === "F") return "rgba(255, 100, 180, 0.8)";
+        return "rgba(200, 200, 200, 0.5)";
+      });
+  });
+
+  // ── FILTRE PAR RÉGION ──────────────────────────────────────────────────
   const countryToRegion = {};
   Object.entries(regions).forEach(([region, codes]) => {
     codes.forEach(code => countryToRegion[code] = region);
