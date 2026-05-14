@@ -1,18 +1,4 @@
-main {
-    text-align: center;           /* Center the main title and subtitle <center> tag is not supported by HTML5 */
-}
-
-#sidebar {
-    position: fixed;              /* Sort du flux du document */
-    left: 0;                      /* Makes sure all sidebar is properly hidden */
-    transform: translateX(-100%); /* Initialement caché */
-    transition: transform 0.3s ease-in-out;  /* Smooth slide */
-}
-
-#sidebar.active{ /* For elements of both classes use the class1.class2 selector */
-    transform: translate(0); /* Show the sidebar when active */
-}
-
+/* === SKELETON === */
 .skeletonSketch {
     display: block; /* Element takes all available width */
     margin: 20px auto; /* Centers the element horizontally and adds vertical spacing */
@@ -28,4 +14,547 @@ main {
 
 .skeletonSketchLabel {
     text-align: center;
+}
+
+* {
+    margin: 0; /* To have banner image take up the whole width + height without small borders */
+}
+
+body {
+    background-color: #f2f1ed;
+}
+
+    /* == SIDEBAR == */
+#sidebar-button {
+    position:fixed;
+    z-index: 600; /* Button above sidebar */
+    font-size: 24px;
+    aspect-ratio: 1 / 1;
+    width: 44px;
+    top: 20px;
+    left: 20px;
+    background-color: #091f36;
+    border: 2px solid #1295af;
+    border-radius: 12px;
+    color: white;
+}
+
+#sidebar {
+    position: fixed;              /* Comes with scrolling */
+    left: 0;                      /* Makes sure all sidebar is properly hidden */
+    top: 0;
+    height: 100%;
+    width: 400px;
+    z-index: 500; /* To place it above the venue map */
+    transform: translateX(-100%); /* Initially hidden */
+    transition: transform 0.3s ease-in-out;  /* Smooth slide */
+    padding-top: 80px;          /* Space for the button */
+    background-color: #091f36;
+    color: white;
+    text-align: center;
+    display:flex; /* To push GitHub logo to the bottom */
+    flex-direction: column; /* To push GitHub logo to the bottom */
+}
+
+#sidebar.active{ 
+    transform: translateX(0); /* Show the sidebar when active */
+}
+
+#sidebar h2 {
+    font-size: 40px; 
+    padding-bottom: 50px;
+}
+
+#sidebar ul {
+    list-style: none;    /* Remove bullet points */
+    padding: 0;          /* Remove default left indent that comes with ul */
+    flex: 1;             /* Takes up all available vertical space -> pushes GitHub logo down */
+}
+
+#sidebar ul li a {
+    color: white;
+    text-decoration: none;     /* Remove underline */
+    font-size: 30px;
+    padding: 30px 20px;
+    display: block;          /* Makes the whole li area clickable */
+    border-left: 3px solid transparent;   /* Invisible border by default */
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+#sidebar ul li a:hover {
+    border-left: 3px solid #00D4FF;
+    background-color: #00D4FF1A;  /* Subtle cyan tint */
+}
+
+#github-link img {
+    width: 150px;
+    height: auto;
+    filter: invert(1);    /* Makes the black GitHub logo white */
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    padding-bottom: 100px; /* Otherwise cannot see logo as it is pushed too far down */
+}
+
+#github-link img:hover {
+    opacity: 1;           /* Full opacity on hover */
+}
+
+    /* == FILTERS BADGE == */
+#filters-badge {
+    display: none; /* Initially hidden */
+    position: fixed;
+    background-color: #091f36;
+    color: white;
+    border: 2px solid #1295af;
+    border-radius: 12px;
+    padding: 24px 40px;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10000; /* To place it above the venue map + extra to ensure above anything else */
+}
+
+#filters-badge hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #1295af;
+    margin: 8px 0;
+}
+
+#reset-filters {
+    margin-top: 15px;
+    background-color: transparent;
+    color: white;
+    border: 1px solid #1295af;
+    border-radius: 50%; /* Circle */
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+#badge-discipline-wrapper {
+    position: relative;
+}
+
+#badge-discipline-input {
+    font-family: inherit;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    outline: none;
+    width: 100%;
+}
+
+#badge-discipline-input::placeholder {
+    color: #aaa; /* For empty filter effect */
+}
+
+#discipline-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #091f36;
+    border: 1px solid #1295af;
+    border-radius: 8px;
+    z-index: 10001;
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.discipline-suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 18px;
+    color: white;
+}
+
+.discipline-suggestion-item:hover {
+    background-color: #1295af33;
+}
+
+
+#badge-country-wrapper {
+    position: relative;
+}
+
+#badge-country-input {
+    font-family: inherit;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    outline: none;
+    width: 100%;
+}
+
+#badge-country-input::placeholder {
+    color: #aaa; /* For empty filter effect */
+}
+
+#country-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #091f36;
+    border: 1px solid #1295af;
+    border-radius: 8px;
+    z-index: 10001;
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.country-suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 18px;
+    color: white;
+}
+
+.country-suggestion-item:hover {
+    background-color: #1295af33;
+}
+
+
+    /* == BANNER == */
+#banner {
+    width: 100%;
+    height: 100vh; 
+    position: relative;    /* Needed for absolute positioning of main */
+}
+
+#banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;     /* Ensures the image covers the entire banner area without distortion */
+}
+
+#scroll-down{
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    animation: bounce 2s infinite;
+}
+
+#scroll-down span {
+    display: block;
+    font-size: 40px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+#scroll-down .arrow {
+    font-size: 50px;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(10px); }
+}
+
+#banner-title {
+    position: absolute;    /* Overlay on top of the image */
+    top: 30%;          /* Distance from bottom of banner */
+    width: 100%;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Shadow for readability */
+    font-size: 64px;
+}
+
+#banner-title h1{
+    padding-bottom: 50px;
+}
+
+    /* == SECTION TITLES == */
+#section-title {
+    font-size: 80px;
+    color: #134172;
+    text-align: center;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 60px;
+}
+
+#section-title::after {
+    content: '';
+    display: block;
+    width: 600px;
+    height: 3px;
+    background: #134172;
+    margin: 10px auto 0;
+}
+
+    /* == TEXT STYLES == */
+p {
+    max-width: 50%;
+    margin: 0 auto 60px;
+    text-align: justify;
+    font-size: 25px;
+    line-height: 1.8;
+    color: #333;
+    text-align-last: center;
+}
+
+    /* == CREDITS == */
+#credits {
+    background-color: #d9d9d9;
+    text-align: center; /* Center text **/
+    padding: 30px 20px; /* top&bottom + right&left */
+    margin-top: 60px; /* Space between credits and previous section */
+}
+
+#credits p {
+    font-size: 16px; /* Written in small */
+    color: #555; 
+    margin: 0; /* Overwrite default margins */
+    max-width: 100%; /* Overwrite default max-width */
+}
+
+/* ================================================================================================================= */
+/* === SECTION 1: GLOBAL OVERVIEW === */
+    /* === INTRO BUBBLES === */
+#intro-bubbles {
+    display: flex;
+    justify-content: center;
+    gap: clamp(40px, 2.5vw, 100px); /* Space between two bubbles */
+    margin: 0 20px; /* So bubbles are now glued to the screen sides */
+}
+
+.bubble-card {
+    flex: 1; /* Each bubble takes equal space */
+    aspect-ratio: 1 / 1; /* Force a square shape ==> keeps it a circle */
+    border-radius: 50%; /* To make it a circle */
+    display: flex;
+    flex-direction: column; /* Put value and text on same column */
+    justify-content: center; /* Put text on centre on y-axis */
+    align-items: center; /* Put text on centre on x-axis */
+    text-align: center; /* Center text inside the bubble */
+
+    /* Animations */
+    animation: bubbling 4s ease-in-out infinite;
+}
+
+/* Animation itself */
+@keyframes bubbling {
+    0%   { transform: translateY(0) scale(1); }
+    25%  { transform: translateY(-5px) scale(0.95); }
+    50%  { transform: translateY(-10px) scale(0.90); }
+    75%  { transform: translateY(-5px) scale(0.95); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* Delay animations */
+.bubble-card:nth-child(1) { animation-delay: 0s; }
+.bubble-card:nth-child(2) { animation-delay: 0.4s; }
+.bubble-card:nth-child(3) { animation-delay: 0.8s; }
+.bubble-card:nth-child(4) { animation-delay: 1.2s; }
+.bubble-card:nth-child(5) { animation-delay: 1.6s; }
+
+
+.bubble-value {
+    font-size: clamp(64px, 2.5vw, 128px);
+    font-weight: bold;
+}
+
+.bubble-text {
+    font-size: clamp(32px, 2.5vw, 64px);
+}
+
+    /* == DISCIPLINE GRID == */
+#discipline-grid {
+    display: grid;                          /* Grid mode (avoids simple piling up) */
+    grid-template-columns: repeat(8, 1fr); /* 8 columns */
+    grid-template-rows: repeat(2, auto);   /* 2 rows */
+    gap: 16px;                             /* Space between each cell */
+    padding: 20px 40px 80px 40px;                /* top right bottom left */
+}
+
+.discipline-card {
+    display: flex;
+    flex-direction: column;                /* Image up, Text down */
+    align-items: center;                   /* Center horizontally */
+    cursor: pointer;                       /* Change cursor to indicate interactivity */
+}
+
+.discipline-card img {
+    width: 100%;                           /* Image takes up the full width of the cell */
+    aspect-ratio: 1 / 1;                   /* Force a square shape */
+    object-fit: cover;                     /* Crop the image to fit without distorting */
+    border-radius: 8px;                    /* Rounded corners */
+}
+
+.discipline-card text {
+    margin-top: 12px;                       /* Space between image and name */
+    font-size: 25px;
+    text-align: center;
+}
+
+.discipline-card.selected{
+    filter: brightness(2);    
+}
+
+.discipline-card.selected text{
+    font-weight: bold;
+}
+
+.discipline-card:hover{
+    transform: scale(1.05);
+}
+
+    /* == PODIUM (Selected discipline) == */
+#podium {
+    text-align: center;      /* Centres title, image, and text */
+}
+
+#disciplineName{
+    font-size: 40px;
+    color: #134172;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+#disciplineImage {
+    width: 20%;
+    aspect-ratio: 1.5 / 1;                   /* Force a square shape */
+    object-fit: cover;                     /* Crop the image to fit without distorting */
+    border-radius: 10px;                    /* Rounded corners */
+    margin-bottom: 30px;
+}
+
+.table-wrapper {
+    display: flex; /* Flex items for table elements */
+    justify-content: center; /* Centre table horizontally */
+}
+
+table {
+    border: 2px solid #091f36;    /* Border encapsulating all of table */
+    border-collapse: separate;   
+    border-spacing: 0;           /* Merges common borders */
+    border-radius: 10px; /* Rounded corners for the table */
+    overflow: hidden; /* Needed to ensure rounded corners are visible due to border-collapse */
+    width: 70%;
+    font-size: 20px;
+}
+
+th {
+    border: 1px solid #1295af; /* Boxes the column titles */
+}
+
+td {
+    border: 1px solid #1295af; /* Boxes the data cells */
+}
+
+thead {
+    background-color: #091f36;  /* Background color for column titles */
+    color: white;               /* Text color for column titles */
+}
+
+tbody tr:hover { /* Apply style for hovering over a row in the table body */
+    background-color: #134273; 
+    color: white;
+}
+
+#event-name {
+    cursor: pointer;  /* Change cursor to indicate interactivity */
+    user-select: none; /* Prevent text selection on click (very useful!) */
+}
+
+#event-type {
+    cursor: pointer;  /* Change cursor to indicate interactivity */
+    user-select: none; /* Prevent text selection on click (very useful!) */
+}
+
+#event-venue {
+    cursor: pointer;  /* Change cursor to indicate interactivity */
+    user-select: none; /* Prevent text selection on click (very useful!) */
+}
+
+#event-date {
+    cursor: pointer;  /* Change cursor to indicate interactivity */
+    user-select: none; /* Prevent text selection on click (very useful!) */
+}
+
+#sort-event-name-arrow {
+    margin-left: 6px; /* Space between the text and the arrow */
+    color: #1295af; /* Color of the arrow */
+}
+
+#sort-event-type-arrow {
+    margin-left: 6px; /* Space between the text and the arrow */
+    color: #1295af; /* Color of the arrow */
+}
+
+#sort-event-venue-arrow {
+    margin-left: 6px; /* Space between the text and the arrow */
+    color: #1295af; /* Color of the arrow */
+}
+
+#sort-event-date-arrow {
+    margin-left: 6px; /* Space between the text and the arrow */
+    color: #1295af; /* Color of the arrow */
+}
+
+#disciplineDetails {
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+    /* == VENUE MAP ==*/
+#venue-map {
+    height: 800px;
+    width: 80%;        
+    margin: 0 auto;    /* Centre */
+}
+
+/* ================================================================================================================= */
+/* === SECTION 2: GENDER REPRESENTATION == */
+    /* === SYMMETRICAL PLOTS === */
+#symmetrical-gender-discipline {
+    display: flex;
+    justify-content: center;
+}
+
+#symmetrical-gender-event {
+    justify-content: center;
+    margin-top: 40px
+}
+
+.sg-tooltip {
+    position: absolute;      
+    background-color: #091f36;
+    border: 2px solid #1295af;
+    border-radius: 8px;
+    padding: 10px 14px;       /* For text within tooltip */
+    color: white;
+    font-size: 18px;
+    pointer-events: none;     /* Otherwise blinking */
+}
+
+/* ================================================================================================================= */
+/* === CONCLUSION === */
+#conclusion-bubbles {
+    width: 1400px;
+    height: 700px;
+    margin: 0 auto;              /* Centre box on x-axis */
+    background-color: #091f36;  
+    border: 2px solid #1295af;  
+    border-radius: 16px;         /* Round corner */
+    overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
+    position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
 }

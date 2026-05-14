@@ -1,111 +1,238 @@
+<!-- 
+python3 -m http.server 8000 (at Project/ level)
+Command to run a local server to serve the files, allowing d3 to load the CSV file.
+http://localhost:8000/Milestone3/index.html (to view the page in a browser)
+If old version used in Source then Ctrl + Shift + R and disable cache in Network
+-->
+
 <!DOCTYPE html>
 <html lang='en'>
     <head>
         <meta charset = 'utf-8'>
 
-        <title>COM-480: Milestone 2</title>
+        <title>COM-480: Milestone 3</title>
 
         <link rel='stylesheet' href='styles.css'>
+
+        <!-- FOR LEAFLET STYLES (VENUE MAP) -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""/>
+
     </head>
 
     <body>
         <!-- SIDEBAR -->
-            <!-- Button -->
-        <button onclick="toggleSidebar()">
-            ☰
-        </button>
-            <!-- Sidebar -->
+            <!-- BUTTON -->
+        <button id="sidebar-button"onclick="toggleSidebar()">☰</button>
+        
+            <!-- SIDEBAR -->
         <div id='sidebar'>
-            <h2>Sidebar</h2>
+            <h2>Navigate</h2>
             <ul>
-                <li><a href=#section1>Section 1</a></li>
-                <li><a href=#section2>Section 2</a></li>
-                <li><a href=#section3>Section 3</a></li>
+                <li><a href=#section1>Global Overview</a></li>
+                <li><a href=#section2>Gender Representation</a></li>
+                <li><a href=#conclusion>Conclusion</a></li>
             </ul>
-        </div>    
+            <a id="github-link" href="https://github.com/com-480-data-visualization/VizLaLune" target="_blank">
+                <img src="../ExtraRessources/Extra/GitHubLogo.png"/>
+            </a>
+        </div>
 
-        <!-- MAIN CONTENT -->
-        <main>
-            <h1>Main title</h1>
-            <h3>Subtitle with team name</h3>
-        </main>
+        <!-- FILTERS BADGE -->
+        <div id="filters-badge">
+            <div id="badge-discipline-wrapper">
+                <input id="badge-discipline-input" type="text" placeholder="Filter discipline..." 
+                    oninput="filterDisciplineSuggestions(this.value)"
+                    onfocus="filterDisciplineSuggestions(this.value)"/> <!-- To display suggestions even before starting typing -->
+                <div id="discipline-suggestions"></div>
+            </div>
+            <hr>
+            <div id="badge-country-wrapper">
+                <input id="badge-country-input" type="text" placeholder="Filter country..." 
+                    oninput="filterCountrySuggestions(this.value)"
+                    onfocus="filterCountrySuggestions(this.value)"/> <!-- To display suggestions even before starting typing -->
+                <div id="country-suggestions"></div>
+            </div>
+            <button id="reset-filters" onclick=resetFilters()>↺</button>
+        </div>
 
-        <!-- SECTION 1: Introduction -->
-        <section>
-            <h2 id='section1'>Section 1 Title: Introduction</h2>
+        <!-- BANNER -->
+        <div id="banner">
+            <img src="../ExtraRessources/Extra/Banner3.avif" alt="Milano-Cortina 2026"/>
+            <div id="banner-title">
+                <h1>Milano-Cortina 2026 Winter Olympics: Behind the Scenes</h1>
+                <h3>VizLaLune</h3>
+            </div>
+            <div id="scroll-down" onclick="document.getElementById('section1').scrollIntoView({behavior: 'smooth'})">
+                <span>Explore</span>
+                <div class="arrow">↓</div>
+            </div>
+        </div>
 
-            <div class='figure1.1', class='skeletonSketch'>
-                <img src="img/figure1_1.png" alt="Figure 1.1">
-                <p class="skeletonSketchLabel"> Figure 1.1: Bubbles. Key Statistics (Nb. of Athletes/Nb. of Countries/Nb. Disciplines/Nb. Events/Nb. Venues).</p>
+        <!-- SECTION 1: GLOBAL OVERVIEW -->
+        <section id='section1'>
+            <h2 id='section-title'>Global Overview</h2>
+            
+            <!-- INTRO BUBBLES-->
+            <p style="padding-top: 50px; padding-bottom: 50px">
+                The XXV Olympic Winter Games, officially known as <strong>Milano-Cortina 2026</strong> saw more than<strong> 2,900 athletes</strong> from 
+                <strong>93 countries</strong> compete across <strong>17 days from February 6 to 22 2026</strong> in front of millions of spectactors. For the first time ever, two Olympic 
+                cauldrons were simultaneously ignited, in both Milan and Cortina d'Ampezzo.
+            </p>
+            <div id="intro-bubbles"></div>
+
+            <!-- DISCIPLINE GRID -->
+            <p style="padding-top: 50px; padding-bottom: 50px">
+                At Milano-Cortina, <strong>116 events in 16 disciplines</strong> were hosted, a record for any Winter Games, and 7 more events than Beijing 2022.
+                <strong>8 brand-new events</strong> made their Olympic debut, headlined by <strong>Ski Mountaineering</strong>, the first new Winter Olympic sport in 24 years. 
+                NHL players returned to the ice for the first time since Sochi 2014, making ice hockey one of the most anticipated events of the Games.
+                <br><br><strong>Choose a discipline below to dive into its events and results</strong>. Your selection will update visualizations throughout the page! 
+                Later, use the top right filter to options to avoid getting back to this page section.
+            </p>
+
+            <div id="discipline-grid"></div>
+            <!-- PODIUM (Selected discipline) -->
+            <div id="podium" style="display: none;">
+                <h1 id="disciplineName"></h1>
+                <img id="disciplineImage" src="" alt="Discipline Image">
+
+                <!-- EVENTS TABLE -->
+                <div class="table-wrapper">
+                    <table id="podium-table">
+                        <thead>
+                            <tr>
+                                <th id="event-name">Event Name<span id="sort-event-name-arrow">⇅</span></th>
+                                <th id="event-type">Event Type<span id="sort-event-type-arrow">⇅</span></th>
+                                <th id="event-venue">Finals Venue<span id="sort-event-venue-arrow">⇅</span></th>
+                                <th id="event-date">Date<span id="sort-event-date-arrow">⇅</span></th>
+                                <th>1st Place</th>
+                                <th>2nd Place</th>
+                                <th>3rd Place</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <h3 id="disciplineDetails"></h3>
             </div>
 
-            <svg id='figure1.2' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure 1.2: Interactive map. Mouse-on venue symbols expands the symbol with the present disciplines/events which are clickable and redirect to the official event webpage.</p>
+            <!-- VENUE MAP -->
+            <p style="padding-top: 80px; padding-bottom: 50px">
+                Milano-Cortina 2026 took place across the landscapes of northern Italy. 
+                Spread over <strong>15 venues and 22,000 km²</strong>, it was the most geographically 
+                expansive Winter Games in history. <br>
+                <strong>Explore the map below! </strong> <br>
+                Single-click a venue to discover 
+                which disciplines were hosted there and single-click a discipline to update the global filter, or 
+                double-click to learn more about the it. 
+            </p>
+            <div id="venue-map"></div>
 
-            <svg id='figure1.3' class='skeletonSketch'>
+            <!-- TREEMAP -->
+            <p style="padding-top: 80px; padding-bottom: 50px">
+                For any athlete, competing at the Olympics represents the pinnacle of their career: facing the world's best, at the peak of their abilities. 
+                Yet <strong>not all disciplines draw the same crowd</strong>: some attract far more competitors than others. <br>
+                Explore the treemap below to discover how athletes are distributed across disciplines, and dive into any of them to see its events.
+            </p>
+            <svg id='figureXXX' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 1.3: Sorted horizontal bar chart (see 7.2 slide 24). Percentage of venue exploitation. Figures can be linked and shown side by side with the one below.</p>
-
-            <svg id='figure1.4' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure 1.4: Treemap (see 5.1 slide 31). Split into disciplines and again into events. Area proportional to medal amount (insight into most impactful sports for medal count). Animated by indicating the victors with mouse-on.</p>
-
-            <svg id='figure1.5' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure 1.5: Sorted horizontal bar chart (see 7.2 slide 24). Classic Medal Race (with numerous filters (discipline/event/country region/gender/team event vs. individual vs. duo etc.)).</p>
+            <p class='skeletonSketchLabel'>Manon Treemap</p>
         </section>
 
 
 
-        <!-- SECTION 2: Geographical Exploration -->
-        <section>
-            <h2 id='section2'>Section 2 Title: Geographical Exploration</h2>
+        <!-- SECTION 2: GENDER REPRESENTATION -->
+        <section id='section2'>
+            <h2 id='section-title'>Gender Representation</h2>
 
-            <svg id='figure2.1' class='skeletonSketch'>
+            <!-- ORIGINS -->
+            <p style="padding-top: 30px; padding-bottom: 50px">
+                Now that we have a better understanding of the structure of the games, let's <strong>explore the athlete gender distribution</strong>! <br>
+                Women were always part of the Winter Olympics. However, they were <strong>initally only allowed to compete in Figure Skating</strong> and consituted only <strong>4.3% of the athletes at Chamonix 1924</strong> games.
+                It took <strong>12 years for a second discipline to open to women</strong> with Alpine Skiing in 1936 (see <a href="https://www.britannica.com/event/Chamonix-1924-Olympic-Winter-Games" target="_blank"> Britannica</a>). <br>
+                Let's first dwell on how each country brings each gender to the games. <strong>Are some countries bringing more men or women in their delegations? Or is this evenly matched?</strong>
+            </p>
+            <svg id='figureXXX' class='skeletonSketch'>
                 <rect x='0' y='0' width='300' height='300'/>
             </svg>
-            <p class='skeletonSketchLabel'>Figure 2.1: Sorted horizontal bar chart (see 7.2 slide 24). Athlete count per discipline. Filter by country on world map (see below). Figures can be linked and shown side by side with the one below.</p>
+            <p class='skeletonSketchLabel'>Leontine WorldMap</p>
 
-            <svg id='figure2.2' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure 2.2: Interactive map (similarity to example shown in class). Dots (1 per athlete) travel from their country of origin to the games. Filter by clicking on the country/by global region. Filter impacts the above bar chart. Mouse-on shows other key country statistitcs.</p>
+            <!-- SYMMETRICAL PLOTS -->
+                <!-- DISCIPLINES -->
+            <p>
+                Milano-Cortina was the
+                <strong>most gender-balanced Winter Olympics in history</strong>, with a record
+                <strong>50 women's events</strong> and <strong>12 of 16 disciplines fully gender-equal</strong> for a <strong>47% women</strong> athlete representation.
+                Still, some unequalities seem to persist. <br>
+                Select a discipline to explore its events repartition between genders. Also select a world region to further explore.
+            </p>
+            <div id="symmetrical-gender-discipline"></div>
 
+                <!-- EVENTS -->
+            <div id="symmetrical-gender-event" style="display: none;"></div>
         </section>
-
-        <!-- SECTION 3: Gender/Team Exploration -->
-        <section>
-            <h2 id='section3'>Section 3 Title: Gender/Team Exploration</h2>
-
-            <svg id='figure3.1' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure 3.1: Symmetrical gender horizontal bar plot per country (see 6.1 slide 37). Filter by global region or by country.</p>
-
-            <svg id='figure3.2' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure 3.2: Symmetrical solo vs. team horizontal bar plot per country (see 6.1 slide 37). Filter by global region or by country. Button to synchronize filters with above plot.</p>
-
-        </section>
-
 
         <!-- CONCLUSION -->
-        <section>
-            <h2 id='conclusion'>Conclusion</h2>
+        <section id='conclusion'>
+            <h2 id='section-title'>Conclusion</h2>
 
-            <svg id='figure4.1' class='skeletonSketch'>
-                <rect x='0' y='0' width='300' height='300'/>
-            </svg>
-            <p class='skeletonSketchLabel'>Figure 4.1: Moving around bubbles. Conclusion with the main takeaways for the different visualizations.</p>
+            <p>
+                <strong>Gender representation at the Winter Olympics has come a long way</strong>, with Milano-Cortina 2026 marking a significant milestone in the journey towards equality.
+                The <strong>pursuit of equal opportunities</strong> for all athletes regardless of gender or country of origin <strong>remains ongoing</strong>, 
+                as enshrined in the <a href="https://stillmed.olympics.com/media/Documents/International-Olympic-Committee/IOC-Publications/EN-Olympic-Charter.pdf" target="_blank">Olympic Charter</a>, 
+                which calls on the IOC to <em>"encourage and support the promotion of women in sport at all levels and in all structures, 
+                with a view to implementing the principle of equality of men and women."</em> <br><br>
+                Below are a few key takeaways from the visualizations above but there is much more to discover! <br>
+                Feel free to explore!
+            </p>
 
+            <!-- CONCLUSION BUBBLES -->
+            <div id="conclusion-bubbles"></div>
         </section>
+
+        <!-- CREDITS -->
+        <footer id="credits">
+            <p>
+                Data source: 
+                <a href="https://www.kaggle.com/datasets/piterfm/milano-cortina-2026-olympic-winter-games/" target="_blank">Kaggle Milano-Cortina 2026 Olympic Winter Games</a> by <a href="https://www.kaggle.com/piterfm" target="_blank">Petro Ivaniuk</a>. <br>
+                Team members:
+                <a href="https://github.com/ThomasLenges" target="_blank">Thomas Lenges</a>, 
+                <a href="https://github.com/titinelef" target="_blank">Léontine Lefranc</a>, 
+                and <a href="https://github.com/mcesbrondarnaud" target="_blank">Manon Cesbron Darnaud</a>. <br>
+                Code can be found
+                <a href="https://github.com/com-480-data-visualization/VizLaLune" target="_blank">here</a>. <br>
+                This project is licensed under 
+                <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>. <br>
+            </p>
+        </footer>
     </body>
 
+    <!-- FOR PAGE SKELETON (SIDEBAR + FILTERS BADGE)-->
     <script src='skeleton.js'></script>
+
+    <!-- FOR LEAFLET INTERACTIVE MAP SCRIPTS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+    <!-- TO LOAD DATA -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- FOR CONTINENT & COUNTRIES MAPPING -->
+    <script src='continents_and_countries.js'></script>
+
+    <!-- SECTION 1 SCRIPTS -->
+    <script src='intro_bubbles.js'></script>
+    <script src='grid.js'></script>
+    <script src="podium.js"></script>
+    <script src='map.js'></script>
+
+    <!-- SECTION 2 SCRIPTS -->
+    <script src='symmetrical_gender.js'></script>
+
+    <!-- CONCLUSION SCRIPTS -->
+    <script src='conclusion_bubbles.js'></script>
 </html>
+
