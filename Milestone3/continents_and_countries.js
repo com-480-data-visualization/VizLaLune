@@ -64,3 +64,9 @@ const countryCodeToName = {
     // Neutral
     AIN: "Individual Neutral Athletes",
 };
+
+function getCodeFromCountryName(countryName) {
+    return Object.keys(countryCodeToName).find(
+        code => countryCodeToName[code] === countryName
+    );
+}

@@ -63,12 +63,9 @@ function updateBubbles(selectedDiscipline = null, selectedCountry = null) {
     }
 
     // === Filter athletes on country ===
-    const countryNameToCode = Object.fromEntries(
-        Object.entries(countryCodeToName).map(([code, name]) => [name, code])
-    );
+    const selectedCode = getCodeFromCountryName(selectedCountry);
 
     if (selectedCountry) {
-        const selectedCode = countryNameToCode[selectedCountry];
         filteredAthletes = filteredAthletes.filter(d => d.country_code === selectedCode);
     }
 

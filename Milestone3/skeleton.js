@@ -33,6 +33,9 @@ function resetFilters() {
 
     // Reset map view
     resetMapView();
+
+    // Reset symmetrical charts
+    recomputeAndRender();
 }
 
 // Discipline filter selection
@@ -119,7 +122,7 @@ function filterCountrySuggestions(value) {
             suggestions.style.display = 'none';
             // Trigger country selection
             updateBubbles(disciplineBadge.value, country);
-            // renderCountryChart(country);
+            recomputeAndRender(country);
             // renderEventChart(country);
         };
         suggestions.appendChild(item);

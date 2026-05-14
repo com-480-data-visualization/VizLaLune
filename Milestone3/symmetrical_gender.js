@@ -14,13 +14,20 @@ d3.csv('../DataPreprocessing/athletes.csv').then(data => {
 });
 
 // ==== Recompute counts + re-render both charts ====
-function recomputeAndRender() {
+function recomputeAndRender(countryFilter = null) {
     // Clear previous counts
     countsDisciplines.clear();
     countsEvents.clear();
 
+    // Filter by Selected Country
+    let filteredAthletes = athletesRaw;
+    if (countryFilter) {
+        const selectedCode = getCodeFromCountryName(countryFilter);
+        filteredAthletes = filteredAthletes.filter(d => d.country_code === selectedCode);
+    }
+
     // Recount based on active continents
-    athletesRaw.forEach(athlete => {
+    filteredAthletes.forEach(athlete => {
         // Skip athlete if their continent is not selected
         const continent = countryToContinent[athlete.country_code];
         if (!activeContinents.has(continent)) return;
@@ -60,17 +67,25 @@ function recomputeAndRender() {
 
 
     // Re-render discipline chart
-    renderDisciplineChart();
+    renderDisciplineChart(countryFilter);
     // Re-render event chart
     const disciplineName = document.getElementById('badge-discipline-input').value || 'No discipline selected';
-    renderEventChart(disciplineName);
+    renderEventChart(disciplineName, countryFilter);
 }
 
 // ==== Render discipline chart ====
 let showOverall = true;
-function renderDisciplineChart() {
+
+function renderDisciplineChart(countryFilter = null) {
     // === Clear previous chart ===
     d3.select('#symmetrical-gender-discipline').selectAll('*').remove();
+    let filteredAthletes = athletesRaw;
+
+    // === Get Country Filter code ===
+    if (countryFilter) {
+        const selectedCode = getCodeFromCountryName(countryFilter);
+        filteredAthletes = filteredAthletes.filter(d => d.country_code === selectedCode);
+    }
 
     // === Convert Map to array for D3 ===
     const chartData = Array.from(countsDisciplines, ([discipline, values]) => ({
@@ -81,8 +96,7 @@ function renderDisciplineChart() {
 
     // Compute Overall (bug detected and fixed: 3 athletes participated to more than 1 discipline!)
     if(showOverall) {
-        // Filter by continent first
-        const filteredAthletes = athletesRaw.filter(a => {
+        filteredAthletes = filteredAthletes.filter(a => {
             const continent = countryToContinent[a.country_code];
             return activeContinents.has(continent);
         });
@@ -215,7 +229,7 @@ function renderDisciplineChart() {
         .style('cursor', 'pointer')
         .on('click', function() {
             showOverall = !showOverall;
-            recomputeAndRender();
+            recomputeAndRender(countryFilter);
         });
 
     // Checkbox rect
@@ -256,7 +270,7 @@ function renderDisciplineChart() {
                     activeContinents.add(continent);
                 }
                 // Re-render everything
-                recomputeAndRender();
+                recomputeAndRender(countryFilter);
             });
 
         // Checkbox rect
@@ -310,7 +324,7 @@ function renderDisciplineChart() {
 }
 
 // ==== Render event chart ====
-function renderEventChart(discipline) {
+function renderEventChart(discipline = null, countryFilter = null) {
     // Clear previous chart
     d3.select('#symmetrical-gender-event').selectAll('*').remove();
     const svg = d3.select('#symmetrical-gender-event');
@@ -333,10 +347,17 @@ function renderEventChart(discipline) {
     .filter(d => d.key.startsWith(discipline + '/') && d.event.trim() !== '') // Do not want empty events (IMPORTANT!)
     .sort((a, b) => (b.M + b.F) - (a.M + a.F));
 
+    // === Get Country Filter code ===
+    let filteredAthletes = athletesRaw;
+    if (countryFilter) {
+        const selectedCode = getCodeFromCountryName(countryFilter);
+        filteredAthletes = filteredAthletes.filter(d => d.country_code === selectedCode);
+    }
+
     // Compute Overall
     if(showOverall) {
         // Filter by continent AND discipline (not by event)
-        const filteredAthletes = athletesRaw.filter(a => {
+        filteredAthletes = filteredAthletes.filter(a => {
             // Filter by continent
             const continent = countryToContinent[a.country_code];
             if (!activeContinents.has(continent)) return false;
