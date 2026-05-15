@@ -154,29 +154,45 @@ If old version used in Source then Ctrl + Shift + R and disable cache in Network
                 It took <strong>12 years for a second discipline to open to women</strong> with Alpine Skiing in 1936 (see <a href="https://www.britannica.com/event/Chamonix-1924-Olympic-Winter-Games" target="_blank"> Britannica</a>). <br>
                 Let's first dwell on how each country brings each gender to the games. <strong>Are some countries bringing more men or women in their delegations? Or is this evenly matched?</strong>
             </p>
-            <div id="geo-section" style="display: flex; align-items: flex-start; gap: 40px; justify-content: center; margin: 20px 0;">
-                
-                <div id="map-container">
-                    <div id="map-buttons-top">
-                        <button id="btn-all" class="region-btn active">🌍 All</button>
-                        <button id="btn-europe" class="region-btn">🇪🇺 Europe</button>
-                        <button id="btn-americas" class="region-btn">🌎 Americas</button>
-                        <button id="btn-asia" class="region-btn">🌏 Asia</button>
-                        <button id="btn-africa" class="region-btn">🌍 Africa</button>
-                        <button id="btn-oceania" class="region-btn">🌊 Oceania</button>
-                    </div>
-                    <svg id="figure2_2"></svg>
-                    <div id="map-buttons">
-                        <button id="btn-send">✈ Send to Milano!</button>
-                        <button id="btn-reset">↺ Reset</button>
-                        <button id="btn-gender" class="region-btn">👫 Show gender</button>
-                        <button id="btn-reset-zoom" class="region-btn">🔍 Reset zoom</button>
-                    </div>
-                </div>
-                <div id="barchart-container">
-                    <svg id="figure2_1"></svg>
-                </div>
-            </div>
+            <!-- ORIGINS -->
+<p style="padding-top: 30px; padding-bottom: 30px">
+    Now that we have a better understanding of the structure of the games, let's <strong>explore the athlete gender distribution</strong>! <br>
+    Women were always part of the Winter Olympics. However, they were <strong>initially only allowed to compete in Figure Skating</strong> and constituted only <strong>4.3% of the athletes at Chamonix 1924</strong> games.
+    It took <strong>12 years for a second discipline to open to women</strong> with Alpine Skiing in 1936 (see <a href="https://www.britannica.com/event/Chamonix-1924-Olympic-Winter-Games" target="_blank"> Britannica</a>). <br>
+    Let's first dwell on how each country brings each gender to the games. <strong>Are some countries bringing more men or women in their delegations? Or is this evenly matched?</strong>
+</p>
+
+<p style="padding-bottom: 20px; font-size: 18px;">
+    The map below shows <strong>one dot per athlete</strong>, placed on their country of origin.
+    Color intensity reflects the total number of athletes sent by each country.
+    <strong>Click a country</strong> to filter the discipline chart. Use region buttons to focus on a specific area,
+    or click <strong>Send to Milano!</strong> to animate all athletes travelling to the Games.
+    Toggle <strong>Show gender</strong> to color dots by gender (blue = men, pink = women).
+    Scroll to zoom in for a closer look.
+</p>
+
+<div id="geo-section" style="display: flex; align-items: center; gap: 40px; justify-content: center; margin: 0 40px 40px 40px;">
+    <div id="map-container">
+        <div id="map-buttons-top">
+            <button id="btn-all" class="region-btn active">All</button>
+            <button id="btn-europe" class="region-btn">Europe</button>
+            <button id="btn-americas" class="region-btn">Americas</button>
+            <button id="btn-asia" class="region-btn">Asia</button>
+            <button id="btn-africa" class="region-btn">Africa</button>
+            <button id="btn-oceania" class="region-btn">Oceania</button>
+        </div>
+        <svg id="figure2_2"></svg>
+        <div id="map-buttons">
+            <button id="btn-send">Send to Milano!</button>
+            <button id="btn-reset">Reset</button>
+            <button id="btn-gender" class="region-btn">Show gender</button>
+            <button id="btn-reset-zoom" class="region-btn">Reset zoom</button>
+        </div>
+    </div>
+    <div id="barchart-container">
+        <svg id="figure2_1"></svg>
+    </div>
+</div>
 
             <!-- SYMMETRICAL PLOTS -->
                 <!-- DISCIPLINES -->

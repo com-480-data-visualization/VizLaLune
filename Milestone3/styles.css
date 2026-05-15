@@ -549,8 +549,11 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 /* === WORLD MAP === */
 #geo-section {
     overflow: visible;
-    padding: 20px 40px;
+    padding: 30px 40px;
     box-sizing: border-box;
+    background-color: #091f36;
+    border-radius: 16px;
+    border: 2px solid #1295af;
 }
 
 #map-container {
@@ -563,7 +566,6 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     height: 420px;
     display: block;
 }
-
 
 #map-buttons-top {
     display: flex;
@@ -583,9 +585,9 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 
 .region-btn {
     padding: 6px 14px;
-    background: #1a2e4a;
+    background: #0d3a5c;
     color: #a0b4c8;
-    border: 1px solid #2a4a6a;
+    border: 1px solid #1295af;
     border-radius: 20px;
     font-size: 13px;
     cursor: pointer;
@@ -593,34 +595,45 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
 }
 
 .region-btn:hover {
-    background: #2a4a6a;
+    background: #1295af;
     color: white;
 }
 
 .region-btn.active {
-    background: #1a4a8a;
+    background: #1295af;
     color: white;
-    border-color: #4a8adf;
+    border-color: #1295af;
+    font-weight: bold;
 }
 
 #btn-send {
     padding: 8px 18px;
-    background: #1a4a8a;
+    background: #1295af;
     color: white;
     border: none;
     border-radius: 20px;
     font-size: 13px;
     cursor: pointer;
+    transition: all 0.2s;
+}
+
+#btn-send:hover {
+    background: #0d7a8a;
 }
 
 #btn-reset {
     padding: 8px 14px;
-    background: #2a4a6a;
+    background: #0d3a5c;
     color: white;
-    border: none;
+    border: 1px solid #1295af;
     border-radius: 20px;
     font-size: 13px;
     cursor: pointer;
+    transition: all 0.2s;
+}
+
+#btn-reset:hover {
+    background: #1295af;
 }
 
 /* === BAR CHART === */
@@ -629,6 +642,7 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     display: flex;
     justify-content: center;
 }
+
 
 /* ================================================================================================================= */
 /* === CONCLUSION === */

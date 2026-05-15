@@ -114,7 +114,7 @@ Promise.all([
 
   const colorScale = d3.scaleSequential()
     .domain([0, maxAthletes])
-    .interpolator(d3.interpolateBlues);
+    .interpolator(t => d3.interpolateBlues(1 - t));
 
   const countries = topojson.feature(world, world.objects.countries);
 
@@ -211,7 +211,7 @@ Promise.all([
     const countryAthletes = athletes.filter(a => a.country_code === code);
     countryAthletes.forEach(athlete => {
       const angle = Math.random() * 2 * Math.PI;
-      const radius = Math.random() * Math.min(8, Math.sqrt(count) * 0.8);
+      const radius = Math.random() * Math.min(4, Math.sqrt(count) * 0.4);
       const ox = xy[0] + Math.cos(angle) * radius;
       const oy = xy[1] + Math.sin(angle) * radius;
       allDots.push({ code, count, gender: athlete.gender, x: ox, y: oy, originX: ox, originY: oy });
@@ -259,11 +259,11 @@ Promise.all([
   const linearGradient = defs.append("linearGradient")
     .attr("id", "legend-gradient");
 
-  linearGradient.selectAll("stop")
+    linearGradient.selectAll("stop")
     .data([
-      { offset: "0%", color: colorScale(0) },
+      { offset: "0%", color: colorScale(maxAthletes) },
       { offset: "50%", color: colorScale(maxAthletes / 2) },
-      { offset: "100%", color: colorScale(maxAthletes) }
+      { offset: "100%", color: colorScale(0) }
     ])
     .join("stop")
     .attr("offset", d => d.offset)

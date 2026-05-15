@@ -31,15 +31,19 @@ const bcTitle = bcSvg.append("text")
     .style("font-size", "13px")
     .style("font-weight", "bold");
 
-function getDiscipline(d) {
-    try {
-        const eventsStr = d.events.replace(/'/g, '"').replace(/\\"/g, '"');
-        const events = JSON.parse(eventsStr);
-        return events[0]?.discipline || "Unknown";
-    } catch {
-        return "Unknown";
-    }
-}
+// Tooltip bar chart
+const bcTooltip = d3.select("body")
+    .append("div")
+    .attr("class", "bc-tooltip")
+    .style("position", "fixed")
+    .style("background", "rgba(9, 31, 54, 0.95)")
+    .style("color", "#e8eaf0")
+    .style("padding", "6px 12px")
+    .style("border-radius", "6px")
+    .style("font-size", "13px")
+    .style("pointer-events", "none")
+    .style("opacity", 0)
+    .style("border", "1px solid #1295af");
 
 function parseDisciplineBC(d) {
     try {
@@ -51,10 +55,7 @@ function parseDisciplineBC(d) {
 }
 
 function updateBarChart(athletesData, countryCode) {
-    bcTitle.text(countryCode
-        ? `${countryCode}`
-        : "All countries"
-    );
+    bcTitle.text(countryCode ? `${countryNames[countryCode] || countryCode}` : "All countries");
 
     const filtered = countryCode
         ? athletesData.filter(d => d.country_code === countryCode)
@@ -70,12 +71,12 @@ function updateBarChart(athletesData, countryCode) {
         discipline, count
     }))
     .filter(d => d.discipline !== "Unknown")
-    .sort((a, b) => a.count - b.count); // ascending pour horizontal
+    .sort((a, b) => a.count - b.count);
 
     xScale.domain([0, d3.max(data, d => d.count)]).nice();
     yScale.domain(data.map(d => d.discipline));
 
-    // Axe X (en bas)
+    // Axe X
     xAxisG.transition().duration(500)
         .call(d3.axisBottom(xScale).ticks(4).tickSize(-bcInner.h))
         .selectAll("text")
@@ -88,7 +89,7 @@ function updateBarChart(athletesData, countryCode) {
 
     xAxisG.select(".domain").style("stroke", "#2a4a6a");
 
-    // Axe Y (labels disciplines)
+    // Axe Y
     yAxisG.transition().duration(500)
         .call(d3.axisLeft(yScale).tickSize(0))
         .selectAll("text")
@@ -97,7 +98,7 @@ function updateBarChart(athletesData, countryCode) {
 
     yAxisG.select(".domain").remove();
 
-    // Barres horizontales
+    // Barres
     bcG.selectAll(".bar")
         .data(data, d => d.discipline)
         .join(
@@ -109,10 +110,38 @@ function updateBarChart(athletesData, countryCode) {
                 .attr("height", yScale.bandwidth())
                 .attr("fill", "#4a9eff")
                 .attr("rx", 3)
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("fill", "#7ac4ff");
+                    bcTooltip.style("opacity", 1)
+                        .html(`<strong>${d.discipline}</strong><br>${d.count} athletes`);
+                })
+                .on("mousemove", function(event) {
+                    bcTooltip
+                        .style("left", (event.clientX + 14) + "px")
+                        .style("top", (event.clientY - 10) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("fill", "#4a9eff");
+                    bcTooltip.style("opacity", 0);
+                })
                 .transition().duration(600)
                 .attr("width", d => xScale(d.count)),
 
             update => update
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("fill", "#7ac4ff");
+                    bcTooltip.style("opacity", 1)
+                        .html(`<strong>${d.discipline}</strong><br>${d.count} athletes`);
+                })
+                .on("mousemove", function(event) {
+                    bcTooltip
+                        .style("left", (event.clientX + 14) + "px")
+                        .style("top", (event.clientY - 10) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("fill", "#4a9eff");
+                    bcTooltip.style("opacity", 0);
+                })
                 .transition().duration(600)
                 .attr("y", d => yScale(d.discipline))
                 .attr("height", yScale.bandwidth())
