@@ -21,35 +21,30 @@ observer.observe(document.getElementById('banner'));
 
 // Reset filters
 function resetFilters() {
-    // Reset filter badge content
     document.getElementById('badge-discipline-input').value = '';
     document.getElementById('badge-country-input').value = '';
-
-    // Reset introduction bubbles
     updateBubbles();
-
-    // Reset grid selection
     selectDisciplineCard();
-
-    // Reset map view
     resetMapView();
-
-    // Reset symmetrical charts
     recomputeAndRender();
+
+    if (window.athletesData) {
+        updateBarChart(window.athletesData, null);
+        highlightDiscipline(null);
+    }
+    if (window.filterMapByDiscipline) filterMapByDiscipline(null);
+    if (window.highlightCountryOnMap) highlightCountryOnMap(null);
 }
 
 // Discipline filter selection
 function filterDisciplineSuggestions(value) {
     const suggestions = document.getElementById('discipline-suggestions');
     const badge = document.getElementById('badge-discipline-input');
-
     const countryBadge = document.getElementById('badge-country-input');
 
-    // Get all discipline names from grid cards
     const allDisciplines = [...document.querySelectorAll('.discipline-card text')]
         .map(t => t.textContent);
 
-    // Filter by startsWith (case insensitive)
     const filtered = value.trim() === ''
         ? allDisciplines
         : allDisciplines.filter(d => d.toLowerCase().startsWith(value.toLowerCase()));
@@ -59,9 +54,8 @@ function filterDisciplineSuggestions(value) {
         return;
     }
 
-    // Render suggestions
-    suggestions.innerHTML = ''; // Clear previous suggestions
-    suggestions.style.display = 'block'; // Make suggestions now visible
+    suggestions.innerHTML = '';
+    suggestions.style.display = 'block';
 
     filtered.forEach(discipline => {
         const item = document.createElement('div');
@@ -70,16 +64,16 @@ function filterDisciplineSuggestions(value) {
         item.onclick = () => {
             badge.value = discipline;
             suggestions.style.display = 'none';
-            // Trigger discipline selection
             updateBubbles(discipline, countryBadge.value);
             selectDisciplineCard(discipline);
-            
-            // Convert "Alpine Skiing" to "Alpine-skiing" to match disciplinesList format
-            // For zoomToDiscipline and showPodium functions
-            const formattedName = discipline.replace(/ /g, '-')
+        
+            if (window.athletesData) highlightDiscipline(discipline);
+            if (window.filterMapByDiscipline) filterMapByDiscipline(discipline); // ← ajoute cette ligne
+        
+            let formattedName = discipline.replace(/ /g, '-')
                 .toLowerCase()
-                .replace(/^\w/, c => c.toUpperCase()); // First letter only to cap
-
+                .replace(/^\w/, c => c.toUpperCase());
+        
             zoomToDiscipline(formattedName);
             showPodium(discipline, `https://www.olympics.com/en/sports/${formattedName.toLowerCase()}`, `/ExtraRessources/Disciplines/${formattedName}.png`);
             renderEventChart(discipline);
@@ -92,14 +86,11 @@ function filterDisciplineSuggestions(value) {
 function filterCountrySuggestions(value) {
     const suggestions = document.getElementById('country-suggestions');
     const badge = document.getElementById('badge-country-input');
-
     const disciplineBadge = document.getElementById('badge-discipline-input');
 
-    // Get all country names from athletes data
     const allCountriesCodes = [...new Set(athletesDataGlobal.map(a => a.country_code))];
     const allCountries = allCountriesCodes.map(code => countryCodeToName[code]).sort();
 
-    // Filter by startsWith (case insensitive)
     const filtered = value.trim() === ''
         ? allCountries
         : allCountries.filter(c => c.toLowerCase().startsWith(value.toLowerCase()));
@@ -109,9 +100,8 @@ function filterCountrySuggestions(value) {
         return;
     }
 
-    // Render suggestions
-    suggestions.innerHTML = ''; // Clear previous suggestions
-    suggestions.style.display = 'block'; // Make suggestions now visible
+    suggestions.innerHTML = '';
+    suggestions.style.display = 'block';
 
     filtered.forEach(country => {
         const item = document.createElement('div');
@@ -120,11 +110,17 @@ function filterCountrySuggestions(value) {
         item.onclick = () => {
             badge.value = country;
             suggestions.style.display = 'none';
-            // Trigger country selection
             updateBubbles(disciplineBadge.value, country);
             recomputeAndRender(country);
-            // renderEventChart(country);
-        };
+            // Update bar chart
+            if (window.athletesData) {
+                const code = Object.keys(countryNames).find(k => countryNames[k] === country);
+                updateBarChart(window.athletesData, code || null);
+    }
+
+    // Highlight sur la map
+    if (window.highlightCountryOnMap) highlightCountryOnMap(country);
+};
         suggestions.appendChild(item);
     });
 }
@@ -139,5 +135,21 @@ document.addEventListener('click', (e) => {
 document.addEventListener('click', (e) => {
     if (!e.target.closest('#badge-country-wrapper')) {
         document.getElementById('country-suggestions').style.display = 'none';
+    }
+});
+
+// Reset map et barchart quand le champ country est vidé
+document.getElementById('badge-country-input').addEventListener('input', function() {
+    if (this.value.trim() === '') {
+        if (window.athletesData) updateBarChart(window.athletesData, null);
+        if (window.highlightCountryOnMap) highlightCountryOnMap(null);
+    }
+});
+
+// Reset barchart highlight quand le champ discipline est vidé
+document.getElementById('badge-discipline-input').addEventListener('input', function() {
+    if (this.value.trim() === '') {
+        highlightDiscipline(null);
+        if (window.filterMapByDiscipline) filterMapByDiscipline(null);
     }
 });
