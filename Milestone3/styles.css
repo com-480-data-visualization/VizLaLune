@@ -554,17 +554,42 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     background-color: #091f36;
     border-radius: 16px;
     border: 2px solid #1295af;
+    margin: 0 auto;              /* Centred horizontally */
+    max-width: 1600px;           /* Limits max width on large screens */
+    display: flex;
+    align-items: center;         /* Vertical centering */
+    gap: 40px;
+    justify-content: center;
 }
 
 #map-container {
-    flex-shrink: 0;
+    flex: 1 1 60%;
     overflow: visible;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;     /* Centre map vertically */
 }
 
 #figure2_2 {
-    width: 750px;
-    height: 420px;
+    width: 100%;
+    height: auto;
     display: block;
+}
+
+#barchart-container {
+    flex: 1 1 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;         /* Centre bar chart vertically */
+    min-width: 0;
+}
+
+#figure2_1 {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 100%;   
 }
 
 #map-buttons-top {
@@ -636,13 +661,6 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     background: #1295af;
 }
 
-/* === BAR CHART === */
-#barchart-container {
-    flex-shrink: 0;
-    display: flex;
-    justify-content: center;
-}
-
 
 /* ================================================================================================================= */
 /* === CONCLUSION === */
@@ -656,4 +674,3 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
     position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
 }
-

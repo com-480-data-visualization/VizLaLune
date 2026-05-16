@@ -1,9 +1,13 @@
 // ─── BARCHART.JS — Figure 2.1 : Athletes per discipline ───────────────────
 
-const bcWidth = 380;
-const bcHeight = 420;
 const bcMargin = { top: 30, right: 30, bottom: 20, left: 150 };
-const bcInner = {
+const bcContainer = document.getElementById('barchart-container');
+
+// Dimensions initiales
+let bcWidth = bcContainer.clientWidth || 380;
+let bcHeight = document.getElementById('figure2_2').clientHeight || 420;
+
+let bcInner = {
     w: bcWidth - bcMargin.left - bcMargin.right,
     h: bcHeight - bcMargin.top - bcMargin.bottom
 };
@@ -11,6 +15,8 @@ const bcInner = {
 const bcSvg = d3.select("#figure2_1")
     .attr("width", bcWidth)
     .attr("height", bcHeight)
+    .attr("viewBox", `0 0 ${bcWidth} ${bcHeight}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
     .style("display", "block")
     .style("background", "#0a1628");
 
@@ -31,6 +37,26 @@ const bcTitle = bcSvg.append("text")
     .style("font-size", "13px")
     .style("font-weight", "bold");
 
+// Observe la taille de la map et adapte le barchart
+const mapEl = document.getElementById('figure2_2');
+const resizeObserver = new ResizeObserver(() => {
+    const newHeight = mapEl.clientHeight;
+    if (newHeight && newHeight !== bcHeight) {
+        bcHeight = newHeight;
+    bcInner.h = bcHeight - bcMargin.top - bcMargin.bottom;
+    const bcSvg = d3.select("#figure2_1")
+    .attr("width", bcWidth)
+    .attr("height", bcHeight)
+    .attr("viewBox", `0 0 ${bcWidth} ${bcHeight}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("display", "block")
+    .style("background", "#0a1628");
+        xAxisG.attr("transform", `translate(0,${bcInner.h})`);
+        yScale.range([0, bcInner.h]);
+        if (window.athletesData) updateBarChart(window.athletesData, null);
+    }
+});
+resizeObserver.observe(mapEl);
 // Tooltip bar chart
 const bcTooltip = d3.select("body")
     .append("div")
@@ -45,6 +71,9 @@ const bcTooltip = d3.select("body")
     .style("opacity", 0)
     .style("border", "1px solid #1295af");
 
+// Variable globale pour le highlight
+let highlightedDiscipline = null;
+
 function parseDisciplineBC(d) {
     try {
         const match = d.events.match(/'discipline':\s*'([^']+)'/);
@@ -52,6 +81,21 @@ function parseDisciplineBC(d) {
     } catch {
         return "Unknown";
     }
+}
+
+// Highlight une discipline dans le barchart
+function highlightDiscipline(discipline) {
+    highlightedDiscipline = discipline;
+    bcG.selectAll(".bar")
+        .transition().duration(400)
+        .attr("fill", d => {
+            if (!discipline) return "#4a9eff";
+            return d.discipline === discipline ? "#1295af" : "#1a3a5c";
+        })
+        .attr("opacity", d => {
+            if (!discipline) return 1;
+            return d.discipline === discipline ? 1 : 0.4;
+        });
 }
 
 function updateBarChart(athletesData, countryCode) {
@@ -108,7 +152,8 @@ function updateBarChart(athletesData, countryCode) {
                 .attr("y", d => yScale(d.discipline))
                 .attr("width", 0)
                 .attr("height", yScale.bandwidth())
-                .attr("fill", "#4a9eff")
+                .attr("fill", d => highlightedDiscipline && d.discipline === highlightedDiscipline ? "#1295af" : "#4a9eff")
+                .attr("opacity", d => highlightedDiscipline && d.discipline !== highlightedDiscipline ? 0.4 : 1)
                 .attr("rx", 3)
                 .on("mouseover", function(event, d) {
                     d3.select(this).attr("fill", "#7ac4ff");
@@ -120,8 +165,8 @@ function updateBarChart(athletesData, countryCode) {
                         .style("left", (event.clientX + 14) + "px")
                         .style("top", (event.clientY - 10) + "px");
                 })
-                .on("mouseout", function() {
-                    d3.select(this).attr("fill", "#4a9eff");
+                .on("mouseout", function(event, d) {
+                    d3.select(this).attr("fill", highlightedDiscipline && d.discipline === highlightedDiscipline ? "#1295af" : "#4a9eff");
                     bcTooltip.style("opacity", 0);
                 })
                 .transition().duration(600)
@@ -138,14 +183,16 @@ function updateBarChart(athletesData, countryCode) {
                         .style("left", (event.clientX + 14) + "px")
                         .style("top", (event.clientY - 10) + "px");
                 })
-                .on("mouseout", function() {
-                    d3.select(this).attr("fill", "#4a9eff");
+                .on("mouseout", function(event, d) {
+                    d3.select(this).attr("fill", highlightedDiscipline && d.discipline === highlightedDiscipline ? "#1295af" : "#4a9eff");
                     bcTooltip.style("opacity", 0);
                 })
                 .transition().duration(600)
                 .attr("y", d => yScale(d.discipline))
                 .attr("height", yScale.bandwidth())
-                .attr("width", d => xScale(d.count)),
+                .attr("width", d => xScale(d.count))
+                .attr("fill", d => highlightedDiscipline && d.discipline === highlightedDiscipline ? "#1295af" : "#4a9eff")
+                .attr("opacity", d => highlightedDiscipline && d.discipline !== highlightedDiscipline ? 0.4 : 1),
 
             exit => exit
                 .transition().duration(300)

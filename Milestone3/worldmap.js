@@ -1,13 +1,15 @@
 // ─── WORLDMAP.JS — Figure 2.2 ─────────────────────────────────────────────
 
-const mapWidth = 750;
-const mapHeight = 420;
+const mapContainer = document.getElementById('map-container');
+const mapWidth = mapContainer.clientWidth || 750;
+const mapHeight = Math.round(mapWidth * 0.56);
 
 const mapSvg = d3.select("#figure2_2")
-  .attr("width", mapWidth)
-  .attr("height", mapHeight)
-  .style("background", "#0a1628")
-  .style("display", "block");
+    .attr("width", mapWidth)
+    .attr("height", mapHeight)
+    .attr("viewBox", `0 0 ${mapWidth} ${mapHeight}`)
+    .style("background", "#0a1628")
+    .style("display", "block");
 
 // Groupe zoomable (carte + dots + Milan)
 const zoomG = mapSvg.append("g").attr("class", "zoom-group");
@@ -16,7 +18,7 @@ const zoomG = mapSvg.append("g").attr("class", "zoom-group");
 const fixedG = mapSvg.append("g").attr("class", "fixed-group");
 
 const projection = d3.geoNaturalEarth1()
-  .scale(750 / 6.3)
+  .scale(mapWidth / 6.3)
   .translate([mapWidth / 2, mapHeight / 2]);
 
 const path = d3.geoPath().projection(projection);
@@ -103,6 +105,7 @@ Promise.all([
   d3.json("regions.json")
 ]).then(([world, athletes, coords, regions]) => {
 
+  window.mapCoords = coords;
   window.athletesData = athletes;
   updateBarChart(athletes, null);
 
@@ -112,9 +115,10 @@ Promise.all([
 
   const maxAthletes = d3.max([...athletesByCountry.values()]);
 
+  // Scale correcte : blanc = beaucoup, bleu foncé = peu
   const colorScale = d3.scaleSequential()
-    .domain([0, maxAthletes])
-    .interpolator(t => d3.interpolateBlues(1 - t));
+    .domain([maxAthletes, 0])    
+    .interpolator(d3.interpolateBlues);
 
   const countries = topojson.feature(world, world.objects.countries);
 
@@ -160,10 +164,10 @@ Promise.all([
         <div style="font-weight:bold;font-size:14px;margin-bottom:6px;color:#4a9eff">
           ${countryNames[alpha3] || alpha3}
         </div>
-        <div>🏅 <strong>${count}</strong> athletes</div>
-        <div>🏆 Top sport: <strong>${topDiscipline ? topDiscipline[0] : "—"}</strong></div>
-        <div>👨 Men: <strong>${men}</strong> (${pctMen}%)</div>
-        <div>👩 Women: <strong>${women}</strong> (${pctWomen}%)</div>
+        <div><strong>${count}</strong> athletes</div>
+        <div>Top sport: <strong>${topDiscipline ? topDiscipline[0] : "—"}</strong></div>
+        <div>Men: <strong>${men}</strong> (${pctMen}%)</div>
+        <div>Women: <strong>${women}</strong> (${pctWomen}%)</div>
       `);
     })
     .on("mousemove", function(event) {
@@ -239,7 +243,7 @@ Promise.all([
 
   milanG.append("text")
     .attr("text-anchor", "middle").attr("dy", "4px")
-    .style("font-size", "10px").text("⭐");
+    .style("font-size", "10px").text("★");
 
   milanG.append("text")
     .attr("text-anchor", "middle").attr("dy", "-12px")
@@ -259,11 +263,12 @@ Promise.all([
   const linearGradient = defs.append("linearGradient")
     .attr("id", "legend-gradient");
 
-    linearGradient.selectAll("stop")
+  // Légende : bleu foncé = peu, blanc = beaucoup
+  linearGradient.selectAll("stop")
     .data([
-      { offset: "0%", color: colorScale(maxAthletes) },
+      { offset: "0%", color: colorScale(maxAthletes) },   
       { offset: "50%", color: colorScale(maxAthletes / 2) },
-      { offset: "100%", color: colorScale(0) }
+      { offset: "100%", color: colorScale(0) }            
     ])
     .join("stop")
     .attr("offset", d => d.offset)
@@ -274,13 +279,13 @@ Promise.all([
     .attr("width", 150).attr("height", 10)
     .style("fill", "url(#legend-gradient)").attr("rx", 2);
 
-  legend.append("text").attr("x", 0).attr("y", 30)
-    .style("fill", "#a0b4c8").style("font-size", "10px").text("0");
+    legend.append("text").attr("x", 0).attr("y", 30)
+    .style("fill", "#a0b4c8").style("font-size", "10px").text(`${maxAthletes} athletes`);  
 
-  legend.append("text").attr("x", 150).attr("y", 30)
+    legend.append("text").attr("x", 150).attr("y", 30)
     .attr("text-anchor", "end")
     .style("fill", "#a0b4c8").style("font-size", "10px")
-    .text(`${maxAthletes} athletes`);
+    .text("0");
 
   legend.append("circle")
     .attr("cx", 0).attr("cy", 55).attr("r", 5)
@@ -324,7 +329,7 @@ Promise.all([
       .attr("cx", d => d.originX).attr("cy", d => d.originY)
       .attr("r", 2).attr("fill", "rgba(255, 200, 50, 0.7)");
     genderMode = false;
-    d3.select("#btn-gender").classed("active", false).text("👫 Show gender");
+    d3.select("#btn-gender").classed("active", false).text("Show gender");
     mapSvg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
   });
 
@@ -335,7 +340,7 @@ Promise.all([
     genderMode = !genderMode;
     d3.select(this)
       .classed("active", genderMode)
-      .text(genderMode ? "🎨 Hide gender" : "👫 Show gender");
+      .text(genderMode ? "Hide gender" : "Show gender");
 
     dotsGroup.selectAll("circle")
       .transition().duration(600)
@@ -383,5 +388,103 @@ Promise.all([
   d3.select("#btn-oceania").on("click", () => filterByRegion("Oceania"));
 
   console.log("Athlètes:", athletes.length, "| Dots:", allDots.length);
+
+  // ── FILTRE GLOBAL PAR PAYS ─────────────────────────────────────────────
+  window.highlightCountryOnMap = function(countryName) {
+    if (!countryName) {
+      countryPaths
+        .transition().duration(400)
+        .attr("opacity", 1)
+        .attr("stroke", "#2a4a6a")
+        .attr("stroke-width", 0.5);
+      dotsGroup.selectAll("circle")
+        .transition().duration(400)
+        .attr("opacity", 0.7);
+      mapSvg.transition().duration(750)
+        .call(zoom.transform, d3.zoomIdentity);
+      return;
+    }
+
+    const code = Object.keys(countryNames).find(k => countryNames[k] === countryName);
+    if (!code) return;
+
+    const latLng = window.mapCoords[code];
+    if (latLng) {
+      const xy = projection([latLng[1], latLng[0]]);
+      if (xy) {
+        const scale = 4;
+        const tx = mapWidth / 2 - scale * xy[0];
+        const ty = mapHeight / 2 - scale * xy[1];
+        mapSvg.transition().duration(750)
+          .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+      }
+    }
+
+    countryPaths
+      .transition().duration(400)
+      .attr("opacity", d => {
+        const numId = String(+d.id).padStart(3, "0");
+        const alpha3 = Object.keys(isoAlpha3ToNumeric)
+          .find(k => isoAlpha3ToNumeric[k] === numId);
+        return alpha3 === code ? 1 : 0.2;
+      })
+      .attr("stroke", d => {
+        const numId = String(+d.id).padStart(3, "0");
+        const alpha3 = Object.keys(isoAlpha3ToNumeric)
+          .find(k => isoAlpha3ToNumeric[k] === numId);
+        return alpha3 === code ? "white" : "#2a4a6a";
+      })
+      .attr("stroke-width", d => {
+        const numId = String(+d.id).padStart(3, "0");
+        const alpha3 = Object.keys(isoAlpha3ToNumeric)
+          .find(k => isoAlpha3ToNumeric[k] === numId);
+        return alpha3 === code ? 2 : 0.5;
+      });
+
+    dotsGroup.selectAll("circle")
+      .transition().duration(400)
+      .attr("opacity", d => d.code === code ? 1 : 0.05);
+  };
+
+  // ── FILTRE GLOBAL PAR DISCIPLINE ───────────────────────────────────────
+  window.filterMapByDiscipline = function(discipline) {
+    if (!discipline) {
+      countryPaths
+        .transition().duration(400)
+        .attr("opacity", 1);
+      dotsGroup.selectAll("circle")
+        .transition().duration(400)
+        .attr("opacity", 0.7)
+        .attr("fill", d => genderMode
+          ? (d.gender === "M" ? "rgba(74, 158, 255, 0.8)" : "rgba(255, 100, 180, 0.8)")
+          : "rgba(255, 200, 50, 0.7)");
+      return;
+    }
+
+    const countriesWithDiscipline = new Set(
+      window.athletesData
+        .filter(a => parseDiscipline(a) === discipline)
+        .map(a => a.country_code)
+    );
+
+    countryPaths
+      .transition().duration(400)
+      .attr("opacity", d => {
+        const numId = String(+d.id).padStart(3, "0");
+        const alpha3 = Object.keys(isoAlpha3ToNumeric)
+          .find(k => isoAlpha3ToNumeric[k] === numId);
+        return alpha3 && countriesWithDiscipline.has(alpha3) ? 1 : 0.15;
+      });
+
+    dotsGroup.selectAll("circle")
+      .transition().duration(400)
+      .attr("opacity", d => countriesWithDiscipline.has(d.code) ? 1 : 0.03)
+      .attr("fill", d => {
+        if (!countriesWithDiscipline.has(d.code)) return "rgba(255, 200, 50, 0.3)";
+        return genderMode
+          ? (d.gender === "M" ? "rgba(74, 158, 255, 0.8)" : "rgba(255, 100, 180, 0.8)")
+          : "rgba(255, 200, 50, 0.7)";
+      });
+  };
 
 }).catch(err => console.error("Erreur:", err));
