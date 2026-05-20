@@ -8,7 +8,7 @@ const bubblesData = [
     { text: "European competitors make up more than 65% of all competitors.", r: 120, vx: 1.5, vy: -1.5 },
     { text: "Bobsleigh's gender gap stems from its greater number of male team events compared to women's individual events.", r: 150, vx: -1.0, vy: -1.0 },
     { text: "COUNTRY X DOMINATES X THROUGH LEONTINE FIGURE. TALK ABOUT GENDER IF POSSIBLE TOO", r: 120, vx: 1.25, vy: -1.25 },
-    { text: "MANON TREEMAP TAKEAWAY", r: 90, vx: 1.75, vy: -1.75 },
+    { text: "Cross-Country Skiing, Ice Hockey and Speed Skating dominate in athlete count, they draw by far the most competitors", r: 90, vx: 1.75, vy: -1.75 },
 ];
 
 // === Box dimensions ===

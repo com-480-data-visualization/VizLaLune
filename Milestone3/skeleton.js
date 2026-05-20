@@ -153,3 +153,21 @@ document.getElementById('badge-discipline-input').addEventListener('input', func
         if (window.filterMapByDiscipline) filterMapByDiscipline(null);
     }
 });
+
+// === FADE IN ON SCROLL ===
+document.addEventListener('DOMContentLoaded', () => {
+    const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            } else {
+                entry.target.classList.remove('visible');
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('p, h2, h3').forEach(el => {
+        el.classList.add('fade-in');
+        fadeObserver.observe(el);
+    });
+});

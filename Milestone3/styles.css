@@ -522,6 +522,69 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     margin: 0 auto;    /* Centre */
 }
 
+
+    /* == TREE MAP ==*/
+
+#treemap {
+    width: 100vw;
+    height: auto;
+    margin: 20px calc(-50vw + 50%);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.88);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+}
+
+    /* == MEDAL RACE ==*/
+
+#medalrace {
+    width: 100%;
+    max-width: 1200px;
+    margin: 30px auto;
+    border-radius: 12px;
+}
+
+.medal-tooltip {
+    position: absolute;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    pointer-events: none;
+    opacity: 0;
+    font-size: 13px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: opacity 0.2s;
+}
+
+#replay-btn {
+    display: block;
+    margin: 12px auto 0;
+    padding: 8px 28px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background: #4e79a7;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+#replay-btn:hover {
+    background: #3a6491;
+}
+
+
 /* ================================================================================================================= */
 /* === SECTION 2: GENDER REPRESENTATION == */
     /* === SYMMETRICAL PLOTS === */
@@ -673,4 +736,18 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     border-radius: 16px;         /* Round corner */
     overflow: hidden;            /* Les bulles ne débordent pas hors de la box */
     position: relative;          /* Nécessaire pour positionner les bulles à l'intérieur */
+}
+
+
+
+/* === FADE IN ON SCROLL === */
+.fade-in {
+    opacity: 0;
+    transform: translateY(80px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
