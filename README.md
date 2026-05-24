@@ -13,7 +13,7 @@
 **80% of the final grade**
 
 ### 🌐 Live website
-**[VizLaLune — explore the 2026 Winter Olympics](https://com-480-data-visualization.github.io/VizLaLune/)**
+**[VizLaLune — explore the 2026 Winter Olympics](https://com-480-data-visualization.github.io/VizLaLune/Milestone3/)**
 
 ### 📖 Process book
 The full process book documenting our journey from M1 sketches to the final website is available here:
@@ -182,7 +182,7 @@ Based on this, we plan to combine different types of visualizations, such as a g
 ## Milestone 2 (17th April, 5pm)
 
 The milestone 2 document can be visualized inside its related folder: [link](https://github.com/com-480-data-visualization/VizLaLune/blob/master/Milestone2/milestone_2.pdf).
-The first live skeleton of the website can be visualized here: [link](https://com-480-data-visualization.github.io/VizLaLune/), whilst its code can be found in its related folder: [link](https://github.com/com-480-data-visualization/VizLaLune/blob/master/Milestone2/index.html).
+The first live skeleton of the website can be visualized here: [link](https://com-480-data-visualization.github.io/VizLaLune/Milestone2/), whilst its code can be found in its related folder: [link](https://github.com/com-480-data-visualization/VizLaLune/blob/master/Milestone2/index.html).
 
 The skeleton serves as the structural foundation for the final website. Placeholders are placed in the skeleton to better anticipate the layout and interactions of the final product. An additional notebook containing the preprocessing code used to generate the data can be found here: [link](https://github.com/com-480-data-visualization/VizLaLune/blob/master/DataPreprocessing/PREPROCESSING_Milan_Cortina_2026_Olympic_Winter_Games.ipynb).
 
