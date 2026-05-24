@@ -39,6 +39,7 @@ python -m http.server 8000
 
 ### Repository structure
 
+```
 VizLaLune/
 ├── index.html                  # Main page
 ├── styles.css                  # Global styles
@@ -58,6 +59,7 @@ VizLaLune/
 ├── assets/                     # Pictograms, images
 ├── process_book.pdf            # M3 process book
 └── README.md
+```
 
 ### Built with
 
