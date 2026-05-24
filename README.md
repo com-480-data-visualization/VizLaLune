@@ -8,6 +8,75 @@
 
 [Milestone 1](#milestone-1) • [Milestone 2](#milestone-2) • [Milestone 3](#milestone-3)
 
+## Milestone 3 (29th May, 5pm)
+
+**80% of the final grade**
+
+### 🌐 Live website
+**[VizLaLune — explore the 2026 Winter Olympics](https://com-480-data-visualization.github.io/VizLaLune/)**
+
+### 📖 Process book
+The full process book documenting our journey from M1 sketches to the final website is available here:
+[process_book.pdf](./process_book.pdf)
+
+### 🎥 Screencast
+A 2-minute video walkthrough of the website:
+[LIEN À AJOUTER]
+
+
+###  Running the website locally
+
+The website is built with vanilla HTML/CSS/JS and a few external libraries (D3.js v7, Leaflet, TopoJSON) — no build step required.
+
+```bash
+git clone https://github.com/com-480-data-visualization/VizLaLune.git
+cd VizLaLune
+python -m http.server 8000
+# Then open http://localhost:8000 in your browser
+```
+
+> A local server is required because the project loads CSV files via `fetch()`, which doesn't work with `file://` URLs.
+
+### Repository structure
+
+VizLaLune/
+├── index.html                  # Main page
+├── styles.css                  # Global styles
+├── js/                         # All visualization scripts
+│   ├── skeleton.js             # Global filter & shared state
+│   ├── intro_bubbles.js        # Animated intro statistics
+│   ├── grid.js                 # Discipline grid with pictograms
+│   ├── map.js                  # Venue map (Leaflet)
+│   ├── treemap.js              # Events treemap (D3)
+│   ├── medal_race.js           # Animated medal race
+│   ├── worldmap.js             # World map of athletes
+│   ├── barchart.js             # Athletes per discipline
+│   ├── symmetrical_gender.js   # Gender comparison
+│   └── conclusion_bubbles.js   # Closing floating insights
+├── DataPreprocessing/          # Python scripts + cleaned CSVs
+├── DataExploration/            # Initial data exploration notebooks
+├── assets/                     # Pictograms, images
+├── process_book.pdf            # M3 process book
+└── README.md
+
+### Built with
+
+- [D3.js v7](https://d3js.org/) — custom visualizations
+- [Leaflet](https://leafletjs.com/) — interactive venue map
+- [TopoJSON](https://github.com/topojson/topojson) — world map geometry
+- Vanilla HTML / CSS / JavaScript
+
+### Project overview
+
+VizLaLune is an interactive scrollytelling website exploring the **Milano-Cortina 2026 Winter Olympic Games** through three connected lenses:
+
+1. **Global Overview** — disciplines, venues, events, and the medal race
+2. **Gender Representation** — country-level participation and gender balance across disciplines
+3. **A conclusion** — key insights surfaced as floating bubbles
+
+All visualizations are linked through a global filter system: selecting a country or discipline anywhere on the site updates every chart simultaneously.
+
+
 ## Milestone 1 (20th March, 5pm)
 
 **10% of the final grade**
@@ -116,13 +185,5 @@ The first live skeleton of the website can be visualized here: [link](https://co
 The skeleton serves as the structural foundation for the final website. Placeholders are placed in the skeleton to better anticipate the layout and interactions of the final product. An additional notebook containing the preprocessing code used to generate the data can be found here: [link](https://github.com/com-480-data-visualization/VizLaLune/blob/master/DataPreprocessing/PREPROCESSING_Milan_Cortina_2026_Olympic_Winter_Games.ipynb).
 
 
-## Milestone 3 (29th May, 5pm)
 
-**80% of the final grade**
-
-
-## Late policy
-
-- < 24h: 80% of the grade for the milestone
-- < 48h: 70% of the grade for the milestone
 
