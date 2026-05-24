@@ -617,12 +617,21 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     background-color: #091f36;
     border-radius: 16px;
     border: 2px solid #1295af;
-    margin: 0 auto;              /* Centred horizontally */
-    max-width: 1600px;           /* Limits max width on large screens */
+    margin: 0 auto;
+    max-width: 1600px;
     display: flex;
-    align-items: center;         /* Vertical centering */
+    align-items: center;
     gap: 40px;
     justify-content: center;
+    /* === Animation === */
+    opacity: 0;
+    transform: translateY(30px)
+    
+}
+
+#geo-section.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 #map-container {

@@ -487,4 +487,18 @@ Promise.all([
       });
   };
 
+  // ==== FADE-IN ON SCROLL ====
+const geoSectionEl = document.getElementById('geo-section');
+const geoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            geoSectionEl.classList.add('visible');
+        } else {
+            geoSectionEl.classList.remove('visible'); // Re-fade if scrolled away
+        }
+    });
+}, { threshold: 0.1 });
+
+geoObserver.observe(geoSectionEl);
+
 }).catch(err => console.error("Erreur:", err));

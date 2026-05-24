@@ -147,11 +147,11 @@ function updateBubbles(selectedDiscipline = null, selectedCountry = null) {
     // All rest of code put here to ensure it get CSV data
     // === Bubble data ===
     const bubbleData = [
-        { value: totalAthletes, text: 'Athletes',        color: { fill: '#EEEDFE', stroke: '#AFA9EC', text: '#3C3489'} },
-        { value: participatingCountries, text: 'Countries',    color: { fill: '#E1F5EE', stroke: '#5DCAA5', text: '#085041'} },
-        { value: disciplines,   text: 'Disciplines', color: { fill: '#FAEEDA', stroke: '#EF9F27', text: '#633806'} },
-        { value: events,  text: 'Events',      color: { fill: '#E6F1FB', stroke: '#85B7EB', text: '#0C447C'} },
-        { value: venues,   text: 'Venues',      color: { fill: '#FAECE7', stroke: '#F0997B', text: '#712B13'} },
+        { value: totalAthletes,          singular: 'Athlete',    plural: 'Athletes',    color: { fill: '#EEEDFE', stroke: '#AFA9EC', text: '#3C3489'} },
+        { value: participatingCountries, singular: 'Country',    plural: 'Countries',   color: { fill: '#E1F5EE', stroke: '#5DCAA5', text: '#085041'} },
+        { value: disciplines,            singular: 'Discipline', plural: 'Disciplines', color: { fill: '#FAEEDA', stroke: '#EF9F27', text: '#633806'} },
+        { value: events,                 singular: 'Event',      plural: 'Events',      color: { fill: '#E6F1FB', stroke: '#85B7EB', text: '#0C447C'} },
+        { value: venues,                 singular: 'Venue',      plural: 'Venues',      color: { fill: '#FAECE7', stroke: '#F0997B', text: '#712B13'} },
     ];
 
     // === Generate bubbles ===
@@ -172,10 +172,10 @@ function updateBubbles(selectedDiscipline = null, selectedCountry = null) {
             .attr('class', 'bubble-value')
             .text(d.value);
 
-        // Bubble text
+        // Bubble text (singular when value is 1)
         card.append('div')
-            .attr('class', 'bubble-text')
-            .text(d.text);
+        .attr('class', 'bubble-text')
+        .text(d.value === 1 ? d.singular : d.plural);
     });
 }
 

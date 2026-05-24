@@ -138,19 +138,33 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Reset map et barchart quand le champ country est vidé
+// Reset everything when country filter field is cleared
 document.getElementById('badge-country-input').addEventListener('input', function() {
     if (this.value.trim() === '') {
+        // Bar chart reset
         if (window.athletesData) updateBarChart(window.athletesData, null);
+        // World map country highlight reset
         if (window.highlightCountryOnMap) highlightCountryOnMap(null);
+        // Bubbles reset (recompute with no country filter, keep discipline filter if any)
+        const currentDiscipline = document.getElementById('badge-discipline-input').value || null;
+        updateBubbles(currentDiscipline, null);
     }
 });
 
-// Reset barchart highlight quand le champ discipline est vidé
+// Reset everything when discipline filter field is cleared
 document.getElementById('badge-discipline-input').addEventListener('input', function() {
     if (this.value.trim() === '') {
+        // Bar chart highlight reset
         highlightDiscipline(null);
+        // World map discipline filter reset
         if (window.filterMapByDiscipline) filterMapByDiscipline(null);
+        // Bubbles reset (recompute with no discipline filter, keep country filter if any)
+        const currentCountry = document.getElementById('badge-country-input').value || null;
+        updateBubbles(null, currentCountry);
+        // Discipline grid: deselect the active card + hide podium
+        selectDisciplineCard(null);
+        // Venue map: reset zoom to initial view
+        resetMapView();
     }
 });
 

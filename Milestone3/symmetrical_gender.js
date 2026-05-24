@@ -7,11 +7,31 @@ const countsEvents = new Map();
 let activeContinents = new Set(continents); // All selected at start
 let athletesRaw = []; // Stored for recomputing on filter change
 
-// ==== Load CSV  ====
 d3.csv('../DataPreprocessing/athletes.csv').then(data => {
-    athletesRaw = data; 
-    recomputeAndRender(); // Initial render with all data
+    athletesRaw = data;
+    // Don't render immediately - wait for scroll
+    setupGenderScrollAnimation();
 });
+
+function setupGenderScrollAnimation() {
+    const genderEl = document.getElementById('symmetrical-gender-discipline');
+    let hasRendered = false;
+    let isVisible = false;
+
+    const genderObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !isVisible) {
+                isVisible = true;
+                // Re-render (will trigger animation each time)
+                recomputeAndRender();
+            } else if (!entry.isIntersecting && isVisible) {
+                isVisible = false;
+            }
+        });
+    }, { threshold: 0.15 });
+
+    genderObserver.observe(genderEl);
+}
 
 // ==== Recompute counts + re-render both charts ====
 function recomputeAndRender(countryFilter = null) {
@@ -133,27 +153,39 @@ function renderDisciplineChart(countryFilter = null) {
         .padding(0.2);
 
     // == Bars ==
+    console.log('Rendering bars, count:', chartData.length);
     dSvg.selectAll('.bar-m')
         .data(chartData)
         .enter()
         .append('rect')
         .attr('class', 'bar-m')
-        .attr('x', d => -xScale(d.M))           // Negative x = goes left from center
+        .attr('x', 0)
         .attr('y', d => yScale(d.discipline))
-        .attr('width', d => xScale(d.M))
+        .attr('width', 0)
         .attr('height', yScale.bandwidth())
-        .attr('fill', '#5b91ce');
+        .attr('fill', '#5b91ce')
+        .transition()
+        .delay((d, i) => i * 60)
+        .duration(750)
+        .ease(d3.easeCubicOut)
+        .attr('x', d => -xScale(d.M))
+        .attr('width', d => xScale(d.M));
 
     dSvg.selectAll('.bar-f')
         .data(chartData)
         .enter()
         .append('rect')
         .attr('class', 'bar-f')
-        .attr('x', 0)                            // Starts at center
+        .attr('x', 0)
         .attr('y', d => yScale(d.discipline))
-        .attr('width', d => xScale(d.F))
+        .attr('width', 0)                   // Start at width 0
         .attr('height', yScale.bandwidth())
-        .attr('fill', '#c45bbf');
+        .attr('fill', '#c45bbf')
+        .transition()
+        .delay((d, i) => i * 60)           // Same stagger
+        .duration(750)
+        .ease(d3.easeCubicOut)
+        .attr('width', d => xScale(d.F));  // Push right
 
     // == Labels ==
     dSvg.selectAll('.label-discipline')
@@ -407,11 +439,17 @@ function renderEventChart(discipline = null, countryFilter = null) {
         .enter()
         .append('rect')
         .attr('class', 'e-bar-m')
-        .attr('x', d => -eXScale(d.M))
+        .attr('x', 0)
         .attr('y', d => eYScale(d.event))
-        .attr('width', d => eXScale(d.M))
+        .attr('width', 0)
         .attr('height', eYScale.bandwidth())
-        .attr('fill', '#5b91ce');
+        .attr('fill', '#5b91ce')
+        .transition()
+        .delay((d, i) => i * 40)
+        .duration(600)
+        .ease(d3.easeCubicOut)
+        .attr('x', d => -eXScale(d.M))
+        .attr('width', d => eXScale(d.M));
 
     // == Female bars ==
     eSvg.selectAll('.e-bar-f')
@@ -421,9 +459,14 @@ function renderEventChart(discipline = null, countryFilter = null) {
         .attr('class', 'e-bar-f')
         .attr('x', 0)
         .attr('y', d => eYScale(d.event))
-        .attr('width', d => eXScale(d.F))
+        .attr('width', 0)
         .attr('height', eYScale.bandwidth())
-        .attr('fill', '#c45bbf');
+        .attr('fill', '#c45bbf')
+        .transition()
+        .delay((d, i) => i * 40)
+        .duration(600)
+        .ease(d3.easeCubicOut)
+        .attr('width', d => eXScale(d.F));
 
     // == Event labels ==
     eSvg.selectAll('.e-label')

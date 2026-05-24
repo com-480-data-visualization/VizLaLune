@@ -123,15 +123,18 @@
 
     // === Leaf groups ===
     const leaves = svg.selectAll(".leaf")
-      .data(root.leaves())
-      .join("g")
-      .attr("class", "leaf")
-      .attr("transform", d => `translate(${d.x0},${d.y0})`);
+    .data(root.leaves())
+    .join("g")
+    .attr("class", "leaf")
+    .attr("transform", d => `translate(${d.x0},${d.y0})`)
+    .style("opacity", 0); // Start invisible for animation
 
     // === Leaf rectangles ===
     leaves.append("rect")
-      .attr("width", d => Math.max(0, d.x1 - d.x0))
-      .attr("height", d => Math.max(0, d.y1 - d.y0))
+      .attr("width", 0)        // Start at width 0
+      .attr("height", 0)       // Start at height 0
+      .attr("x", d => (d.x1 - d.x0) / 2)  // Start at center
+      .attr("y", d => (d.y1 - d.y0) / 2)
       .attr("fill", d => color(d.parent.data.name))
       .attr("stroke", "white")
       .attr("stroke-width", 1.5)
@@ -356,6 +359,59 @@
           .text(" — " + name);
       });
     }
+
+   // === SCROLL-TRIGGERED ANIMATION ===
+   const sortedLeaves = root.leaves().sort((a, b) => b.value - a.value);
+   const totalLeaves = sortedLeaves.length;
+
+   function animateTreemap() {
+     // Reset to invisible state
+     leaves.style("opacity", 0);
+     leaves.selectAll("rect")
+       .attr("width", 0)
+       .attr("height", 0)
+       .attr("x", d => (d.x1 - d.x0) / 2)
+       .attr("y", d => (d.y1 - d.y0) / 2);
+
+     // Cascade from biggest to smallest
+     leaves.each(function(d) {
+       const rank = sortedLeaves.indexOf(d);
+       const delay = (rank / totalLeaves) * 1200; // spread over 1.2s total
+       const leaf = d3.select(this);
+
+       leaf.transition()
+         .delay(delay)
+         .duration(50)
+         .style("opacity", 1);
+
+       leaf.select("rect")
+         .transition()
+         .delay(delay)
+         .duration(700)
+         .ease(d3.easeCubicOut)
+         .attr("x", 0)
+         .attr("y", 0)
+         .attr("width", d => Math.max(0, d.x1 - d.x0))
+         .attr("height", d => Math.max(0, d.y1 - d.y0));
+     });
+   }
+
+   // Initial animation + replay on re-entry
+   const treemapEl = document.getElementById("treemap");
+   let treemapIsVisible = false;
+
+   const treemapObserver = new IntersectionObserver((entries) => {
+     entries.forEach(entry => {
+       if (entry.isIntersecting && !treemapIsVisible) {
+         treemapIsVisible = true;
+         animateTreemap();
+       } else if (!entry.isIntersecting && treemapIsVisible) {
+         treemapIsVisible = false;
+       }
+     });
+   }, { threshold: 0.2 });
+
+   treemapObserver.observe(treemapEl); 
 
   });
 
