@@ -5,7 +5,7 @@
 let selectedDiscipline = null;
 
 // Required to hardcode disciplines due to GitHub Pages not allowing directory listing!
-const disciplines = [
+const disciplinesList = [
     "Alpine-skiing",
     "Biathlon",
     "Bobsleigh",
@@ -28,7 +28,7 @@ const grid = d3.select('#discipline-grid');
 
 
 // For each image link, create a card with the image and a label
-disciplines.forEach(disciplineName => {
+disciplinesList.forEach(disciplineName => {
     const disciplineURL = `https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`; // Link maybe changed (done once already)
     const disciplineImgURL = `../ExtraResources/Disciplines/${disciplineName}.png`;
 
