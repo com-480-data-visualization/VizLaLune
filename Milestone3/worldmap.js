@@ -100,9 +100,10 @@ function parseDiscipline(d) {
 
 Promise.all([
   d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"),
-  d3.csv("../DataPreprocessing/athletes.csv"),
-  d3.json("countries_coords.json"),
-]).then(([world, athletes, coords]) => {
+  d3.csv("../DataPreprocessing/athletes.csv")
+]).then(([world, athletes]) => {
+
+  const coords = countriesCoords;
 
   window.mapCoords = coords;
   window.athletesData = athletes;
