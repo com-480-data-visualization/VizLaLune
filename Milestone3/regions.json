@@ -1,7 +1,0 @@
-{
-    "Europe": ["ALB","AND","ARM","AUT","AZE","BEL","BIH","BUL","BGR","CRO","HRV","CYP","CZE","DEN","DNK","EST","FIN","FRA","GEO","GER","DEU","GBR","GRE","HUN","ISL","IRL","ISR","ITA","KOS","LAT","LIE","LTU","LUX","MLT","MDA","MON","MCO","MNE","NED","NLD","NOR","POL","POR","PRT","ROU","SMR","SRB","SVK","SLO","SVN","SUI","CHE","SWE","TUR","UKR","AIN"],
-    "Americas": ["ARG","BOL","BRA","CAN","CHI","CHL","COL","ECU","HAI","JAM","MEX","PUR","TTO","URU","USA","VEN"],
-    "Asia": ["AFG","AZE","BLR","CHN","HKG","IND","IRI","IRN","JPN","KAZ","KGZ","KOR","KSA","SAU","LBN","MAS","MGL","PAK","PHI","SGP","THA","TPE","TWN","UAE","UZB"],
-    "Africa": ["AGO","ALG","DZA","BEN","EGY","ETH","KEN","MAD","MAR","NGR","NGA","RSA","ZAF"],
-    "Oceania": ["AUS","NZL"]
-  }

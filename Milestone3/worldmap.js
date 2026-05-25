@@ -102,8 +102,7 @@ Promise.all([
   d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"),
   d3.csv("../DataPreprocessing/athletes.csv"),
   d3.json("countries_coords.json"),
-  d3.json("regions.json")
-]).then(([world, athletes, coords, regions]) => {
+]).then(([world, athletes, coords]) => {
 
   window.mapCoords = coords;
   window.athletesData = athletes;
@@ -115,14 +114,14 @@ Promise.all([
 
   const maxAthletes = d3.max([...athletesByCountry.values()]);
 
-  // Scale correcte : blanc = beaucoup, bleu foncé = peu
+  // Scale
   const colorScale = d3.scaleSequential()
     .domain([maxAthletes, 0])    
     .interpolator(d3.interpolateBlues);
 
   const countries = topojson.feature(world, world.objects.countries);
 
-  // ── CARTE ──────────────────────────────────────────────────────────────
+  // ── MAP ──────────────────────────────────────────────────────────────
   const countryPaths = zoomG.append("g")
     .selectAll("path")
     .data(countries.features)
@@ -201,7 +200,7 @@ Promise.all([
       }
     });
 
-  // ── DOTS (dans zoomG) ──────────────────────────────────────────────────
+  // ── DOTS (in zoomG) ──────────────────────────────────────────────────
   const milanXY = projection([9.19, 45.46]);
   const dotsGroup = zoomG.append("g").attr("class", "dots");
 
@@ -231,7 +230,7 @@ Promise.all([
     .attr("fill", "rgba(255, 200, 50, 0.7)")
     .attr("stroke", "none");
 
-  // ── MARQUEUR MILAN (dans zoomG) ────────────────────────────────────────
+  // ── MARKER MILAN (in zoomG) ────────────────────────────────────────
   const milanG = zoomG.append("g")
     .attr("transform", `translate(${milanXY[0]}, ${milanXY[1]})`);
 
@@ -250,7 +249,7 @@ Promise.all([
     .style("fill", "white").style("font-size", "10px")
     .style("font-weight", "bold").text("Milano");
 
-  // ── LÉGENDE (dans fixedG) ──────────────────────────────────────────────
+  // ── LEGEND ──────────────────────────────────────────────
   const legend = fixedG.append("g")
     .attr("transform", `translate(20, ${mapHeight - 100})`);
 
@@ -263,7 +262,7 @@ Promise.all([
   const linearGradient = defs.append("linearGradient")
     .attr("id", "legend-gradient");
 
-  // Légende : bleu foncé = peu, blanc = beaucoup
+  // Legend
   linearGradient.selectAll("stop")
     .data([
       { offset: "0%", color: colorScale(maxAthletes) },   
@@ -352,11 +351,8 @@ Promise.all([
       });
   });
 
-  // ── FILTRE PAR RÉGION ──────────────────────────────────────────────────
-  const countryToRegion = {};
-  Object.entries(regions).forEach(([region, codes]) => {
-    codes.forEach(code => countryToRegion[code] = region);
-  });
+  // ── FILTER PER RÉGION ──────────────────────────────────────────────────
+  const countryToRegion = countryToContinent;
 
   function filterByRegion(region) {
     d3.selectAll(".region-btn").classed("active", false);
@@ -389,7 +385,7 @@ Promise.all([
 
   console.log("Athlètes:", athletes.length, "| Dots:", allDots.length);
 
-  // ── FILTRE GLOBAL PAR PAYS ─────────────────────────────────────────────
+  // ── FILTRE GLOBAL PER COUNTRY ─────────────────────────────────────────────
   window.highlightCountryOnMap = function(countryName) {
     if (!countryName) {
       countryPaths
@@ -446,7 +442,7 @@ Promise.all([
       .attr("opacity", d => d.code === code ? 1 : 0.05);
   };
 
-  // ── FILTRE GLOBAL PAR DISCIPLINE ───────────────────────────────────────
+  // ── FILTER GLOBAL PER DISCIPLINE ───────────────────────────────────────
   window.filterMapByDiscipline = function(discipline) {
     if (!discipline) {
       countryPaths
