@@ -305,8 +305,8 @@
     d3.select("#treemap")
       .append("div")
       .style("text-align", "center")
-      .style("font-size", "10px")
-      .style("color", "#aaa")
+      .style("font-size", "20px")
+      .style("color", "#000000")
       .style("margin-top", "4px")
       .style("padding-left", "8px")
       .text("* Area ∝ √athletes");

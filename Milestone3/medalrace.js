@@ -194,9 +194,9 @@
             d3.select(this).attr("opacity", 0.8).attr("stroke", "black").attr("stroke-width", 2);
             tooltip.style("opacity", 1).html(`
               <strong>${d.data.country}</strong><br>
-              🥇 Gold: ${d.data.GOLD}<br>
-              🥈 Silver: ${d.data.SILVER}<br>
-              🥉 Bronze: ${d.data.BRONZE}<br>
+              Gold: ${d.data.GOLD}<br>
+              Silver: ${d.data.SILVER}<br>
+              Bronze: ${d.data.BRONZE}<br>
               <strong>Total: ${d.data.total}</strong>
             `);
           })
@@ -221,6 +221,8 @@
       labels.enter()
         .append("text")
         .attr("class", "total-label")
+        .attr("x", d => x(d.total) + 10)        // So numbers do not appear out of now where on figure top left
+        .attr("y", d => y(d.country) + y.bandwidth() / 2 + 5)  
         .merge(labels)
         .transition().duration(700)
         .attr("x", d => x(d.total) + 10)
@@ -259,15 +261,15 @@
     // =============================
     container
     .append("button")
-    .text("▶ Replay")
+    .text("↺ Replay")
     .style("display", "block")
     .style("margin", "16px auto 0")
     .style("padding", "8px 28px")
     .style("font-size", "14px")
     .style("cursor", "pointer")
-    .style("border", "none")
-    .style("border-radius", "8px")
-    .style("background", "#4e79a7")
+    .style("border", "2px solid #1295af")
+    .style("border-radius", "12px")
+    .style("background", "#091f36")
     .style("color", "white")
     .style("font-weight", "700")
     .style("letter-spacing", "0.5px")
@@ -275,7 +277,8 @@
       resetRace();
       startRace();
     });
-  
+
+
     // =============================
   // AUTO-START / RESTART WHEN SCROLLED INTO VIEW
   // =============================

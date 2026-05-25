@@ -2,13 +2,15 @@
 // Each bubble has a text and a size
 const bubblesData = [
     { text: "Most geographically expansive Games in history.", r: 95, vx: -1.75, vy: 1.75 },
-    { text: "Nordic Combined is the only male-only discipline.", r: 115, vx: 1.5, vy: 1.5 },
+    { text: "Nordic Combined is a male-only discipline.", r: 115, vx: 1.5, vy: 1.5 },
     { text: "Most gender equal Games! 47% of female participants.", r: 120, vx: -1.25, vy: 1.25 },
     { text: "Africa, Oceania, and Neutral athletes combined represent less than 4% of all competitors.", r: 140, vx: 1.0, vy: -1.0 },
     { text: "European competitors make up more than 65% of all competitors.", r: 120, vx: 1.5, vy: -1.5 },
     { text: "Bobsleigh's gender gap stems from its greater number of male team events compared to women's individual events.", r: 150, vx: -1.0, vy: -1.0 },
-    { text: "The USA leads with the biggest delegation (235 athletes) — and one of the most gender-balanced too, with 49.8% women.", r: 130, vx: 1.25, vy: -1.25 },
-    { text: "Cross-Country Skiing, Ice Hockey and Speed Skating dominate in athlete count, they draw by far the most competitors", r: 90, vx: 1.75, vy: -1.75 },
+    { text: "The USA leads with the biggest delegation (235 athletes) and one of the most gender-balanced too, with 49.8% women.", r: 130, vx: 1.25, vy: -1.25 },
+    { text: "Europe is male-dominated with 56% of males vs. 44% females.", r: 95, vx: 1.75, vy: -1.75 },
+    { text: "Ice Hockey, Alpine Skiing and Cross-Country Skiing (18.75% of disciplines) represent more than 38% of athletes", r: 140, vx: 1.75, vy: -1.75 },
+    { text: "USA and Canada make up more than 89% of all American athletes.", r: 100, vx: -1.5, vy: 1.5 },
 ];
 
 // === Box dimensions ===
@@ -23,7 +25,7 @@ const svg = d3.select('#conclusion-bubbles')
 
 // === Give each bubble a starting position ===
 bubblesData.forEach((d, i) => {
-    d.x = (i + 1) * 140;   // Spread horizontally like before
+    d.x = (i + 1) * 100;   // Spread horizontally like before
     d.y = boxHeight / 2;    // All start at mid-height
 });
 

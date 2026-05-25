@@ -107,10 +107,10 @@ body {
     color: white;
     border: 2px solid #1295af;
     border-radius: 12px;
-    padding: 24px 40px;
+    padding: 12px 20px;
     top: 20px;
     right: 20px;
-    font-size: 30px;
+    font-size: 22px;
     flex-direction: column;
     align-items: center;
     z-index: 10000; /* To place it above the venue map + extra to ensure above anything else */
@@ -129,9 +129,9 @@ body {
     color: white;
     border: 1px solid #1295af;
     border-radius: 50%; /* Circle */
-    width: 36px;
-    height: 36px;
-    font-size: 22px;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
     cursor: pointer;
 }
 
@@ -144,7 +144,7 @@ body {
     background-color: transparent;
     border: none;
     color: white;
-    font-size: 30px;
+    font-size: 22px;
     text-align: center;
     outline: none;
     width: 100%;
@@ -189,7 +189,7 @@ body {
     background-color: transparent;
     border: none;
     color: white;
-    font-size: 30px;
+    font-size: 22px;
     text-align: center;
     outline: none;
     width: 100%;
@@ -526,9 +526,9 @@ tbody tr:hover { /* Apply style for hovering over a row in the table body */
     /* == TREE MAP ==*/
 
 #treemap {
-    width: 100vw;
+    width: 90vw;
     height: auto;
-    margin: 20px calc(-50vw + 50%);
+    margin: 20px auto;
     border-radius: 12px;
     overflow: hidden;
 }
