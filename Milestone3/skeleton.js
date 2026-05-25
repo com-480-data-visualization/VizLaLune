@@ -34,6 +34,7 @@ function resetFilters() {
     }
     if (window.filterMapByDiscipline) filterMapByDiscipline(null);
     if (window.highlightCountryOnMap) highlightCountryOnMap(null);
+    if (window.highlightDisciplineOnTreemap) highlightDisciplineOnTreemap(null);
 }
 
 // Discipline filter selection
@@ -68,7 +69,8 @@ function filterDisciplineSuggestions(value) {
             selectDisciplineCard(discipline);
         
             if (window.athletesData) highlightDiscipline(discipline);
-            if (window.filterMapByDiscipline) filterMapByDiscipline(discipline); // ← ajoute cette ligne
+            if (window.filterMapByDiscipline) filterMapByDiscipline(discipline); 
+            if (window.highlightDisciplineOnTreemap) highlightDisciplineOnTreemap(discipline);
         
             let formattedName = discipline.replace(/ /g, '-')
                 .toLowerCase()
@@ -165,6 +167,8 @@ document.getElementById('badge-discipline-input').addEventListener('input', func
         selectDisciplineCard(null);
         // Venue map: reset zoom to initial view
         resetMapView();
+        // Reset treemap discipline highlight
+        if (window.highlightDisciplineOnTreemap) highlightDisciplineOnTreemap(null);
     }
 });
 

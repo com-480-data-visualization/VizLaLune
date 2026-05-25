@@ -76,15 +76,15 @@
 
     // === Hierarchy with sqrt scale ===
     const hierarchyData = {
-      name: "Olympics",
-      children: Array.from(disciplineMap, ([discipline, events]) => ({
-        name: discipline,
-        children: Array.from(events, ([event, count]) => ({
-          name: event,
-          rawValue: count,
-          value: Math.sqrt(count)
+        name: "Olympics",
+        children: Array.from(disciplineMap, ([discipline, events]) => ({
+            name: discipline,
+            children: Array.from(events, ([event, count]) => ({
+                name: event,
+                rawValue: count,
+                value: Math.sqrt(count)
+            }))
         }))
-      }))
     };
 
     const root = d3.hierarchy(hierarchyData)
@@ -361,57 +361,85 @@
     }
 
    // === SCROLL-TRIGGERED ANIMATION ===
-   const sortedLeaves = root.leaves().sort((a, b) => b.value - a.value);
-   const totalLeaves = sortedLeaves.length;
+    const sortedLeaves = root.leaves().sort((a, b) => b.value - a.value);
+    const totalLeaves = sortedLeaves.length;
 
-   function animateTreemap() {
+    function animateTreemap() {
      // Reset to invisible state
-     leaves.style("opacity", 0);
-     leaves.selectAll("rect")
-       .attr("width", 0)
-       .attr("height", 0)
-       .attr("x", d => (d.x1 - d.x0) / 2)
-       .attr("y", d => (d.y1 - d.y0) / 2);
+      leaves.style("opacity", 0);
+      leaves.selectAll("rect")
+        .interrupt("grow")
+        .attr("width", 0)
+        .attr("height", 0)
+        .attr("x", d => (d.x1 - d.x0) / 2)
+        .attr("y", d => (d.y1 - d.y0) / 2);
 
      // Cascade from biggest to smallest
-     leaves.each(function(d) {
-       const rank = sortedLeaves.indexOf(d);
+      leaves.each(function(d) {
+        const rank = sortedLeaves.indexOf(d);
        const delay = (rank / totalLeaves) * 1200; // spread over 1.2s total
-       const leaf = d3.select(this);
+        const leaf = d3.select(this);
 
-       leaf.transition()
-         .delay(delay)
-         .duration(50)
-         .style("opacity", 1);
+        leaf.transition("fade")
+          .delay(delay)
+          .duration(50)
+          .style("opacity", 1);
 
-       leaf.select("rect")
-         .transition()
-         .delay(delay)
-         .duration(700)
-         .ease(d3.easeCubicOut)
-         .attr("x", 0)
-         .attr("y", 0)
-         .attr("width", d => Math.max(0, d.x1 - d.x0))
-         .attr("height", d => Math.max(0, d.y1 - d.y0));
-     });
-   }
+        leaf.select("rect")
+          .transition("grow")
+          .delay(delay)
+          .duration(700)
+          .ease(d3.easeCubicOut)
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", d => Math.max(0, d.x1 - d.x0))
+          .attr("height", d => Math.max(0, d.y1 - d.y0));
+      });
+    }
 
    // Initial animation + replay on re-entry
-   const treemapEl = document.getElementById("treemap");
-   let treemapIsVisible = false;
+    const treemapEl = document.getElementById("treemap");
+    let treemapIsVisible = false;
 
-   const treemapObserver = new IntersectionObserver((entries) => {
-     entries.forEach(entry => {
-       if (entry.isIntersecting && !treemapIsVisible) {
-         treemapIsVisible = true;
-         animateTreemap();
-       } else if (!entry.isIntersecting && treemapIsVisible) {
-         treemapIsVisible = false;
-       }
-     });
-   }, { threshold: 0.2 });
+    const treemapObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !treemapIsVisible) {
+          treemapIsVisible = true;
+          animateTreemap();
+        } else if (!entry.isIntersecting && treemapIsVisible) {
+          treemapIsVisible = false;
+        }
+      });
+    }, { threshold: 0.2 });
 
-   treemapObserver.observe(treemapEl); 
+    treemapObserver.observe(treemapEl); 
+
+    // === FILTER BY DISCIPLINE ===
+    window.highlightDisciplineOnTreemap = function(discipline) {
+        if (!discipline) {
+            // Restore all
+            svg.selectAll(".discipline-bg")
+                .transition().duration(400)
+                .attr("opacity", 0.10);
+            svg.selectAll(".leaf")
+                .transition().duration(400)
+                .style("opacity", 1);
+            svg.selectAll(".discipline-label")
+                .transition().duration(400)
+                .attr("opacity", 1);
+        } else {
+            // Fade other disciplines
+            svg.selectAll(".discipline-bg")
+                .transition().duration(400)
+                .attr("opacity", d => d.data.name === discipline ? 0.10 : 0.02);
+            svg.selectAll(".leaf")
+                .transition().duration(400)
+                .style("opacity", d => d.parent.data.name === discipline ? 1 : 0.05);
+            svg.selectAll(".discipline-label")
+                .transition().duration(400)
+                .attr("opacity", d => d.data.name === discipline ? 1 : 0.15);
+        }
+    };
 
   });
 
