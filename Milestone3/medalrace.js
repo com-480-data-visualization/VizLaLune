@@ -241,19 +241,25 @@
     let activeInterval = null;
   
     function startRace() {
-      activeInterval = d3.interval(() => {
-        if (currentIndex >= uniqueDates.length) {
-          activeInterval.stop();
-          return;
-        }
-        const currentDate = uniqueDates[currentIndex];
-        dateLabel.text(new Date(currentDate).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric"
-        }));
-        updateChart(currentDate);
-        currentIndex++;
-      }, 1000);
+        activeInterval = d3.interval(() => {
+            if (currentIndex >= uniqueDates.length) {
+                activeInterval.stop();
+                return;
+            }
+            const currentDate = uniqueDates[currentIndex];
+            dateLabel.text(new Date(currentDate).toLocaleDateString("en-US", {
+                month: "short", day: "numeric"
+            }));
+            updateChart(currentDate);
+
+            // Update slider
+            slider.property("value", currentIndex);
+            sliderLabel.text(new Date(currentDate).toLocaleDateString("en-US", {
+                month: "short", day: "numeric"
+            }));
+
+            currentIndex++;
+        }, 1000);
     }
   
     // =============================
@@ -310,6 +316,69 @@
             }
         });
 
+    // =============================
+    // SLIDER
+    // =============================
+    const sliderContainer = container.append("div")
+        .style("display", "flex")
+        .style("align-items", "center")
+        .style("gap", "10px")
+        .style("margin", "12px auto 0")
+        .style("width", "80%");
+
+    const sliderLabel = sliderContainer.append("span")
+        .style("color", "#666")
+        .style("font-size", "18px")
+        .style("min-width", "60px")
+        .text("Feb 7");
+
+    const slider = sliderContainer.append("input")
+        .attr("type", "range")
+        .attr("min", 0)
+        .attr("max", uniqueDates.length - 1)
+        .attr("value", 0)
+        .style("flex", "1")
+        .style("cursor", "pointer")
+        .style("accent-color", "#1295af");
+
+    sliderContainer.append("span")
+        .style("color", "#666")
+        .style("font-size", "18px")
+        .style("min-width", "60px")
+        .text("Feb 22");
+
+    // User dragging
+    slider.on("input", function() {
+        const idx = +this.value; // idx corresponds to the date index in uniqueDates
+
+        // Stop race
+        if (activeInterval) activeInterval.stop();
+        isPaused = true;
+        playPauseBtn.text("▶ Play");
+
+        // Reset to selected date
+        medalState.clear();
+        chartGroup.selectAll("*").remove();
+        svg.selectAll(".total-label").remove();
+        xAxis.selectAll("*").remove();
+        yAxis.selectAll("*").remove();
+        grid.selectAll("*").remove();
+
+        // Replay from selected date
+        for (let i = 0; i <= idx; i++) {
+            updateChart(uniqueDates[i]);
+        }
+        currentIndex = idx + 1;
+
+        // Met à jour le label de date
+        dateLabel.text(new Date(uniqueDates[idx]).toLocaleDateString("en-US", {
+            month: "short", day: "numeric"
+        }));
+
+        sliderLabel.text(new Date(uniqueDates[idx]).toLocaleDateString("en-US", {
+            month: "short", day: "numeric"
+        }));
+    });
 
     // =============================
   // AUTO-START / RESTART WHEN SCROLLED INTO VIEW
