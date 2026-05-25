@@ -384,7 +384,7 @@ Promise.all([
   d3.select("#btn-africa").on("click", () => filterByRegion("Africa"));
   d3.select("#btn-oceania").on("click", () => filterByRegion("Oceania"));
 
-  console.log("Athlètes:", athletes.length, "| Dots:", allDots.length);
+  // console.log("Athlètes:", athletes.length, "| Dots:", allDots.length);
 
   // ── FILTRE GLOBAL PER COUNTRY ─────────────────────────────────────────────
   window.highlightCountryOnMap = function(countryName) {
