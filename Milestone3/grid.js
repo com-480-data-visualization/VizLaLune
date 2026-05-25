@@ -4,7 +4,7 @@
 // To memorize the selected discipline
 let selectedDiscipline = null;
 
-fetch('./ExtraResources/Disciplines/') // Fetch at this URL from server
+fetch('../ExtraResources/Disciplines/') // Fetch at this URL from server
     .then(response => response.text()) // Transform the body: ReadableStream response into HTML text
     .then(html => { // html = response.text()
 
@@ -25,7 +25,7 @@ fetch('./ExtraResources/Disciplines/') // Fetch at this URL from server
         links.forEach(imgURL => {
             const disciplineName = imgURL.split('/').pop().replace('.png', '');
             const disciplineURL = `https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`; // Link maybe changed (done once already)
-            const disciplineImgURL = `./ExtraResources/Disciplines/${disciplineName}.png`;
+            const disciplineImgURL = `../ExtraResources/Disciplines/${disciplineName}.png`;
 
             // == Generate card ==
             const card = grid.append('div')
