@@ -257,26 +257,58 @@
     }
   
     // =============================
-    // REPLAY BUTTON
+    // REPLAY + PLAY/PAUSE BUTTONS
     // =============================
-    container
-    .append("button")
-    .text("↺ Replay")
-    .style("display", "block")
-    .style("margin", "16px auto 0")
-    .style("padding", "8px 28px")
-    .style("font-size", "14px")
-    .style("cursor", "pointer")
-    .style("border", "2px solid #1295af")
-    .style("border-radius", "12px")
-    .style("background", "#091f36")
-    .style("color", "white")
-    .style("font-weight", "700")
-    .style("letter-spacing", "0.5px")
-    .on("click", () => {
-      resetRace();
-      startRace();
-    });
+    const btnContainer = container.append("div")
+        .style("display", "flex")
+        .style("justify-content", "center")
+        .style("gap", "10px")
+        .style("margin-top", "16px");
+
+    btnContainer
+        .append("button")
+        .text("↺ Replay")
+        .style("padding", "8px 28px")
+        .style("font-size", "14px")
+        .style("cursor", "pointer")
+        .style("border", "2px solid #1295af")
+        .style("border-radius", "12px")
+        .style("background", "#091f36")
+        .style("color", "white")
+        .style("font-weight", "700")
+        .style("letter-spacing", "0.5px")
+        .on("click", () => {
+            resetRace();
+            startRace();
+            playPauseBtn.text("⏸ Pause");
+            isPaused = false;
+        });
+
+    let isPaused = false;
+
+    const playPauseBtn = btnContainer
+        .append("button")
+        .text("⏸ Pause") // Emoji because could not find better
+        .style("padding", "8px 28px")
+        .style("font-size", "14px")
+        .style("cursor", "pointer")
+        .style("border", "2px solid #1295af")
+        .style("border-radius", "12px")
+        .style("background", "#091f36")
+        .style("color", "white")
+        .style("font-weight", "700")
+        .style("letter-spacing", "0.5px")
+        .on("click", () => {
+            if (isPaused) {
+                isPaused = false;
+                playPauseBtn.text("⏸ Pause");
+                startRace();
+            } else {
+                isPaused = true;
+                playPauseBtn.text("▶ Play");
+                if (activeInterval) activeInterval.stop();
+            }
+        });
 
 
     // =============================
