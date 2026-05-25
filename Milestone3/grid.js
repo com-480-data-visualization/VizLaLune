@@ -4,92 +4,96 @@
 // To memorize the selected discipline
 let selectedDiscipline = null;
 
-fetch('../ExtraResources/Disciplines/') // Fetch at this URL from server
-    .then(response => response.text()) // Transform the body: ReadableStream response into HTML text
-    .then(html => { // html = response.text()
+// Required to hardcode disciplines due to GitHub Pages not allowing directory listing!
+const disciplines = [
+    "Alpine-skiing",
+    "Biathlon",
+    "Bobsleigh",
+    "Cross-country-skiing",
+    "Curling",
+    "Figure-skating",
+    "Freestyle-skiing",
+    "Ice-hockey",
+    "Luge",
+    "Nordic-combined",
+    "Short-track-speed-skating",
+    "Skeleton",
+    "Ski-jumping",
+    "Ski-mountaineering",
+    "Snowboard",
+    "Speed-skating"
+];
 
-        // Required to enable querySelectorAll which transforms HTML string into DOM tree
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html'); 
+const grid = d3.select('#discipline-grid');
 
-        // Find all <a> tags in the directory listing,
-        // extract their href URLs and keep only .png image links
-        const links = [...doc.querySelectorAll('a')]
-            .map(a => a.href)
-            .filter(href => href.endsWith('.png'));
 
-        // Select grid container
-        const grid = d3.select('#discipline-grid');
+// For each image link, create a card with the image and a label
+disciplines.forEach(disciplineName => {
+    const disciplineURL = `https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`; // Link maybe changed (done once already)
+    const disciplineImgURL = `../ExtraResources/Disciplines/${disciplineName}.png`;
 
-        // For each image link, create a card with the image and a label
-        links.forEach(imgURL => {
-            const disciplineName = imgURL.split('/').pop().replace('.png', '');
-            const disciplineURL = `https://www.olympics.com/en/sports/${disciplineName.toLowerCase()}`; // Link maybe changed (done once already)
-            const disciplineImgURL = `../ExtraResources/Disciplines/${disciplineName}.png`;
+    // == Generate card ==
+    const card = grid.append('div')
+        .attr('class', 'discipline-card');
 
-            // == Generate card ==
-            const card = grid.append('div')
-                .attr('class', 'discipline-card');
+    card.append('img')
+        .attr('src', disciplineImgURL)
+        .attr('alt', disciplineName);
 
-            card.append('img')
-                .attr('src', disciplineImgURL)
-                .attr('alt', disciplineName);
+    // Cross-country special case handling
+    if (disciplineName === "Cross-country-skiing"){
+        card.append('text')
+            .text("Cross-Country Skiing");
+    } else {
+        card.append('text')
+            .text(disciplineName.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
+    }
 
-            // Cross-country special case handling
+    // == Click event ==
+        // Single click: zoom map + show podium below grid
+    card.on('click', () => {
+        const badge = document.getElementById('badge-discipline-input')
+
+        // Remove 'selected' class from previously selected discipline
+        if (selectedDiscipline){
+            selectedDiscipline.classed('selected', false);
+        }
+
+        // Click back on selected card
+        if (selectedDiscipline === card) {
+            selectedDiscipline = null; // Deselect if clicking the same card
+            badge.value = ''; // Reset badge text
+            updateBubbles(null);
+            // Hide podium section when deselecting
+            document.getElementById('podium').style.display = 'none';
+            renderEventChart("No discipline selected");
+        // Click on a different card
+        } else {
+            card.classed('selected', true); // Add 'selected' class to clicked card
+            selectedDiscipline = card; // Update selected discipline
+            zoomToDiscipline(disciplineName);
+
+            let cleanDisciplineName; // To filter properly athletes.csv in bubbles.js
+
             if (disciplineName === "Cross-country-skiing"){
-                card.append('text')
-                    .text("Cross-Country Skiing");
+                cleanDisciplineName = "Cross-Country Skiing";
             } else {
-                card.append('text')
-                    .text(disciplineName.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
+                cleanDisciplineName = disciplineName
+                    .replace(/-/g, ' ')
+                    .replace(/\b\w/g, c => c.toUpperCase());
             }
 
-            // == Click event ==
-                // Single click: zoom map + show podium below grid
-            card.on('click', () => {
-                const badge = document.getElementById('badge-discipline-input')
+            badge.value = cleanDisciplineName;
+            updateBubbles(cleanDisciplineName);
 
-                // Remove 'selected' class from previously selected discipline
-                if (selectedDiscipline){
-                    selectedDiscipline.classed('selected', false);
-                }
+            // Show podium inline below the grid
+            showPodium(cleanDisciplineName, disciplineURL, disciplineImgURL);
 
-                // Click back on selected card
-                if (selectedDiscipline === card) {
-                    selectedDiscipline = null; // Deselect if clicking the same card
-                    badge.value = ''; // Reset badge text
-                    updateBubbles(null);
-                    // Hide podium section when deselecting
-                    document.getElementById('podium').style.display = 'none';
-                    renderEventChart("No discipline selected");
-                // Click on a different card
-                } else {
-                    card.classed('selected', true); // Add 'selected' class to clicked card
-                    selectedDiscipline = card; // Update selected discipline
-                    zoomToDiscipline(disciplineName);
-
-                    let cleanDisciplineName; // To filter properly athletes.csv in bubbles.js
-
-                    if (disciplineName === "Cross-country-skiing"){
-                        cleanDisciplineName = "Cross-Country Skiing";
-                    } else {
-                        cleanDisciplineName = disciplineName
-                            .replace(/-/g, ' ')
-                            .replace(/\b\w/g, c => c.toUpperCase());
-                    }
-
-                    badge.value = cleanDisciplineName;
-                    updateBubbles(cleanDisciplineName);
-
-                    // Show podium inline below the grid
-                    showPodium(cleanDisciplineName, disciplineURL, disciplineImgURL);
-
-                    // Update event chart for this discipline
-                    renderEventChart(cleanDisciplineName);
-                }
-            });
-        });
+            // Update event chart for this discipline
+            renderEventChart(cleanDisciplineName);
+        }
     });
+});
 
 
 // Called from map.js when a discipline marker is clicked
