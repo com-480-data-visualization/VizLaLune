@@ -71,7 +71,6 @@ function updateBubbles(selectedDiscipline = null, selectedCountry = null) {
 
     // === Compute Total Athletes ===
     totalAthletes = filteredAthletes.length;
-    console.log("Total Athletes:", totalAthletes);
 
     // === Filter venues on discipline ===
     let filteredVenues = venuesDataGlobal;
@@ -95,8 +94,6 @@ function updateBubbles(selectedDiscipline = null, selectedCountry = null) {
             })
         );
 
-        console.log("Disciplines of selected country:", disciplinesOfSelectedCountry);
-
         filteredVenues = filteredVenues.filter(venue => {
             return venue.disciplines.some(d => disciplinesOfSelectedCountry.has(d));
         });
@@ -104,7 +101,6 @@ function updateBubbles(selectedDiscipline = null, selectedCountry = null) {
 
     // === Compute Participating Countries ===
     participatingCountries = new Set(filteredAthletes.map(d => d.country_code)).size;
-    console.log("Participating Countries:", participatingCountries);
 
     // === Compute Disciplines ===
     const disciplines = new Set(
@@ -119,7 +115,6 @@ function updateBubbles(selectedDiscipline = null, selectedCountry = null) {
                 }
             })
     ).size;
-    console.log("Disciplines:", disciplines);
 
     // === Compute Events ===
     const events = new Set(
@@ -137,11 +132,9 @@ function updateBubbles(selectedDiscipline = null, selectedCountry = null) {
                 }
             })
     ).size;
-    console.log("Events:", events);
 
     // === Compute Venues ===
     venues = filteredVenues.length;
-    console.log("Venues:", venues);
 
 
     // All rest of code put here to ensure it get CSV data
