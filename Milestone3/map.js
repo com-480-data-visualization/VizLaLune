@@ -7,7 +7,7 @@
 function roundedDisciplineIcon(disciplineName, size, anchor) {
     return L.divIcon({
         className: '',
-        html: `<img src="../ExtraRessources/Disciplines/${disciplineName}.png" 
+        html: `<img src="../ExtraResources/Disciplines/${disciplineName}.png" 
                 style="width:${size[0]}px; height:${size[1]}px; 
                     border-radius: 4px;">`,
         iconSize: size,
@@ -75,7 +75,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
         // Need to move it here to avoid race condition where creating markers before the data is loaded
         // Generate initial icon
         const icon = L.icon({
-            iconUrl: '../ExtraRessources/Venues/' + venue.image,
+            iconUrl: '../ExtraResources/Venues/' + venue.image,
             iconSize: [initialIconWidth, initialIconHeight],
             popupAnchor: initialPopupAnchor
         });
@@ -122,7 +122,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
         marker.on('mouseover', function() {
             marker.isHovering = true;
             marker.setIcon(L.icon({
-                iconUrl: '../ExtraRessources/Venues/' + venue.image,
+                iconUrl: '../ExtraResources/Venues/' + venue.image,
                 iconSize: setIconSizeHover(map.getZoom()),
                 popupAnchor: setPopupAnchorHover(map.getZoom())
             }));
@@ -132,7 +132,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
         marker.on('mouseout', function() {
             marker.isHovering = false;
             marker.setIcon(L.icon({
-                iconUrl: '../ExtraRessources/Venues/' + venue.image,
+                iconUrl: '../ExtraResources/Venues/' + venue.image,
                 iconSize: setIconSize(map.getZoom()),
                 popupAnchor: setPopupAnchor(map.getZoom())
             }));
@@ -186,7 +186,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker11.on('click', function() {
                         const disciplineName = marker.disciplinesList[0];
                         const disciplineURL = marker.disciplineURL[0];
-                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
+                        const disciplineImage = '../ExtraResources/Disciplines/' + marker.disciplinesList[0] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
                         badge.value = cleanDisciplineName;
@@ -236,7 +236,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker21.on('click', function() {
                         const disciplineName = marker.disciplinesList[0];
                         const disciplineURL = marker.disciplineURL[0];
-                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
+                        const disciplineImage = '../ExtraResources/Disciplines/' + marker.disciplinesList[0] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
                         badge.value = cleanDisciplineName;
@@ -247,7 +247,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker22.on('click', function() {
                         const disciplineName = marker.disciplinesList[1];
                         const disciplineURL = marker.disciplineURL[1];
-                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png';
+                        const disciplineImage = '../ExtraResources/Disciplines/' + marker.disciplinesList[1] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
                         badge.value = cleanDisciplineName;
@@ -314,7 +314,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker31.on('click', function() {
                         const disciplineName = marker.disciplinesList[0];
                         const disciplineURL = marker.disciplineURL[0];
-                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[0] + '.png';
+                        const disciplineImage = '../ExtraResources/Disciplines/' + marker.disciplinesList[0] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
                         badge.value = cleanDisciplineName;
@@ -325,7 +325,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker32.on('click', function() {
                         const disciplineName = marker.disciplinesList[1];
                         const disciplineURL = marker.disciplineURL[1];
-                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[1] + '.png';
+                        const disciplineImage = '../ExtraResources/Disciplines/' + marker.disciplinesList[1] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
                         badge.value = cleanDisciplineName;
@@ -336,7 +336,7 @@ d3.csv("../DataPreprocessing/venues.csv").then(data => {
                     marker.disciplineMarker33.on('click', function() {
                         const disciplineName = marker.disciplinesList[2];
                         const disciplineURL = marker.disciplineURL[2];
-                        const disciplineImage = '../ExtraRessources/Disciplines/' + marker.disciplinesList[2] + '.png';
+                        const disciplineImage = '../ExtraResources/Disciplines/' + marker.disciplinesList[2] + '.png';
                         const cleanDisciplineName = cleanMapDisciplineName(disciplineName);
                         showPodium(cleanDisciplineName, disciplineURL, disciplineImage);
                         badge.value = cleanDisciplineName;
@@ -424,7 +424,7 @@ function updateDisciplineMarkersZoom(marker) {
 map.on('zoom', function() {
     markers.forEach((marker, index) => {
         marker.setIcon(L.icon({
-            iconUrl: '../ExtraRessources/Venues/' + venuesData[index].image,
+            iconUrl: '../ExtraResources/Venues/' + venuesData[index].image,
             iconSize: marker.isHovering ? setIconSizeHover(map.getZoom()) : setIconSize(map.getZoom()),
             popupAnchor: marker.isHovering ? setPopupAnchorHover(map.getZoom()) : setPopupAnchor(map.getZoom())
         }));

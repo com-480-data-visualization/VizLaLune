@@ -75,7 +75,7 @@ function filterDisciplineSuggestions(value) {
                 .replace(/^\w/, c => c.toUpperCase());
         
             zoomToDiscipline(formattedName);
-            showPodium(discipline, `https://www.olympics.com/en/sports/${formattedName.toLowerCase()}`, `/ExtraRessources/Disciplines/${formattedName}.png`);
+            showPodium(discipline, `https://www.olympics.com/en/sports/${formattedName.toLowerCase()}`, `/ExtraResources/Disciplines/${formattedName}.png`);
             renderEventChart(discipline);
         };
         suggestions.appendChild(item);
