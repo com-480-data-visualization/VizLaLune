@@ -35,9 +35,6 @@ VizLaLune/
 ├── DataExploration/            # Initial data exploration notebooks
 ├── DataPreprocessing/          # Python scripts + cleaned CSVs
 ├── ExtraResources/             # Images used in the website
-│   ├── Disciplines/            # Pictograms for each of the 16 disciplines
-│   ├── Extra/                  # Banners and logos
-│   └── Venues/                 # Photos of the Olympic venues
 ├── Milestone2/                 # M2 skeleton website
 └── Milestone3/                 # Final website (M3)
     ├── index.html              # Main page
