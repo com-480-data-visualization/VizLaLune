@@ -35,6 +35,9 @@ function resetFilters() {
     if (window.filterMapByDiscipline) filterMapByDiscipline(null);
     if (window.highlightCountryOnMap) highlightCountryOnMap(null);
     if (window.highlightDisciplineOnTreemap) highlightDisciplineOnTreemap(null);
+    if (window.filterMedalRaceByDiscipline) filterMedalRaceByDiscipline(null);
+    if (window.highlightCountryOnMedalRace) highlightCountryOnMedalRace(null);
+    if (window.filterTreemapByCountry) filterTreemapByCountry(null);
 }
 
 // Discipline filter selection
@@ -71,7 +74,8 @@ function filterDisciplineSuggestions(value) {
             if (window.athletesData) highlightDiscipline(discipline);
             if (window.filterMapByDiscipline) filterMapByDiscipline(discipline); 
             if (window.highlightDisciplineOnTreemap) highlightDisciplineOnTreemap(discipline);
-        
+            if (window.filterMedalRaceByDiscipline) filterMedalRaceByDiscipline(discipline);
+
             let formattedName = discipline.replace(/ /g, '-')
                 .toLowerCase()
                 .replace(/^\w/, c => c.toUpperCase());
@@ -114,15 +118,18 @@ function filterCountrySuggestions(value) {
             suggestions.style.display = 'none';
             updateBubbles(disciplineBadge.value, country);
             recomputeAndRender(country);
-            // Update bar chart
-            if (window.athletesData) {
-                const code = Object.keys(countryNames).find(k => countryNames[k] === country);
-                updateBarChart(window.athletesData, code || null);
-    }
 
-    // Highlight sur la map
-    if (window.highlightCountryOnMap) highlightCountryOnMap(country);
-};
+            // Get country code — declared outside the if block so it's in scope everywhere
+            const code = Object.keys(countryCodeToName).find(k => countryCodeToName[k] === country);
+
+            if (window.athletesData) {
+                updateBarChart(window.athletesData, code || null);
+            }
+
+            if (window.highlightCountryOnMap) highlightCountryOnMap(country);
+            if (window.highlightCountryOnMedalRace) highlightCountryOnMedalRace(country);
+            if (window.filterTreemapByCountry) filterTreemapByCountry(code || null);
+        };
         suggestions.appendChild(item);
     });
 }
@@ -143,11 +150,10 @@ document.addEventListener('click', (e) => {
 // Reset everything when country filter field is cleared
 document.getElementById('badge-country-input').addEventListener('input', function() {
     if (this.value.trim() === '') {
-        // Bar chart reset
         if (window.athletesData) updateBarChart(window.athletesData, null);
-        // World map country highlight reset
         if (window.highlightCountryOnMap) highlightCountryOnMap(null);
-        // Bubbles reset (recompute with no country filter, keep discipline filter if any)
+        if (window.highlightCountryOnMedalRace) highlightCountryOnMedalRace(null);
+        if (window.filterTreemapByCountry) filterTreemapByCountry(null);
         const currentDiscipline = document.getElementById('badge-discipline-input').value || null;
         updateBubbles(currentDiscipline, null);
     }
@@ -156,19 +162,14 @@ document.getElementById('badge-country-input').addEventListener('input', functio
 // Reset everything when discipline filter field is cleared
 document.getElementById('badge-discipline-input').addEventListener('input', function() {
     if (this.value.trim() === '') {
-        // Bar chart highlight reset
         highlightDiscipline(null);
-        // World map discipline filter reset
         if (window.filterMapByDiscipline) filterMapByDiscipline(null);
-        // Bubbles reset (recompute with no discipline filter, keep country filter if any)
+        if (window.highlightDisciplineOnTreemap) highlightDisciplineOnTreemap(null);
+        if (window.filterMedalRaceByDiscipline) filterMedalRaceByDiscipline(null);
         const currentCountry = document.getElementById('badge-country-input').value || null;
         updateBubbles(null, currentCountry);
-        // Discipline grid: deselect the active card + hide podium
         selectDisciplineCard(null);
-        // Venue map: reset zoom to initial view
         resetMapView();
-        // Reset treemap discipline highlight
-        if (window.highlightDisciplineOnTreemap) highlightDisciplineOnTreemap(null);
     }
 });
 

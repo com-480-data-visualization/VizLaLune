@@ -109,9 +109,20 @@
   
     data.sort((a, b) => a.dateObj - b.dateObj);
   
-    const uniqueDates = Array.from(
-      new Set(data.map(d => d.date))
-    );
+    const fullData = data;
+    let activeData = fullData;
+    const _allRawDates = Array.from(new Set(activeData.map(d => d.date)))
+        .sort((a, b) => new Date(a) - new Date(b));
+    const _firstDate = new Date(_allRawDates[0]);
+    const _lastDate = new Date(_allRawDates[_allRawDates.length - 1]);
+    let activeDates = [];
+    for (let d = new Date(_firstDate); d <= _lastDate; d.setDate(d.getDate() + 1)) {
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        activeDates.push(`${year}-${month}-${day}`);
+    }    
+    let highlightedCountry = null;
   
     const medalState = new Map();
   
@@ -128,7 +139,7 @@
     const chartGroup = svg.append("g");
   
     function updateChart(currentDate) {
-      const todayRows = data.filter(d => d.date === currentDate);
+      const todayRows = activeData.filter(d => d.date === currentDate);
   
       todayRows.forEach(d => {
         if (!medalState.has(d.country)) {
@@ -203,15 +214,18 @@
           .on("mousemove", function(event) {
             tooltip.style("left", `${event.pageX + 12}px`).style("top", `${event.pageY + 12}px`);
           })
-          .on("mouseout", function() {
-            d3.select(this).attr("opacity", 1).attr("stroke", "none");
-            tooltip.style("opacity", 0);
+          .on("mouseout", function(event, d) {
+              d3.select(this)
+                  .attr("opacity", !highlightedCountry || d.data.country === highlightedCountry ? 1 : 0.15)
+                  .attr("stroke", "none");
+              tooltip.style("opacity", 0);
           })
           .transition().duration(700)
           .attr("x", d => x(d[0]))
           .attr("y", d => y(d.data.country))
           .attr("height", y.bandwidth())
-          .attr("width", d => x(d[1]) - x(d[0]));
+          .attr("width", d => x(d[1]) - x(d[0]))
+          .attr("opacity", d => !highlightedCountry || d.data.country === highlightedCountry ? 1 : 0.15);
   
         rects.exit().remove();
       });
@@ -242,11 +256,11 @@
   
     function startRace() {
         activeInterval = d3.interval(() => {
-            if (currentIndex >= uniqueDates.length) {
+            if (currentIndex >= activeDates.length) {
                 activeInterval.stop();
                 return;
             }
-            const currentDate = uniqueDates[currentIndex];
+            const currentDate = activeDates[currentIndex];
             dateLabel.text(new Date(currentDate).toLocaleDateString("en-US", {
                 month: "short", day: "numeric"
             }));
@@ -335,7 +349,7 @@
     const slider = sliderContainer.append("input")
         .attr("type", "range")
         .attr("min", 0)
-        .attr("max", uniqueDates.length - 1)
+        .attr("max", activeDates.length - 1)
         .attr("value", 0)
         .style("flex", "1")
         .style("cursor", "pointer")
@@ -349,7 +363,7 @@
 
     // User dragging
     slider.on("input", function() {
-        const idx = +this.value; // idx corresponds to the date index in uniqueDates
+        const idx = +this.value; // idx corresponds to the date index in activeDates
 
         // Stop race
         if (activeInterval) activeInterval.stop();
@@ -366,16 +380,16 @@
 
         // Replay from selected date
         for (let i = 0; i <= idx; i++) {
-            updateChart(uniqueDates[i]);
+            updateChart(activeDates[i]);
         }
         currentIndex = idx + 1;
 
         // Met à jour le label de date
-        dateLabel.text(new Date(uniqueDates[idx]).toLocaleDateString("en-US", {
+        dateLabel.text(new Date(activeDates[idx]).toLocaleDateString("en-US", {
             month: "short", day: "numeric"
         }));
 
-        sliderLabel.text(new Date(uniqueDates[idx]).toLocaleDateString("en-US", {
+        sliderLabel.text(new Date(activeDates[idx]).toLocaleDateString("en-US", {
             month: "short", day: "numeric"
         }));
     });
@@ -414,6 +428,32 @@
   }, { threshold: 0.3 }); // triggers when 30% of the medal race is visible
 
   raceObserver.observe(medalRaceEl);
+
+  window.filterMedalRaceByDiscipline = function(discipline) {
+      activeData = discipline ? fullData.filter(d => d.discipline === discipline) : fullData;
+      const rawDates = Array.from(new Set(fullData.map(d => d.date)))
+          .sort((a, b) => new Date(a) - new Date(b));
+      const firstDate = new Date(rawDates[0]);
+      const lastDate = new Date(rawDates[rawDates.length - 1]);
+      activeDates = [];
+      for (let d = new Date(firstDate); d <= lastDate; d.setDate(d.getDate() + 1)) {
+          const year = d.getFullYear();
+          const month = String(d.getMonth() + 1).padStart(2, '0');
+          const day = String(d.getDate()).padStart(2, '0');
+          activeDates.push(`${year}-${month}-${day}`);
+      }
+      resetRace();
+      startRace();
+  };
+
+  window.highlightCountryOnMedalRace = function(countryName) {
+      highlightedCountry = countryName
+          ? Object.keys(countryCodeToName).find(k => countryCodeToName[k] === countryName) || null
+          : null;
+      chartGroup.selectAll(".layer rect")
+          .transition().duration(400)
+          .attr("opacity", d => !highlightedCountry || d.data.country === highlightedCountry ? 1 : 0.15);
+  };
   
   });
   

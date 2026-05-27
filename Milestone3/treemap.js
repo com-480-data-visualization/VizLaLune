@@ -25,19 +25,7 @@
   const width = containerEl.getBoundingClientRect().width;
   const height = Math.round(width * 0.6);
 
-  // === Create SVG ===
-  const container = d3.select("#treemap");
-  container.selectAll("*").remove();
-
-  const svg = container
-    .append("svg")
-    .attr("viewBox", `0 0 ${width} ${height}`)
-    .attr("width", "100%")
-    .attr("height", height)
-    .style("border-radius", "14px")
-    .style("overflow", "hidden");
-
-  // === Tooltip ===
+  // === Tooltip (created once) ===
   const tooltip = d3.select("body")
     .append("div")
     .attr("class", "treemap-tooltip")
@@ -52,12 +40,28 @@
     .style("box-shadow", "0 4px 12px rgba(0,0,0,0.3)")
     .style("line-height", "1.6");
 
-  // === Load athletes.csv ===
-  d3.csv("../DataPreprocessing/athletes.csv").then(data => {
+  // === Store all athletes data ===
+  let allAthletesData = [];
+
+  // === Build treemap from athletes data ===
+  function buildTreemap(athletesData) {
+
+    // Clear previous treemap
+    const container = d3.select("#treemap");
+    container.selectAll("svg").remove();
+    container.selectAll("div").remove();
+
+    const svg = container
+      .append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("width", "100%")
+      .attr("height", height)
+      .style("border-radius", "14px")
+      .style("overflow", "hidden");
 
     const disciplineMap = new Map();
 
-    data.forEach(athlete => {
+    athletesData.forEach(athlete => {
       try {
         const participations = Function('return (' + athlete.events + ')')();
         const uniqueEvents = [
@@ -73,6 +77,16 @@
         });
       } catch { return; }
     });
+
+    // If no data for this country
+    if (disciplineMap.size === 0) {
+      svg.append("text")
+        .attr("x", width / 2).attr("y", height / 2)
+        .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+        .attr("font-size", "18px").attr("fill", "#999")
+        .text("No data for this selection");
+      return;
+    }
 
     // === Hierarchy with sqrt scale ===
     const hierarchyData = {
@@ -360,12 +374,12 @@
       });
     }
 
-   // === SCROLL-TRIGGERED ANIMATION ===
+    // === SCROLL-TRIGGERED ANIMATION ===
     const sortedLeaves = root.leaves().sort((a, b) => b.value - a.value);
     const totalLeaves = sortedLeaves.length;
 
     function animateTreemap() {
-     // Reset to invisible state
+      // Reset to invisible state
       leaves.style("opacity", 0);
       leaves.selectAll("rect")
         .interrupt("grow")
@@ -374,10 +388,10 @@
         .attr("x", d => (d.x1 - d.x0) / 2)
         .attr("y", d => (d.y1 - d.y0) / 2);
 
-     // Cascade from biggest to smallest
+      // Cascade from biggest to smallest
       leaves.each(function(d) {
         const rank = sortedLeaves.indexOf(d);
-       const delay = (rank / totalLeaves) * 1200; // spread over 1.2s total
+        const delay = (rank / totalLeaves) * 1200; // spread over 1.2s total
         const leaf = d3.select(this);
 
         leaf.transition("fade")
@@ -397,7 +411,7 @@
       });
     }
 
-   // Initial animation + replay on re-entry
+    // Initial animation + replay on re-entry
     const treemapEl = document.getElementById("treemap");
     let treemapIsVisible = false;
 
@@ -412,7 +426,8 @@
       });
     }, { threshold: 0.2 });
 
-    treemapObserver.observe(treemapEl); 
+    treemapObserver.observe(treemapEl);
+    animateTreemap();
 
     // === FILTER BY DISCIPLINE ===
     window.highlightDisciplineOnTreemap = function(discipline) {
@@ -441,6 +456,22 @@
         }
     };
 
+  } // end buildTreemap
+
+  // === Load data and build initial treemap ===
+  d3.csv("../DataPreprocessing/athletes.csv").then(data => {
+    allAthletesData = data;
+    buildTreemap(allAthletesData);
   });
+
+  // === COUNTRY FILTER ===
+  window.filterTreemapByCountry = function(countryCode) {
+    if (!countryCode) {
+      buildTreemap(allAthletesData);
+    } else {
+      const filtered = allAthletesData.filter(d => d.country_code === countryCode);
+      buildTreemap(filtered);
+    }
+  };
 
 })();
