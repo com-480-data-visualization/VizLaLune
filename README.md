@@ -14,7 +14,7 @@
 
 ## Dataset
 
-The main dataset used in this project is the [Milano-Cortina 2026 Olympic Winter Games](https://www.kaggle.com/datasets/piterfm/milano-cortina-2026-winter-olympics) dataset.
+The main dataset used in this project is the [Milano-Cortina 2026 Olympic Winter Games](https://www.kaggle.com/datasets/piterfm/milano-cortina-2026-olympic-winter-games/data?select=medals.csv) dataset compiled by [Petro Ivaniuk](https://www.kaggle.com/piterfm).
 
 It covers the complete results of the 2026 Winter Olympics held in Milan and Cortina d'Ampezzo (February 4–22, 2026), and is composed of 7 files: `athletes.csv`, `coaches.csv`, `medallists.csv`, `medals.csv`, `schedules.csv`, `teams.csv`, and `venues.csv`.
 
