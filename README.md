@@ -23,7 +23,7 @@ It covers the complete results of the 2026 Winter Olympics held in Milan and Cor
 - **16 disciplines**, **116 events**
 - **348 medals** awarded to **534 unique athletes** from **29 countries**
 
-The full data exploration is available in [`DataExploration/`](./DataExploration/), and the preprocessing scripts in [`DataPreprocessing/`](./DataPreprocessing/).
+The full data exploration is available in [`DataExploration/`](./DataExploration/), and the preprocessing scripts in [`DataPreprocessing/`](./DataPreprocessing/) where the cleaned dataset can also be found.
 
 ---
 
@@ -35,7 +35,7 @@ VizLaLune/
 ├── DataExploration/            # Initial data exploration notebooks
 ├── DataPreprocessing/          # Python scripts + cleaned CSVs
 ├── ExtraResources/             # Images used in the website
-├── Milestone2/                 # M2 skeleton website
+├── Milestone2/                 # M2 skeleton website + report pdf
 └── Milestone3/                 # Final website (M3)
     ├── index.html              # Main page
     ├── styles.css              # Global styles
@@ -75,9 +75,9 @@ The website is built with vanilla HTML/CSS/JS and a few external libraries (D3.j
 
 ```bash
 git clone https://github.com/com-480-data-visualization/VizLaLune.git
-cd VizLaLune/Milestone3
+cd VizLaLune/
 python -m http.server 8000
-# Then open http://localhost:8000 in your browser
+# Then open http://localhost:8000/Milestone3/index.html in your browser
 ```
 
 > A local server is required because the project loads CSV files via `fetch()`, which doesn't work with `file://` URLs.
@@ -95,7 +95,7 @@ VizLaLune is an interactive scrollytelling website exploring the **Milano-Cortin
 
 1. **Global Overview** — disciplines, venues, events, and the medal race. The user can explore the 16 disciplines through an interactive pictogram grid, locate every Olympic venue on a Leaflet map of the Milan–Cortina region, dive into a hierarchical treemap of all 116 events, and watch an animated race chart revealing how the medal tally unfolds across competing nations.
 
-2. **Gender Representation** — a deeper dive into how participation breaks down by gender across countries and disciplines. This section combines three linked visualizations: an interactive world map showing each country's delegation as a cluster of dots (with an optional gender colouring revealing the male/female split at a glance), a horizontal bar chart ranking disciplines by number of athletes for the selected country, and a symmetrical "back-to-back" bar chart comparing male and female participation discipline by discipline (and event by event when a discipline is selected). Together, they let the user uncover striking patterns: which countries send the most balanced delegations, which disciplines remain heavily male-dominated (ski jumping, Nordic combined), and which have achieved near-parity (alpine skiing, biathlon, snowboard).
+2. **Gender Representation** — a deeper dive into how participation breaks down by gender across countries and disciplines. This section combines three linked visualizations: an interactive world map showing each country's delegation as a cluster of dots (with an optional gender colouring revealing the male/female split as a first glance), a horizontal bar chart ranking disciplines by number of athletes for the selected country, and a symmetrical "back-to-back" bar chart comparing male and female participation discipline by discipline (and event by event when a discipline is selected). Together, they let the user uncover striking patterns: which countries send the most balanced delegations, which disciplines remain heavily male-dominated (ski jumping, Nordic combined), and which have achieved near-parity (alpine skiing, biathlon, snowboard).
 
 3. **Conclusion** — key insights surfaced as floating animated bubbles, each highlighting a noteworthy fact from the data (the largest delegation, the most gender-balanced team, the dominant nation per discipline...).
 
