@@ -187,7 +187,7 @@ Promise.all([
       const radius = Math.random() * Math.min(4, Math.sqrt(count) * 0.4);
       const ox = xy[0] + Math.cos(angle) * radius;
       const oy = xy[1] + Math.sin(angle) * radius;
-      allDots.push({ code, count, gender: athlete.gender, x: ox, y: oy, originX: ox, originY: oy });
+      allDots.push({ code, count, gender: athlete.gender, x: ox, y: oy, originX: ox, originY: oy, discipline: parseDiscipline(athlete)});
     });
   });
 
@@ -444,7 +444,10 @@ Promise.all([
 
     dotsGroup.selectAll("circle")
       .transition().duration(400)
-      .attr("opacity", d => countriesWithDiscipline.has(d.code) ? 1 : 0.03)
+      .attr("opacity", d => {
+        if (d.discipline === discipline) return 1;
+        return 0;
+      })
       .attr("fill", d => {
         if (!countriesWithDiscipline.has(d.code)) return "rgba(255, 200, 50, 0.3)";
         return genderMode
