@@ -43,17 +43,16 @@ const resizeObserver = new ResizeObserver(() => {
     const newHeight = mapEl.clientHeight;
     if (newHeight && newHeight !== bcHeight) {
         bcHeight = newHeight;
-    bcInner.h = bcHeight - bcMargin.top - bcMargin.bottom;
-    const bcSvg = d3.select("#figure2_1")
-    .attr("width", bcWidth)
-    .attr("height", bcHeight)
-    .attr("viewBox", `0 0 ${bcWidth} ${bcHeight}`)
-    .attr("preserveAspectRatio", "xMidYMid meet")
-    .style("display", "block")
-    .style("background", "#0a1628");
+        bcInner.h = bcHeight - bcMargin.top - bcMargin.bottom;
+        const bcSvg = d3.select("#figure2_1")
+                    .attr("width", bcWidth)
+                    .attr("height", bcHeight)
+                    .attr("viewBox", `0 0 ${bcWidth} ${bcHeight}`)
+                    .attr("preserveAspectRatio", "xMidYMid meet")
+                    .style("display", "block")
+                    .style("background", "#0a1628");
         xAxisG.attr("transform", `translate(0,${bcInner.h})`);
         yScale.range([0, bcInner.h]);
-        if (window.athletesData) updateBarChart(window.athletesData, null);
     }
 });
 resizeObserver.observe(mapEl);
@@ -99,7 +98,7 @@ function highlightDiscipline(discipline) {
 }
 
 function updateBarChart(athletesData, countryCode) {
-    bcTitle.text(countryCode ? `${countryNames[countryCode] || countryCode}` : "All countries");
+    bcTitle.text(countryCode ? `${countryCodeToName[countryCode] || countryCode}` : "All countries");
 
     const filtered = countryCode
         ? athletesData.filter(d => d.country_code === countryCode)

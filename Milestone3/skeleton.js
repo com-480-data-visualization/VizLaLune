@@ -29,8 +29,8 @@ function resetFilters() {
     recomputeAndRender();
 
     if (window.athletesData) {
-        updateBarChart(window.athletesData, null);
         highlightDiscipline(null);
+        updateBarChart(window.athletesData, null);
     }
     if (window.filterMapByDiscipline) filterMapByDiscipline(null);
     if (window.highlightCountryOnMap) highlightCountryOnMap(null);

@@ -46,37 +46,6 @@ const isoAlpha3ToNumeric = {
   "VEN":"862","AIN":"000"
 };
 
-const countryNames = {
-  "AFG":"Afghanistan","ALB":"Albania","DZA":"Algeria","AND":"Andorra",
-  "AGO":"Angola","ARG":"Argentina","ARM":"Armenia","AUS":"Australia",
-  "AUT":"Austria","AZE":"Azerbaijan","BEL":"Belgium","BEN":"Benin",
-  "BIH":"Bosnia & Herzegovina","BOL":"Bolivia","BRA":"Brazil",
-  "BGR":"Bulgaria","BUL":"Bulgaria","CAN":"Canada","CHI":"Chile",
-  "CHL":"Chile","CHN":"China","COL":"Colombia","CRO":"Croatia",
-  "HRV":"Croatia","CYP":"Cyprus","CZE":"Czech Republic","DEN":"Denmark",
-  "DNK":"Denmark","ECU":"Ecuador","EST":"Estonia","FIN":"Finland",
-  "FRA":"France","GEO":"Georgia","GER":"Germany","DEU":"Germany",
-  "GBR":"Great Britain","GRE":"Greece","HAI":"Haiti","HKG":"Hong Kong",
-  "HUN":"Hungary","ISL":"Iceland","IND":"India","IRI":"Iran",
-  "IRN":"Iran","IRL":"Ireland","ISR":"Israel","ITA":"Italy",
-  "JAM":"Jamaica","JPN":"Japan","KAZ":"Kazakhstan","KEN":"Kenya",
-  "KGZ":"Kyrgyzstan","KOR":"South Korea","KOS":"Kosovo","KSA":"Saudi Arabia",
-  "SAU":"Saudi Arabia","LAT":"Latvia","LBN":"Lebanon","LIE":"Liechtenstein",
-  "LTU":"Lithuania","LUX":"Luxembourg","MAD":"Madagascar","MAR":"Morocco",
-  "MAS":"Malaysia","MDA":"Moldova","MEX":"Mexico","MGL":"Mongolia",
-  "MKD":"North Macedonia","MLT":"Malta","MNE":"Montenegro","MON":"Monaco",
-  "MCO":"Monaco","NED":"Netherlands","NLD":"Netherlands","NGR":"Nigeria",
-  "NGA":"Nigeria","NOR":"Norway","NZL":"New Zealand","PAK":"Pakistan",
-  "PHI":"Philippines","POL":"Poland","POR":"Portugal","PRT":"Portugal",
-  "PUR":"Puerto Rico","ROU":"Romania","RSA":"South Africa","ZAF":"South Africa",
-  "SGP":"Singapore","SVK":"Slovakia","SLO":"Slovenia","SVN":"Slovenia",
-  "SMR":"San Marino","SRB":"Serbia","SUI":"Switzerland","CHE":"Switzerland",
-  "SWE":"Sweden","THA":"Thailand","TTO":"Trinidad & Tobago","TPE":"Chinese Taipei",
-  "TWN":"Chinese Taipei","TUR":"Turkey","UAE":"UAE","UKR":"Ukraine",
-  "URU":"Uruguay","USA":"United States","UZB":"Uzbekistan","VEN":"Venezuela",
-  "AIN":"AIN"
-};
-
 const tooltip = d3.select("body")
   .append("div")
   .style("position", "fixed")
@@ -162,7 +131,7 @@ Promise.all([
 
       tooltip.style("opacity", 1).html(`
         <div style="font-weight:bold;font-size:14px;margin-bottom:6px;color:#4a9eff">
-          ${countryNames[alpha3] || alpha3}
+          ${countryCodeToName[alpha3] || alpha3}
         </div>
         <div><strong>${count}</strong> athletes</div>
         <div>Top sport: <strong>${topDiscipline ? topDiscipline[0] : "—"}</strong></div>
@@ -402,7 +371,7 @@ Promise.all([
       return;
     }
 
-    const code = Object.keys(countryNames).find(k => countryNames[k] === countryName);
+    const code = Object.keys(countryCodeToName).find(k => countryCodeToName[k] === countryName);
     if (!code) return;
 
     const latLng = window.mapCoords[code];
