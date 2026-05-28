@@ -17,15 +17,12 @@ let medallistsCache = null;
 function showPodium(disciplineName, disciplineURL, disciplineImage) {
     // Save position
     const scrollPos = window.scrollY;
+    const section = document.getElementById("podium");
+    const wasHidden = section.style.display === 'none';
+    const oldHeight = wasHidden ? 0 : section.offsetHeight;
 
     // Show the section
-    const section = document.getElementById("podium");
     section.style.display = "block";
-
-    // Wait for layout to complete, then restore scroll position
-    requestAnimationFrame(() => {
-        window.scrollTo(0, scrollPos + section.offsetHeight);
-    });
 
     // Fill header info
     document.getElementById("disciplineName").textContent = disciplineName;
@@ -47,6 +44,16 @@ function showPodium(disciplineName, disciplineURL, disciplineImage) {
         filteredSchedule = schedulesData.filter(row => row.discipline === disciplineName && row.event_medal === "1");
         filteredMedallists = medallistsData.filter(row => row.discipline === disciplineName);
         renderTable(filteredSchedule);
+
+        // Wait for layout to complete, then restore scroll position (ONLY IF BELOW THE PODIUM)
+        if (section.offsetTop < scrollPos) {
+            requestAnimationFrame(() => {
+                const newHeight = section.offsetHeight;
+                const heightDiff = newHeight - oldHeight;
+                window.scrollTo(0, scrollPos + heightDiff);
+                console.log(`Adjusted scroll by ${heightDiff}px`);
+            });
+        }
     });
 }
 
@@ -250,10 +257,13 @@ function hidePodium() {
     const scrollPos = window.scrollY;
     const sectionHeight = section.offsetHeight;
     
+    // Adjust scroll if hiding a visible element (for user experience!) (ONLY IF BELOW THE PODIUM)
+    if (scrollPos >= section.offsetTop) {
+        requestAnimationFrame(() => {
+            window.scrollTo(0, scrollPos - sectionHeight);
+            console.log(`Adjusted scroll by -${sectionHeight}px`);
+        });
+    }
+
     section.style.display = 'none';
-    
-    // Adjust scroll if hiding a visible element (for user experience!)
-    requestAnimationFrame(() => {
-        window.scrollTo(0, scrollPos - sectionHeight);
-    });
 }

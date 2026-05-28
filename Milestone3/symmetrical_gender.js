@@ -368,16 +368,16 @@ function renderEventChart(discipline = null, countryFilter = null) {
     if (discipline === "No discipline selected") {
         svg.style('display', 'none');
         // Wait for layout to complete, then restore scroll position
-        requestAnimationFrame(() => {
-            window.scrollTo(0, scrollPos - section.offsetHeight);
-        });
+        // requestAnimationFrame(() => {
+        //     window.scrollTo(0, scrollPos - section.offsetHeight);
+        // });
         return; // No discipline selected
     } else {
         svg.style('display', 'flex');
         // Wait for layout to complete, then restore scroll position
-        requestAnimationFrame(() => {
-            window.scrollTo(0, scrollPos + section.offsetHeight);
-        });
+        // requestAnimationFrame(() => {
+        //     window.scrollTo(0, scrollPos + section.offsetHeight);
+        // });
     }
 
 
