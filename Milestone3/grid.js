@@ -65,7 +65,7 @@ disciplinesList.forEach(disciplineName => {
             badge.value = ''; // Reset badge text
             updateBubbles(null);
             // Hide podium section when deselecting
-            document.getElementById('podium').style.display = 'none';
+            hidePodium();
             renderEventChart("No discipline selected");
         // Click on a different card
         } else {
@@ -105,7 +105,7 @@ function selectDisciplineCard(disciplineName) {
             selectedDiscipline = null;
         }
         // Hide podium section when deselecting
-        document.getElementById('podium').style.display = 'none';
+        hidePodium();
         renderEventChart("No discipline selected");
         return;
     }

@@ -357,6 +357,9 @@ function renderDisciplineChart(countryFilter = null) {
 
 // ==== Render event chart ====
 function renderEventChart(discipline = null, countryFilter = null) {
+    // Save position
+    const scrollPos = window.scrollY;
+
     // Clear previous chart
     d3.select('#symmetrical-gender-event').selectAll('*').remove();
     const svg = d3.select('#symmetrical-gender-event');
@@ -364,10 +367,19 @@ function renderEventChart(discipline = null, countryFilter = null) {
     // Hide/Show event chart based on whether a discipline is selected
     if (discipline === "No discipline selected") {
         svg.style('display', 'none');
+        // Wait for layout to complete, then restore scroll position
+        requestAnimationFrame(() => {
+            window.scrollTo(0, scrollPos - section.offsetHeight);
+        });
         return; // No discipline selected
     } else {
         svg.style('display', 'flex');
+        // Wait for layout to complete, then restore scroll position
+        requestAnimationFrame(() => {
+            window.scrollTo(0, scrollPos + section.offsetHeight);
+        });
     }
+
 
     // Filter events for this discipline + Convert Map to array for D3
     const eventData = Array.from(countsEvents, ([key, values]) => ({

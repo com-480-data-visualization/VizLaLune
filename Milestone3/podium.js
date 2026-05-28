@@ -15,9 +15,17 @@ let medallistsCache = null;
 // disciplineURL  : link to official Olympics page
 // disciplineImage: path to the discipline image
 function showPodium(disciplineName, disciplineURL, disciplineImage) {
+    // Save position
+    const scrollPos = window.scrollY;
+
     // Show the section
     const section = document.getElementById("podium");
     section.style.display = "block";
+
+    // Wait for layout to complete, then restore scroll position
+    requestAnimationFrame(() => {
+        window.scrollTo(0, scrollPos + section.offsetHeight);
+    });
 
     // Fill header info
     document.getElementById("disciplineName").textContent = disciplineName;
@@ -236,3 +244,16 @@ d3.select("#event-date").on("click", function() {
 
     renderTable(sortedEvents);
 });
+
+function hidePodium() {
+    const section = document.getElementById("podium");
+    const scrollPos = window.scrollY;
+    const sectionHeight = section.offsetHeight;
+    
+    section.style.display = 'none';
+    
+    // Adjust scroll if hiding a visible element (for user experience!)
+    requestAnimationFrame(() => {
+        window.scrollTo(0, scrollPos - sectionHeight);
+    });
+}
