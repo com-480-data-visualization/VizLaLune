@@ -11,10 +11,10 @@ const mapSvg = d3.select("#figure2_2")
     .style("background", "#0a1628")
     .style("display", "block");
 
-// Groupe zoomable (carte + dots + Milan)
+// zoomable group (map+ dots + Milan)
 const zoomG = mapSvg.append("g").attr("class", "zoom-group");
 
-// Groupe fixe (légende uniquement)
+// fix group (legend only)
 const fixedG = mapSvg.append("g").attr("class", "fixed-group");
 
 const projection = d3.geoNaturalEarth1()
@@ -219,7 +219,7 @@ Promise.all([
     .style("fill", "white").style("font-size", "10px")
     .style("font-weight", "bold").text("Milano");
 
-  // ── LEGEND ──────────────────────────────────────────────
+  
   const legend = fixedG.append("g")
     .attr("transform", `translate(20, ${mapHeight - 100})`);
 
@@ -232,7 +232,7 @@ Promise.all([
   const linearGradient = defs.append("linearGradient")
     .attr("id", "legend-gradient");
 
-  // Legend
+  
   linearGradient.selectAll("stop")
     .data([
       { offset: "0%", color: colorScale(maxAthletes) },   
@@ -282,7 +282,7 @@ Promise.all([
       .call(zoom.transform, d3.zoomIdentity);
   });
 
-  // ── BOUTONS SEND / RESET ───────────────────────────────────────────────
+  // ── BUTTONS SEND / RESET ───────────────────────────────────────────────
   d3.select("#btn-send").on("click", function() {
     dotsGroup.selectAll("circle")
       .transition().duration(2000)
@@ -302,7 +302,7 @@ Promise.all([
     mapSvg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
   });
 
-  // ── BOUTON GENRE ───────────────────────────────────────────────────────
+  // ──  GENRE BUTTON ───────────────────────────────────────────────────────
   let genderMode = false;
 
   d3.select("#btn-gender").on("click", function() {
@@ -321,7 +321,7 @@ Promise.all([
       });
   });
 
-  // ── FILTER PER RÉGION ──────────────────────────────────────────────────
+  // ── FILTER PER REGION ──────────────────────────────────────────────────
   const countryToRegion = countryToContinent;
 
   function filterByRegion(region) {
@@ -355,7 +355,7 @@ Promise.all([
 
   // console.log("Athlètes:", athletes.length, "| Dots:", allDots.length);
 
-  // ── FILTRE GLOBAL PER COUNTRY ─────────────────────────────────────────────
+  // ── GLOBAL FILTER PER COUNTRY ─────────────────────────────────────────────
   window.highlightCountryOnMap = function(countryName) {
     if (!countryName) {
       countryPaths

@@ -174,13 +174,21 @@ document.getElementById('badge-discipline-input').addEventListener('input', func
 });
 
 // === FADE IN ON SCROLL ===
+// === FADE IN ON SCROLL ===
 document.addEventListener('DOMContentLoaded', () => {
     const fadeObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                // Si l'élément a la classe fade-once, on stop l'observer
+                if (entry.target.classList.contains('fade-once')) {
+                    fadeObserver.unobserve(entry.target);
+                }
             } else {
-                entry.target.classList.remove('visible');
+                // Seulement retirer 'visible' si pas fade-once
+                if (!entry.target.classList.contains('fade-once')) {
+                    entry.target.classList.remove('visible');
+                }
             }
         });
     }, { threshold: 0.15 });
@@ -190,3 +198,4 @@ document.addEventListener('DOMContentLoaded', () => {
         fadeObserver.observe(el);
     });
 });
+
