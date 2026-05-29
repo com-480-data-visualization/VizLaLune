@@ -67,7 +67,7 @@ The full process book documenting our journey from M1 sketches to the final webs
 [process_book.pdf](./Milestone3/process_book.pdf)
 
 ### Screencast
-A 2-minute video walkthrough of the website: [LIEN À AJOUTER]
+A 2-minute video walkthrough of the website: [Here](./Milestone3/walkthrough.mov)
 
 ###  Running the website locally
 
